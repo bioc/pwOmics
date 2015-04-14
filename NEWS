@@ -1,0 +1,16 @@
+pwOmics 0.99.2
+====================================
+* sessionInfo as part of vignette
+
+
+pwOmics 0.99.1
+====================================
+* transcription factor - target database (ChEA + Pazar) + pathway database 
+  information (NCI PID Biopax files) can be accessed directly via 
+  AnnotationHub package now
+
+
+pwOmics 0.99.0
+====================================
+* initial package version
+
