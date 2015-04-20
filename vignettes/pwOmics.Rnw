@@ -409,9 +409,9 @@ by constituting in particular the comparative analysis of the results of the
 two different data sets. The intersection analysis simply compares the results
 of the separate upstream and downstream analysis. The static consensus analysis
 enables setting up static consensus graphs for each time point measured in
-parallel. Finally, the dynamic consensus analysis provides the user with one
-final dynamic consensus graph obtained from the data changes over time
-based on dynamic bayesian network inference. The dynamic consensus analysis is
+parallel. Finally, the consensus-based dynamic analysis provides the user with one
+final dynamic network obtained from the data changes over time
+based on dynamic bayesian network inference. The consensus-based dynamic analysis is
 self-evidently only conductable with time-series data sets measured for proteome
 and genome/transcriptome data in parallel.
 
@@ -472,7 +472,7 @@ gained from the comparative analysis of the corresponding time points to a
 consensus net for each time point. The change of this consensus net over time
 gives a first insight into the changes seen statically at the different time
 points. However, the static consensus nets do not yet include information
-gathered over time - as it is the case in the dynamic consensus analysis
+gathered over time - as it is the case in the consensus-based dynamic analysis
 (see section~\ref{sec:DynCons}). This is why the static consensus analysis
 is also applicable for single time point measurements.\\
 
@@ -493,12 +493,12 @@ consensusGraphs = staticConsensusNet(data_omics)
 \end{verbatim}
 
 
-\subsection{Dynamic consensus analysis}
+\subsection{Consensus-based dynamic analysis}
 \label{sec:DynCons}
 
-Unlike the static consensus analysis, the dynamic consensus analysis takes into
+Unlike the static consensus analysis, the consensus-based dynamic analysis takes into
 consideration also the signaling changes over time by applying dynamic bayesian
-network inference. The packages used for the dynamic consensus analysis are
+network inference. The packages used for the consensus-based dynamic analysis are
 \textit{longitudinal} \cite{Opgen_longi_2006, rainer_opgen-rhein_inferring_2006} 
 to adjust the format of the data and the actual network inference part is done
 via the \textit{ebdbNet} \cite{Rau_ebdbnet_2010} package. 
@@ -507,7 +507,7 @@ filter estimating the posterior distributions of the network parameters.
 The defined prior structure of the network is used for a straightforward
 estimation of hyperparameters via an expectation maximization (EM)-like
 algorithm and the dimension of the hidden states are determined via the
-singular value decomposition (SVD) of a block-Hangel matrix.\\
+singular value decomposition (SVD) of a block-Hankel matrix.\\
 
 The nodes included into the network inference step are nodes which are part of
 the static consensus graphs from corresponding time points of the two different
@@ -627,7 +627,7 @@ plotConsensusGraph(consensusGraphs, data_omics)
 \end{figure}
 
 
-The dynamic consensus analysis result can be visualized as follows
+The consensus-based dynamic analysis result can be visualized as follows
 (see Figure~\ref{fig:DynConsgraph}):
 \begin{verbatim}
 plotdynConsensusNet(dynInferredNet, sig.level = 0.65)
@@ -640,7 +640,7 @@ layout parameters.\\
 \begin{figure}[htbp]
 \centering
 \includegraphics{dynConsensusNet_2.pdf}
-\caption{\textit{pwOmics} dynamic consensus graph.}
+\caption{\textit{pwOmics} dynamic network graph.}
 \label{fig:DynConsgraph}
 \end{figure}
 

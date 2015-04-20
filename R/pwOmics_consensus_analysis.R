@@ -325,7 +325,7 @@ SteinerTree_cons <- function(terminal_nodes, PPI_graph, run_times) {
 #' points of the two different measurement types. In case a node is not
 #' significantly changed at a certain point in time its FC is assumed to remain
 #' constant at this time point.
-#' Calculation of the dynamic consensus net parameters are based on the ebdbNet 
+#' Calculation of the consensus-based dynamic net parameters are based on the ebdbNet 
 #' R package [1]. The number of time points generated via smoothing splines (50) 
 #' is based on their results for median AUCs of ROC curves.
 #' The number of forward time units a node is assumed to influence other nodes
@@ -334,10 +334,10 @@ SteinerTree_cons <- function(terminal_nodes, PPI_graph, run_times) {
 #' singular value decomposition (SVD) of the block-Hankel matrix H in order to
 #' specify the hidden state dimension K (for further details see [1]).
 #'    
-#' @references 1. A. Rau, F. Jaffrezic, J.-L. Foulley, R. W. Doerge (2010). An empirical 
-#' Bayesian method for estimating biological networks from temporal microarray
-#' data. Statistical Applications in Genetics and Molecular Biology, vol. 9, 
-#' iss. 1, article 9.     
+#' @references 1. A. Rau, F. Jaffrezic, J.-L. Foulley, R. W. Doerge (2010). 
+#' An empirical Bayesian method for estimating biological networks from temporal
+#' microarray data. Statistical Applications in Genetics and Molecular Biology, 
+#' vol. 9, iss. 1, article 9.     
 #'    
 #' @param data_omics OmicsData object.
 #' @param consensusGraphs result from static analysis: consensus graph generated 
@@ -380,9 +380,9 @@ SteinerTree_cons <- function(terminal_nodes, PPI_graph, run_times) {
 #' noTFs_inPW = 1, order_neighbors = 10)
 #' data_omics = identifyPWTFTGs(data_omics, only_enriched = FALSE)
 #' statConsNet = staticConsensusNet(data_omics)
-#' dynamicConsensusNet(data_omics, statConsNet)
+#' consDynamicNet(data_omics, statConsNet)
 #' }
-dynamicConsensusNet <- function(data_omics, consensusGraphs, laghankel = 3, 
+consDynamicNet <- function(data_omics, consensusGraphs, laghankel = 3, 
                                 cutoffhankel = 0.9, conv.1 = 0.15, 
                                 conv.2 = 0.05, 
                                 conv.3 = 0.05, verbose = TRUE, max.iter = 100, 
