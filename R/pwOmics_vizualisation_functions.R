@@ -98,7 +98,7 @@ plotTimeProfileClusters <- function(fuzzed_matsplines) {
 #' plotConsDynNet(dynConsNet, sig.level = 0.8)
 #' }
 plotConsDynNet <- function(dynConsensusNet, sig.level, clarify = "TRUE",
-                                layout = layout.fruchterman.reingold, ...) {
+                           layout = layout.fruchterman.reingold, ...) {
     
     dynConsNet = dynConsensusNet[[1]]
     pdf(paste(getwd(), "/", "dynConsensusNet.pdf", sep = ""))
@@ -109,7 +109,7 @@ plotConsDynNet <- function(dynConsensusNet, sig.level, clarify = "TRUE",
     cutoff <- qnorm((1 + sig.level)/2)
     if(dim(which(abs(dynnet_z) > cutoff, arr.ind = TRUE))[1] == 0)
     { stop("No nodes in the network have a significance higher than the
-            selected value. Please choose a less strict significance level.\n")}
+           selected value. Please choose a less strict significance level.\n")}
     dynnet[which(abs(dynnet_z) > cutoff, arr.ind = TRUE)] <- 1
     remove_ind <- which(colSums(dynnet) == 0 & rowSums(dynnet) == 0)
     if(length(remove_ind) >= dim(dynnet)[1]-1)
@@ -128,7 +128,7 @@ plotConsDynNet <- function(dynConsensusNet, sig.level, clarify = "TRUE",
     legend("topleft" , legend = c("consensus proteins", "consensus genes"), 
            fill = c("red", "green"), cex = 0.7, ...)
     dev.off()
-}
+    }
 
 #' Plot consensus graph(s) from static analysis.
 #' 

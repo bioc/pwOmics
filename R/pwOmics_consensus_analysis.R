@@ -75,18 +75,18 @@ staticConsensusNet <- function(data_omics, run_times = 3) {
         plot(ST_net, main = paste("Steiner tree of consensus graph\n time ", 
                                   same_tps[tps], sep = ""))
         legend(x = 0, y = -1.2 , legend = c("consensus proteins",
-                "steiner node proteins", "consensus TFs"), 
-                fill = c("red", "yellow", "lightblue"), cex = 0.7)
+                                            "steiner node proteins", "consensus TFs"), 
+               fill = c("red", "yellow", "lightblue"), cex = 0.7)
         message("Steiner tree of consensus graph for time point ", same_tps[tps],
-            " was build.\n")
-
+                " was build.\n")
+        
         ST_TFTG = getbipartitegraphInfo(data_omics, tps)
         ST_net_targets = genfullConsensusGraph(ST_net, ST_TFTG)
         V(ST_net_targets)$label.cex = 0.6
         plot.igraph(ST_net_targets, main = paste("Consensus graph\n time ", 
-                    same_tps[tps], sep = ""), vertex.size = 18)
+                                                 same_tps[tps], sep = ""), vertex.size = 18)
         legend(x = 0, y = -1.2 , legend = c("consensus proteins", 
-        "steiner node proteins", "consensus TFs", "consensus target genes"), 
+                                            "steiner node proteins", "consensus TFs", "consensus target genes"), 
                fill = c("red", "yellow", "lightblue", "green"), cex = 0.7)
         
         ST_net_targets = addFeedbackLoops(ST_net_targets)
@@ -94,7 +94,7 @@ staticConsensusNet <- function(data_omics, run_times = 3) {
     }
     names(consensus_graph) = as.character(same_tps)
     return(consensus_graph)
-}
+    }
 
 #' Generate STRING PPI graph.
 #' 
@@ -383,10 +383,10 @@ SteinerTree_cons <- function(terminal_nodes, PPI_graph, run_times) {
 #' consDynamicNet(data_omics, statConsNet)
 #' }
 consDynamicNet <- function(data_omics, consensusGraphs, laghankel = 3, 
-                                cutoffhankel = 0.9, conv.1 = 0.15, 
-                                conv.2 = 0.05, 
-                                conv.3 = 0.05, verbose = TRUE, max.iter = 100, 
-                                max.subiter = 200){
+                           cutoffhankel = 0.9, conv.1 = 0.15, 
+                           conv.2 = 0.05, 
+                           conv.3 = 0.05, verbose = TRUE, max.iter = 100, 
+                           max.subiter = 200){
     
     requireNamespace("ebdbNet", quietly = TRUE)
     requireNamespace("longitudinal", quietly = TRUE)

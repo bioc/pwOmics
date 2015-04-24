@@ -4,13 +4,13 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{enumitem}
-\usepackage{hyperref}
 \usepackage{epstopdf}
 \usepackage{csquotes} 
 \usepackage[english]{babel}
 %\usepackage[sort, numbers]{natbib}
 \usepackage[backend = bibtex, style=numeric]{biblatex}
 \usepackage{subcaption}
+\usepackage{hyperref}
 
 \addbibresource{pwOmics_vignette.bib}
 \setlength{\parindent}{0pt}
@@ -612,16 +612,15 @@ plotConsensusGraph(consensusGraphs, data_omics)
 
 \begin{figure}[htbp]
 \centering
-\begin{subfigure}{.5\textwidth}
-    \centering
-    \includegraphics [trim=0.7cm 2.5cm 0.7cm 0cm, width = 1\linewidth]{ConsensusGraphs_1.pdf}
-    \caption{Time point 1 hr.}
-\end{subfigure}%    
-\begin{subfigure}{.5\textwidth}
-    \centering
-    \includegraphics [trim=0.7cm 2.5cm 0.7cm 0cm, width = 1\linewidth]{ConsensusGraphs_2.pdf}
-    \caption{Time point 4 hrs.}
-\end{subfigure}   
+\begin{tabular}{@{}c@{}}
+    \includegraphics [trim=0.7cm 2.5cm 0.7cm 0cm, width = 0.45\linewidth]{ConsensusGraphs_1.pdf}\\[\abovecaptionskip]
+    \small Time point 1 hr.
+\end{tabular} 
+\vspace{1cm}
+\begin{tabular}{@{}c@{}}
+    \includegraphics [trim=0.7cm 2.5cm 0.7cm 0cm, width = 0.45\linewidth]{ConsensusGraphs_2.pdf}\\[\abovecaptionskip]
+    \small Time point 4 hrs.
+\end{tabular}   
 \caption{\textit{pwOmics} static consensus graphs.}
 \label{fig:Consgraph}
 \end{figure}
