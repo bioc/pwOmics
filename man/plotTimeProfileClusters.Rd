@@ -36,8 +36,8 @@ data_omics = identifyRsofTFs(data_omics, only_enriched = FALSE,
 noTFs_inPW = 1, order_neighbors = 10)
 data_omics = identifyPWTFTGs(data_omics, only_enriched = FALSE)
 statConsNet = staticConsensusNet(data_omics)
-dynConsNet = consDynamicNet(data_omics, statConsNet)
-timeprof = clusterTimeProfiles(dynConsNet)
+consDynNet = consDynamicNet(data_omics, statConsNet)
+timeprof = clusterTimeProfiles(consDynNet)
 plotTimeProfileClusters(timeprof)
 }
 }
