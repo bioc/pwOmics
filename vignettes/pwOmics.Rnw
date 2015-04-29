@@ -569,7 +569,7 @@ specified. For further details the user is referred to \cite{Rau_ebdbnet_2010}.
 \begin{verbatim}
 library(ebdbNet)
 library(longitudinal)
-dynInferredNet = dynamicConsensusNet(data_omics, 
+dynInferredNet = consDynamicNet(data_omics, consensusGraphs,
                  laghankel = 3, 
                  cutoffhankel = 0.9)
 \end{verbatim}
@@ -593,7 +593,7 @@ maximal cluster number based on the number of distinct data points. For more
 details see \cite{Mfuzz2012} and \cite{schwammle_simple_2010}.
 \begin{verbatim}
 library(Mfuzz)
-fuzzyClusters = clusterTimeProfiles(dynConsensusNet, 
+fuzzyClusters = clusterTimeProfiles(dynInferredNet, 
                                     min.std = 0, 
                                     ncenters = 12)
 \end{verbatim}
@@ -629,7 +629,7 @@ plotConsensusGraph(consensusGraphs, data_omics)
 The consensus-based dynamic analysis result can be visualized as follows
 (see Figure~\ref{fig:DynConsgraph}):
 \begin{verbatim}
-plotdynConsensusNet(dynInferredNet, sig.level = 0.65)
+plotConsDynNet(dynInferredNet, sig.level = 0.65)
 \end{verbatim}
 Here, the parameter `sig.level' is the significance level used as cutoff for
 plotting edges in the network and has to be specified in the range between

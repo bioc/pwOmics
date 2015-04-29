@@ -121,9 +121,9 @@ test.staticConsensusNet  <- function(){
     ##check for right input format
     checkException(staticConsensusNet(3))
 }
-test.dynamicConsensusNet  <- function(){
+test.consDynamicNet  <- function(){
     ##check for right input format
-    checkException(dynamicConsensusNet(3))
+    checkException(consDynamicNet(3))
 }
 test.clusterTimeProfiles <- function(){
     ##check for right input format
