@@ -273,6 +273,10 @@ getConsensusSTRINGIDs <- function(data_omics, tps, string_db){
 #' @keywords manip
 SteinerTree_cons <- function(terminal_nodes, PPI_graph, run_times) {
     
+    requireNamespace(igraph, quiet = TRUE)
+    altunion = igraph::union
+    unloadNamespace(igraph) 
+    
     color = NULL
     terminal_nodes = na.omit(terminal_nodes)
     V(PPI_graph)$color = "yellow"
@@ -293,7 +297,7 @@ SteinerTree_cons <- function(terminal_nodes, PPI_graph, run_times) {
          {
              paths_length = sapply(paths$res, length)
              sp = paths$res[which(paths_length == min(paths_length))][[1]]
-             subtree = union(subtree, V(PPI_graph)$name[sp])
+             subtree = altunion(subtree, V(PPI_graph)$name[sp])
              nsubtree = setdiff(nsubtree, V(PPI_graph)$name[sp])
          }else{
              subtree = subtree
@@ -448,7 +452,7 @@ dynamicConsensusNet <- function(data_omics, consensusGraphs, laghankel = 3,
 #' @keywords manip
 predictFCvals <- function(data_omics, nopredpoints, splineslist, title) {
     
-    uni_timepoints = union(data_omics[[1]][[1]][[1]][[1]], 
+    uni_timepoints = BiocGenerics::union(data_omics[[1]][[1]][[1]][[1]], 
                            data_omics[[1]][[1]][[1]][[2]])
     timevals = seq(0, max(uni_timepoints), length.out = nopredpoints)
     
@@ -487,7 +491,7 @@ getFCsplines <- function(data_omics, nodes, nodetype) {
         timepoints = data_omics[[1]][[1]][[1]][[2]]
         used_list = 2
     }
-    uni_timepoints = union(data_omics[[1]][[1]][[1]][[1]], 
+    uni_timepoints = BiocGenerics::union(data_omics[[1]][[1]][[1]][[1]], 
                            data_omics[[1]][[1]][[1]][[2]])
     fc = list()
     for(s in 1: length(nodes))
