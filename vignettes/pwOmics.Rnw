@@ -612,17 +612,14 @@ plotConsensusGraph(consensusGraphs, data_omics)
 
 \begin{figure}[htbp]
 \centering
-\begin{tabular}{@{}c@{}}
-    \includegraphics [trim=0.7cm 2.5cm 0.7cm 0cm, width = 0.45\linewidth]{ConsensusGraphs_1.pdf}\\[\abovecaptionskip]
-    \small Time point 1 hr.
-\end{tabular} 
-\vspace{1cm}
-\begin{tabular}{@{}c@{}}
-    \includegraphics [trim=0.7cm 2.5cm 0.7cm 0cm, width = 0.45\linewidth]{ConsensusGraphs_2.pdf}\\[\abovecaptionskip]
-    \small Time point 4 hrs.
-\end{tabular}   
-\caption{\textit{pwOmics} static consensus graphs.}
-\label{fig:Consgraph}
+\includegraphics{ConsensusGraphs_1.pdf}
+\caption{\textit{pwOmics} static consensus graph: Time point 1 hr.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{ConsensusGraphs_2.pdf}
+\caption{\textit{pwOmics} static consensus graph: Time point 4 hrs.}
 \end{figure}
 
 

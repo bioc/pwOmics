@@ -273,7 +273,7 @@ getConsensusSTRINGIDs <- function(data_omics, tps, string_db){
 #' @keywords manip
 SteinerTree_cons <- function(terminal_nodes, PPI_graph, run_times) {
     
-    requireNamespace(igraph, quiet = TRUE)
+    requireNamespace("igraph", quietly = TRUE)
     altunion = igraph::union
     unloadNamespace(igraph) 
     
