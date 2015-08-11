@@ -1,3 +1,8 @@
+pwOmics 1.2.0
+===================================
+* include threshold parameter into 'readTFdata' function
+
+
 pwOmics 1.1.1
 ====================================
 * rename consensus-based dynamic analysis

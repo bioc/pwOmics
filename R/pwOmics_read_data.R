@@ -81,17 +81,18 @@ readOmics <- function(tp_prots, tp_genes, omics, PWdatabase, TFtargetdatabase) {
 #' Reads in chosen transcription factor target database information.
 #'
 #' This function reads in transcription factor information given the selected 
-#' transcription factor target gene database. The database file(s) have to be 
-#' stored in the current working directory.
-#' Usage of pazar database could take some time due to ID mapping. The 
-#' individual pazar files have to be stored in a subfolder with name 
-#' 'Pazar_tftargets'.
+#' transcription factor target gene database. The information is downloaded
+#' via the AnnotationHub package and merged, if necessary.
 #'
 #' @param data_omics OmicsData object.
 #' @param TF_target_path character vector indicating path of the txt file of 
 #' matching transcription factors and target genes; the file should be a txt 
 #' file with first column transcription factors and second column target gene 
 #' symbols without a header.
+#' @param TF_filter_threshold integer defining a threshold number to 
+#' filter out those transcription factors having higher numbers of target genes
+#' than 'TF_filter_threshold' from the further analysis
+#' 
 #' @return OmicsData object - a list containing information about the user data 
 #' (timepoints, IDs, fold changes) and the selected databases chosen for the 
 #' analysis.
@@ -109,7 +110,7 @@ readOmics <- function(tp_prots, tp_genes, omics, PWdatabase, TFtargetdatabase) {
 #' TFtargetdatabase = c("chea"))
 #' data_omics = readTFdata(data_omics)
 #' data_omics[[3]]
-readTFdata <- function(data_omics, TF_target_path) {
+readTFdata <- function(data_omics, TF_target_path, TF_filter_threshold = 0) {
     
     if(class(data_omics) != "OmicsData")
     { stop("Parameter 'data_omics' is not an OmicsData object.\n")} 
@@ -167,6 +168,16 @@ readTFdata <- function(data_omics, TF_target_path) {
         TF_data_comb = rbind(TF_data_comb, TF_data)}
       message("User specified database information was read.\n")
     }
+    
+    if(is.numeric(TF_filter_threshold) & TF_filter_threshold != 0)
+    {TF_matrix = matrix(nrow = length(as.character(unique(TF_data_comb[,1]))), ncol = 2)
+    TF_matrix[,1] = as.character(unique(TF_data_comb[,1]))
+    for(k in 1: length(unique(TF_data_comb[,1])))
+    { TF_matrix[k,2] = length(which(TF_data_comb[,1] == TF_matrix[k,1]))}
+    TF_matrix = TF_matrix[order(as.numeric(TF_matrix[,2])),]
+    TF_matrix = TF_matrix[-which(as.numeric(TF_matrix[,2])> TF_filter_threshold),]
+    TF_data_comb = TF_data_comb[which(TF_data_comb[,1] %in% TF_matrix[,1]),]}
+
     data_omics[[3]][[2]] = TF_data_comb
     #increment status
     if(length(data_omics[[2]][[2]])!=0 & length(data_omics[[3]][[2]]) != 0)

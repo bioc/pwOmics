@@ -4,7 +4,7 @@
 \alias{readTFdata}
 \title{Reads in chosen transcription factor target database information.}
 \usage{
-readTFdata(data_omics, TF_target_path)
+readTFdata(data_omics, TF_target_path, TF_filter_threshold = 0)
 }
 \arguments{
 \item{data_omics}{OmicsData object.}
@@ -13,6 +13,10 @@ readTFdata(data_omics, TF_target_path)
 matching transcription factors and target genes; the file should be a txt
 file with first column transcription factors and second column target gene
 symbols without a header.}
+
+\item{TF_filter_threshold}{integer defining a threshold number to
+filter out those transcription factors having higher numbers of target genes
+than 'TF_filter_threshold' from the further analysis}
 }
 \value{
 OmicsData object - a list containing information about the user data
@@ -26,11 +30,8 @@ TFtargetsD containing selected TF target gene databases + TF target gene data.
 }
 \description{
 This function reads in transcription factor information given the selected
-transcription factor target gene database. The database file(s) have to be
-stored in the current working directory.
-Usage of pazar database could take some time due to ID mapping. The
-individual pazar files have to be stored in a subfolder with name
-'Pazar_tftargets'.
+transcription factor target gene database. The information is downloaded
+via the AnnotationHub package and merged, if necessary.
 }
 \examples{
 data(OmicsExampleData)
