@@ -1,4 +1,4 @@
-pwOmics 1.2.0
+pwOmics 1.1.10
 ===================================
 * include threshold parameter into 'readTFdata' function
 
