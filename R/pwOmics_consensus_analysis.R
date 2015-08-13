@@ -48,7 +48,8 @@ staticConsensusNet <- function(data_omics, run_times = 3) {
     if(class(data_omics) != "OmicsData")
     {stop("Parameter 'data_omics' is not an OmicsData object.")}
     
-    string_db = STRINGdb$new(version = "9_05", species = 9606,
+    requireNamespace("STRINGdb", quietly = TRUE)
+    string_db = STRINGdb$new(version = "10", species = 9606,
                              score_threshold = 0, input_directory = "") 
     PPI_graph = getSTRING_graph(string_db) 
     
@@ -85,9 +86,15 @@ staticConsensusNet <- function(data_omics, run_times = 3) {
         V(ST_net_targets)$label.cex = 0.6
         plot.igraph(ST_net_targets, main = paste("Consensus graph\n time ", 
                                                  same_tps[tps], sep = ""), vertex.size = 18)
-        legend(x = 0, y = -1.2 , legend = c("consensus proteins", 
-                                            "steiner node proteins", "consensus TFs", "consensus target genes"), 
+        if("yellow" %in% V(ST_net_targets)$color)
+        {legend(x = 0, y = -1.2 , legend = c("consensus proteins", 
+            "steiner node proteins", "consensus TFs", "consensus target genes"), 
                fill = c("red", "yellow", "lightblue", "green"), cex = 0.7)
+        }else{
+        legend(x = 0, y = -1.2 , legend = c("consensus proteins", 
+                 "consensus TFs", "consensus target genes"), 
+                 fill = c("red", "lightblue", "green"), cex = 0.7)   
+        }
         
         ST_net_targets = addFeedbackLoops(ST_net_targets)
         consensus_graph[[tps]] = ST_net_targets
@@ -150,7 +157,8 @@ addFeedbackLoops <- function(ST_net_targets){
 genfullConsensusGraph <- function(ST_net, ST_TFTG){
     
     ST_net_targets = ST_net
-    for(s in 1: length(ST_TFTG))
+    match_vec = which(names(ST_TFTG) %in% V(ST_net)$name)
+    for(s in match_vec)
     {
         if(s>1)
         {targets_in_graph = V(ST_net_targets)$name[which(V(ST_net_targets)$color == "green")]
@@ -253,7 +261,7 @@ getConsensusSTRINGIDs <- function(data_omics, tps, string_db){
     if(length(doubID)>0)
     {consSTRINGIDs = ST_proteins_STRINGid[-doubID,]  
     }else{
-        consSTRINGIDs = ST_proteins_STRINGid}
+        consSTRINGIDs = na.omit(ST_proteins_STRINGid)}
     return(consSTRINGIDs)
 }
 
@@ -272,10 +280,6 @@ getConsensusSTRINGIDs <- function(data_omics, tps, string_db){
 #' 
 #' @keywords manip
 SteinerTree_cons <- function(terminal_nodes, PPI_graph, run_times) {
-    
-    requireNamespace("igraph", quietly = TRUE)
-    altunion = igraph::union
-    unloadNamespace(igraph) 
     
     color = NULL
     terminal_nodes = na.omit(terminal_nodes)
@@ -297,7 +301,7 @@ SteinerTree_cons <- function(terminal_nodes, PPI_graph, run_times) {
          {
              paths_length = sapply(paths$res, length)
              sp = paths$res[which(paths_length == min(paths_length))][[1]]
-             subtree = altunion(subtree, V(PPI_graph)$name[sp])
+             subtree = igraph::union(subtree, V(PPI_graph)$name[sp])
              nsubtree = setdiff(nsubtree, V(PPI_graph)$name[sp])
          }else{
              subtree = subtree

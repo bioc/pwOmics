@@ -1,6 +1,7 @@
 pwOmics 1.1.10
 ===================================
 * include threshold parameter into 'readTFdata' function
+* change STRINGdb to version 10
 
 
 pwOmics 1.1.1

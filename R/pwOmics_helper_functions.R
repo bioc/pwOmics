@@ -747,5 +747,3 @@ preparePWinfo <- function(data_omics, plen) {
     PWofinterest = data_omics[[1]][[3]][[1]][[plen+1]][!PW_tp_NA] 
     return(list(data_omics,tps_PWs, PWofinterest))
 }
-
-
