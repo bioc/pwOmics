@@ -509,7 +509,7 @@ getProteinIntersection <- function(data_omics, tp_prot, tp_genes) {
 #' measurement chosen for comparison.
 #' @param only_enriched Boolean value defining if transcription factors should 
 #' be identified only for enriched pathways (TRUE); or for all identified 
-#' pathways (FALSE); default is TRUE.
+#' pathways (FALSE); default is FALSE.
 #' @return list with three elements: 1) character vector of transcription factor
 #' IDs identified in both upstream and downstream analysis 2) protein time point
 #' 3) gene/transcript time point.
@@ -535,7 +535,7 @@ getProteinIntersection <- function(data_omics, tp_prot, tp_genes) {
 #' getTFIntersection(data_omics, 4,4,only_enriched = TRUE)
 #' }
 getTFIntersection <- function(data_omics, tp_prot, tp_genes,
-                              only_enriched = TRUE) {
+                              only_enriched = FALSE) {
     
     if(class(data_omics) != "OmicsData")
     {stop("Parameter 'data_omics' is not an OmicsData object.")}
@@ -546,16 +546,28 @@ getTFIntersection <- function(data_omics, tp_prot, tp_genes,
     if(!tp_genes %in% data_omics[[1]][[1]][[1]][[2]])
     {stop("tp_genes is not found in gene/transcript time points 
           of OmicsData object.")}
+    if(dim(getUS_TFs(data_omics)[[glen]])[2] == 1 && only_enriched == TRUE)
+    {stop("No enrichment was performed. Either use enrichTFs() or choose
+          only_enriched = FALSE.")}
+    
     
     plen = which(data_omics[[1]][[1]][[1]][[1]] == tp_prot)
     glen = which(data_omics[[1]][[1]][[1]][[2]] == tp_genes)
     TF_inters = vector()
     prot_TFs = unique(getDS_TFs(data_omics)[[plen]])
-    if(only_enriched == TRUE)
-    {gene_TFs = unique(as.character(getUS_TFs(data_omics)[[glen]][,1]))
+    if(only_enriched == FALSE)
+    {if(length(getUS_TFs(data_omics)[[glen]])!= 0)
+       {gene_TFs = unique(as.character(getUS_TFs(data_omics)[[glen]][,1]))
+        }else{
+        gene_TFs = NA   
+       }
     }else{
-        gene_TFs = 
-            unique(as.character(getUS_TFs(data_omics)[[glen]][which(getUS_TFs(data_omics)[[glen]][,2]==1),1])) 
+        if(length(getUS_TFs(data_omics)[[glen]])!= 0)
+        {gene_TFs = 
+            unique(as.character(getUS_TFs(data_omics)[[glen]][which(getUS_TFs(data_omics)[[glen]][,2]==1),1]))
+        }else{
+         gene_TFs = NA   
+        }
     }
     TF_inters = prot_TFs[which(prot_TFs %in% gene_TFs)]
     return(list(TF_Intersection =TF_inters, Protein_Timepoint = tp_prot, 
@@ -630,6 +642,9 @@ getGenesIntersection <- function(data_omics, tp_prot, tp_genes) {
 #' 3) gene intersection
 #' each element contains a list with overlapping time points of both upstream
 #' and downstream analyses.
+#' @param only_enriched Boolean value defining if transcription factors should 
+#' be identified only for enriched pathways (TRUE); or for all identified 
+#' pathways (FALSE); default is FALSE.
 #' @keywords manip
 #' @export
 #' @examples
@@ -651,7 +666,7 @@ getGenesIntersection <- function(data_omics, tp_prot, tp_genes) {
 #' data_omics = identifyPWTFTGs(data_omics, only_enriched = FALSE)
 #' gettpIntersection(data_omics)
 #' }
-gettpIntersection <- function(data_omics) {
+gettpIntersection <- function(data_omics, only_enriched = FALSE) {
     
     if(class(data_omics) != "OmicsData")
     {stop("Parameter 'data_omics' is not an OmicsData object.")}
@@ -664,7 +679,7 @@ gettpIntersection <- function(data_omics) {
     for(g in same_tps)
     { temp_ind = which(same_tps==g)
       prot[[temp_ind]] = getProteinIntersection(data_omics, g,g)[[1]]
-      TF[[temp_ind]] = getTFIntersection(data_omics, g,g)[[1]]
+      TF[[temp_ind]] = getTFIntersection(data_omics, g,g, only_enriched)[[1]]
       genes[[temp_ind]] = getGenesIntersection(data_omics, g,g)[[1]]
     }
     names(prot) = paste("tp", same_tps, sep = "")

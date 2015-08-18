@@ -4,10 +4,14 @@
 \alias{gettpIntersection}
 \title{Get omics data intersection on the three levels.}
 \usage{
-gettpIntersection(data_omics)
+gettpIntersection(data_omics, only_enriched = FALSE)
 }
 \arguments{
 \item{data_omics}{OmicsData object.}
+
+\item{only_enriched}{Boolean value defining if transcription factors should
+be identified only for enriched pathways (TRUE); or for all identified
+pathways (FALSE); default is FALSE.}
 }
 \value{
 list with three elements:

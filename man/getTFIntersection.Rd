@@ -4,7 +4,7 @@
 \alias{getTFIntersection}
 \title{Get TF intersection for the omics data on the different time points.}
 \usage{
-getTFIntersection(data_omics, tp_prot, tp_genes, only_enriched = TRUE)
+getTFIntersection(data_omics, tp_prot, tp_genes, only_enriched = FALSE)
 }
 \arguments{
 \item{data_omics}{OmicsData object.}
@@ -17,7 +17,7 @@ measurement chosen for comparison.}
 
 \item{only_enriched}{Boolean value defining if transcription factors should
 be identified only for enriched pathways (TRUE); or for all identified
-pathways (FALSE); default is TRUE.}
+pathways (FALSE); default is FALSE.}
 }
 \value{
 list with three elements: 1) character vector of transcription factor

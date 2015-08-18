@@ -4,7 +4,8 @@
 \alias{readTFdata}
 \title{Reads in chosen transcription factor target database information.}
 \usage{
-readTFdata(data_omics, TF_target_path, TF_filter_threshold = 0)
+readTFdata(data_omics, TF_target_path, cell_match = 0,
+  TF_filter_threshold = 0)
 }
 \arguments{
 \item{data_omics}{OmicsData object.}
@@ -13,6 +14,27 @@ readTFdata(data_omics, TF_target_path, TF_filter_threshold = 0)
 matching transcription factors and target genes; the file should be a txt
 file with first column transcription factors and second column target gene
 symbols without a header.}
+
+\item{cell_match}{character indicating the cell line/cells for which the TF target
+gene data should be extracted from the database; this is only possible for
+chea database. Available cell-specific data from chea for matching are
+"Hs578T", "Raji B cells and iDC", "MCF7", "THP-1", "Hela cells", "STHdh",
+"H3396 breast cancer cells","HL60","HESC","T-ALL", "HPC-7",
+"ovarian surface epithelium", "HaCaT", "HCT116","U2OS", "Wilms tumor-derived CCG99-9611",
+"HepG2","HUMAN INTESTINAL CELL LINE CACO-2", "HEK293T","K562", "AK7",
+"NEUROBLASTOMA","JURKAT","T-47D","LS174T", "MULTIPLE HUMAN CANCER CELL TYPES",
+"501MEL", "PC3", "CACO-2", "FETAL_BRAIN", "HELA", "U937_AND_SAOS2",
+"CD4_POS_T", "ERYTHROLEUKEMIA", "RHABDOMYOSARCOMA", "293T", "SW620",
+"LYMPHOBLASTOID", "VCAP", "SK-N-MC", "CADO-ES1", "MEDULLOBLASTOMA", "M12",
+"K562_HELA_HEPG2_GM12878", "NT2", "SHEP-21N", "LN229_GBM", "MCF-7", "MELANOMA",
+"MYOFIBROBLAST", "NTERA2", "MEGAKARYOCYTES", "HMVEC", "ZR75-1", "TREG",
+"TLL", "A2780", "MONOCYTES", "BEAS2B", "LNCAP PROSTATE CANCER CELL LINES",
+"MCF10A", "GC-B", "BL", "IMR90", "EOC", "PCA", "PROSTATE_CANCER", "OVCAR3",
+"MALME-3M", "HFKS", "HEK293", "HELA-AND-SCP4", "CD34+", "IB4-LCL", "MDA-MB-231",
+"U87", "T47D", "Z138-A519-JVM2", "DLD1", "ATHEROSCLEROTIC-FOAM", "LCL-AND-THP1",
+"NB4", "PFSK-1 AND SK-N-MC", "EP156T","GBM1-GSC","CD4+", "FIBROSARCOMA",
+"LGR5+ INTESTINAL STEM CELL","NEUROBLASTOMA BE2-C".
+If no tissue is given the data from all cells/cell lines are merged.}
 
 \item{TF_filter_threshold}{integer defining a threshold number to
 filter out those transcription factors having higher numbers of target genes

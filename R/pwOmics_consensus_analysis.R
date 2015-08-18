@@ -64,9 +64,10 @@ staticConsensusNet <- function(data_omics, run_times = 3) {
     for(tps in 1: length(same_tps))
     {
         STRINGIDs = getConsensusSTRINGIDs(data_omics, tps, string_db)
-        message("Consensus graph for time point ", same_tps[tps], 
+        if(dim(STRINGIDs)[1]>0)
+        {message("Consensus graph for time point ", same_tps[tps], 
                 " was generated.\n")   
-        
+
         ST_net = SteinerTree_cons(STRINGIDs$STRING_id, 
                                   PPI_graph, run_times) 
         ST_net = getAliasfromSTRINGIDs(data_omics, ST_net, 
@@ -98,6 +99,11 @@ staticConsensusNet <- function(data_omics, run_times = 3) {
         
         ST_net_targets = addFeedbackLoops(ST_net_targets)
         consensus_graph[[tps]] = ST_net_targets
+        }else{
+        consensus_graph[[tps]] = NA
+            message("Not enough intersecting molecules to generate
+                    a consensus graph for time point ", same_tps[tps], "\n")   
+        }
     }
     names(consensus_graph) = as.character(same_tps)
     return(consensus_graph)

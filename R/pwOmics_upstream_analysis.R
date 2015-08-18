@@ -200,7 +200,8 @@ identifyRsofTFs <- function(data_omics, only_enriched = TRUE, noTFs_inPW = 2,
     for(glen in 1: length(data_omics[[1]][[1]][[1]][[2]]))
     { 
         tps_TFs = identTFs(data_omics, glen)
-        if(only_enriched == TRUE)
+        if(!length(tps_TFs) == 0)
+        {if(only_enriched == TRUE)
         {tps_TFs = tps_TFs[which(tps_TFs[,enrichedTFs] == 1),]}
         pathway_info = identPWsofTFs(genelists, tps_TFs)
         pws_morex_TFs = selectPWsofTFs(pathway_info[[1]], pathway_info[[2]],
@@ -219,7 +220,11 @@ identifyRsofTFs <- function(data_omics, only_enriched = TRUE, noTFs_inPW = 2,
         names(data_omics[[1]][[3]][[2]][[glen+1]])[dim(data_omics[[1]][[2]][[2]][[glen]])[1] +2] = 
             "regulatorsPW"
         message("Regulators for time point ", 
-                data_omics[[1]][[1]][[1]][[2]][glen] ," were identified. \n")    
+                data_omics[[1]][[1]][[1]][[2]][glen] ," were identified. \n")  
+        }else{
+        message("No upstream TFs and upstream regulators identified for time point ", 
+                    data_omics[[1]][[1]][[1]][[2]][glen] ,". \n")      
+        }
     }
     message("Regulatory pathway elements of transcription factors in upstream 
         analysis are identified.\n")
