@@ -124,15 +124,11 @@ symbols without a header, e.g.:\\
 
 \begin{center}
 \fbox{\parbox[c]{3cm}{
-REST    SUPT7L\\
-REST	SUV420H1\\
-REST	SUV420H2\\
-REST	SVOP\\
-REST	SYCN\\
-REST	SYN2\\
-REST	SYP\\
-REST	SYPL2\\
-REST	SYT1\\
+GATA-4    HAMP\\
+c-Jun	IL18\\
+NF-kappaB   TLR2\\
+MYB LTB\\
+FOXO1A	TGFBR1\\
 ...}}
 \end{center}
 
