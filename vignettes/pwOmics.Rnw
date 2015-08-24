@@ -612,6 +612,7 @@ plotConsensusGraph(consensusGraphs, data_omics)
 \caption{\textit{pwOmics} static consensus graph: Time point 1 hr.}
 \end{figure}
 
+
 \begin{figure}[htbp]
 \centering
 \includegraphics{ConsensusGraphs_2.pdf}
