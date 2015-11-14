@@ -1,3 +1,8 @@
+pwOmics 3.1.1
+===================================
+* include static consensus profiles function
+* include activating/inhibiting edges in dynamic consensus net
+
 pwOmics 1.1.10
 ===================================
 * include threshold parameter into 'readTFdata' function
