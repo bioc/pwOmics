@@ -189,3 +189,90 @@ plotConsensusGraph <- function(consensusGraphs, data_omics, ...) {
     dev.off()
 }
 
+#' Plot consensus graph profiles of static consensus molecules.
+#' 
+#' Consensus graph profiles of static consensus molecules 
+#' plotted as heatmap to pdf file stored in current working directory.
+#'  
+#' @param consensusGraphs result from static analysis: consensus graph generated 
+#' by staticConsensusNet function.
+#' @param data_omics OmicsData object.
+#' @param subsel character vector of selected consensus molecules for plotting; 
+#' if TRUE all consensus molecules are plotted
+#' @param ... further plotting/legend parameters.
+#' @return pdf file in current working directory.
+#' 
+#' @keywords manip
+#' @export
+#' @examples
+#' #please run with whole database files (prepared according to vignette)
+#' data(OmicsExampleData)
+#' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
+#' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
+#' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
+#' TFtargetdatabase = c("chea", "pazar"))
+#' \dontrun{
+#' data_omics = readTFdata(data_omics)
+#' data_omics_plus = readPWdata(data_omics,  
+#' loadgenelists = FALSE)
+#' data_omics = identifyPWs(data_omics_plus)
+#' data_omics = identifyTFs(data_omics)
+#' data_omics = enrichPWs(data_omics)
+#' data_omics = identifyRsofTFs(data_omics, only_enriched = FALSE, 
+#' noTFs_inPW = 1, order_neighbors = 10)
+#' data_omics = identifyPWTFTGs(data_omics, only_enriched = FALSE)
+#' statConsNet = staticConsensusNet(data_omics)
+#' plotConsensusProfiles(statConsNet)
+#' }
+plotConsensusProfiles <- function(consensusGraphs, data_omics, subsel = TRUE, ...) {
+    
+    if(class(data_omics) != "OmicsData")
+    {stop("Parameter 'data_omics' is not an OmicsData object.")}
+    
+    if(TRUE %in% !(names(consensusGraphs) %in% 
+                   as.character(data_omics[[1]][[1]][[1]][[1]]) &
+                   names(consensusGraphs) %in% 
+                   as.character(data_omics[[1]][[1]][[1]][[2]])) ) 
+    {warning("Warning: ConsensusGraphs do not match OmicsData object.")}
+    
+    same_tps = data_omics[[1]][[1]][[1]][[1]][which(data_omics[[1]][[1]][[1]][[1]] 
+                                                    %in% data_omics[[1]][[1]][[1]][[2]])]
+    Cons_graph_members = vector()
+    for(k in 1: length(same_tps))
+    {Cons_graph_members = c(Cons_graph_members, unique(c(V(consensusGraphs[[k]])$name))) }
+    Cons_graph_members = unique(Cons_graph_members)
+    
+    heat_CGM = matrix(nrow = length(Cons_graph_members), ncol = length(same_tps),
+                      dimnames = list(Cons_graph_members, same_tps))
+    for(s in 1: length(Cons_graph_members))
+    {  for(h in 1: length(same_tps))
+    {heat_CGM[s,h] = if(Cons_graph_members[s] %in% V(consensusGraphs[[h]])$name)
+    {V(consensusGraphs[[h]])$color[which(V(consensusGraphs[[h]])$name == Cons_graph_members[s])]
+    }else{"white"}
+    }
+    }
+    colvec = c("white", "green", "lightblue", "red", "yellow")
+    numvec = c(0,1,2,3,4)
+    for(s in 1:5)
+    {heat_CGM[which(heat_CGM == colvec[s])] = numvec[s]}
+    heat_CGM = apply(heat_CGM,2, as.numeric)
+    rownames(heat_CGM) = Cons_graph_members
+    
+    if((subsel == TRUE)[1])
+    {ind_sel = seq(1, length(Cons_graph_members))
+    }else{
+        ind_sel = which(rownames(heat_CGM) %in% subsel)  
+        if(!5 %in% ((unique(as.vector(heat_CGM[ind_sel,])))+1) || 
+           (!5 %in% ((unique(as.vector(heat_CGM[ind_sel,])))+1) & !4 %in% ((unique(as.vector(heat_CGM[ind_sel,])))+1)) ||
+           (!5 %in% ((unique(as.vector(heat_CGM[ind_sel,])))+1) &  !4 %in% ((unique(as.vector(heat_CGM[ind_sel,])))+1) &
+            !3 %in% ((unique(as.vector(heat_CGM[ind_sel,])))+1) ))
+        {colvec = colvec[sort(unique(as.vector(heat_CGM[ind_sel,])))+1]}
+    }
+    pdf(paste(getwd(), "/", "ConsensusGraphs.pdf", sep = ""))
+    heatmap.2(heat_CGM[ind_sel,], Colv = NA, dendrogram = "row", col = colvec,
+              scale = "none", main = "Consensus graph profiles", trace = "none", key = FALSE, ...)
+    legend("topleft", fill = c("red", "yellow", "lightblue", "green"), 
+           legend = c("consensus proteins", "steiner node proteins", "consensus TFs", "consensus target genes"), cex = 0.7)
+    dev.off()
+}
+
