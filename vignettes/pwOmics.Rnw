@@ -8,7 +8,7 @@
 \usepackage{csquotes} 
 \usepackage[english]{babel}
 %\usepackage[sort, numbers]{natbib}
-\usepackage[backend = bibtex, style=numeric]{biblatex}
+\usepackage[backend=bibtex,bibencoding=ascii,style=authoryear,sorting=none]{biblatex}
 \usepackage{subcaption}
 \usepackage{hyperref}
 
@@ -294,7 +294,7 @@ different databases are automatically stored in the working directory and can
 be reused in another analysis when the corresponding path containing these files
 is given to the `readPWdata' function as loadgenelists parameter.
 \begin{verbatim}
-data_omics = readPWdata(data_omics, 
+data_omicsPW = readPWdata(data_omics, 
              loadgenelists = "Genelist_reactome.RData")
 \end{verbatim}
 Automatically the information of the selected databases and/or the corresponding
@@ -313,7 +313,7 @@ After reading in these information the user can follow the workflow for
 downstream analysis and identify the pathways in which the differentially 
 abundant proteins are present:
 \begin{verbatim}
-data_omics = identifyPWs(data_omics)
+data_omics = identifyPWs(data_omicsPW)
 \end{verbatim}
 In a next step pathway enrichment can be conducted. The user can specify the 
 multiple testing correction method as well as the significance level for this 
