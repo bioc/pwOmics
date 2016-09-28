@@ -2,11 +2,12 @@
 \documentclass[a4paper]{article}
 
 \usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
 \usepackage{graphicx}
 \usepackage{enumitem}
 \usepackage{epstopdf}
 \usepackage{csquotes} 
-\usepackage[english]{babel}
 %\usepackage[sort, numbers]{natbib}
 \usepackage[backend=bibtex,bibencoding=ascii,style=authoryear,sorting=none]{biblatex}
 \usepackage{subcaption}
@@ -15,8 +16,7 @@
 \addbibresource{pwOmics_vignette.bib}
 \setlength{\parindent}{0pt}
 
-\title{pwOmics - \\
-Pathway-based Integration of time-series Omics Data using public database knowledge}
+\title{pwOmics - Pathway-based Integration of time-series Omics Data using public database knowledge}
 \author{Astrid Wachter\\
 Medical Statistics, University Medical Center Göttingen, Germany}
 

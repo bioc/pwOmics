@@ -301,7 +301,7 @@ readTFtargets <- function(data_omics, TF_target_path) {
 #' @keywords manip
 getAlias_Ensemble <- function(ids)
 {
-  ensembl = useDataset("hsapiens_gene_ensembl", mart = useMart("ensembl"))
+  ensembl = useDataset("hsapiens_gene_ensembl", mart = useMart("ENSEMBL_MART_ENSEMBL", dataset="hsapiens_gene_ensembl", host = "www.ensembl.org"))
   hgnc = getBM(attributes = c('ensembl_gene_id', 'hgnc_symbol'), 
                filters = "ensembl_gene_id", values = ids, mart = ensembl)
   return(hgnc)
