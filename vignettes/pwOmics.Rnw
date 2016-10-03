@@ -35,11 +35,11 @@ parallel with different platforms is a complex but promising task, needing
 consideration of time-independent combination of omics data and additionally
 time-dependent signaling analysis. As each measurement technique shows a certain
 bias and has natural limitations in identifying full signaling responses
-\cite{yeger-lotem_bridging_2009}, such cross-platform analysis is an up-to-date
+(\cite{yeger-lotem_bridging_2009}), such cross-platform analysis is an up-to-date
 approach in order to connect biological implications on different signaling
 levels. Using diverse data types is expected to provide a deeper understanding
 of global biological functions and the underlying complex processes
-\cite{Kholodenko2012}.\\
+(\cite{Kholodenko2012}).\\
 This is why computational data analysis tools for interpretation of data from
 proteomics and transcriptomics measurements in parallel are needed.\\
 \textit{pwOmics} is a tool for pathway-based level-specific data comparison and
@@ -74,22 +74,22 @@ work with. Three different kinds of databases are necessary to do all analyses
 steps:\\
 \begin{enumerate}[topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex]
 \item Pathway databases:\\ The user can choose from Biocarta 
-\cite{nishimura_biocarta_2001}, Reactome \cite{milacic_annotating_2012, 
-croft_reactome_2014}, PID \cite{schaefer_pid:_2009} from the National 
-Cancer Institute (NCI) and KEGG \cite{kanehisa_data_2014, 
-kanehisa_kegg:_2000}.\\
+(\cite{nishimura_biocarta_2001}), Reactome (\cite{milacic_annotating_2012, 
+croft_reactome_2014}), PID (\cite{schaefer_pid:_2009}) from the National 
+Cancer Institute (NCI) and KEGG (\cite{kanehisa_data_2014, 
+kanehisa_kegg:_2000}).\\
 \item Protein-protein interaction (PPI) database:\\ STRING 
-\cite{franceschini_string_2013}.\\
+(\cite{franceschini_string_2013}).\\
 \item Transcription factor (TF) - target gene databases:\\ The user can choose
-from ChEA \cite{lachmann_chea:_2010}, Pazar \cite{portales-casamar_pazar_2009,
-portales-casamar_pazar:_2007} and/or decide to specify an own file e.g. based
+from ChEA (\cite{lachmann_chea:_2010}), Pazar (\cite{portales-casamar_pazar_2009,
+portales-casamar_pazar:_2007}) and/or decide to specify an own file e.g. based
 on a commercial database.\\
 \end{enumerate}
 
 The pathway database information is used to identify the pathways of the
 differentially abundant proteins in the downstream analysis as well as upstream
 protein regulators of TFs in the upstream analysis. The PPI database STRING
-\cite{franceschini_string_2013} was chosen to define the protein net for the
+(\cite{franceschini_string_2013}) was chosen to define the protein net for the
 consensus analysis. The TF - target gene databases information is necessary for
 the TF identification in pathways in the downstream analysis. Additionally the
 upstream TFs of differentially expressed genes/transcripts are identified in the
@@ -98,7 +98,7 @@ In downstream analysis the pathway gene set information is used, whereas in the
 upstream analysis also the pathway topology information is exploited.\\
 
 The database information is downloaded internally via \textit{STRINGdb} and
-\textit{AnnotationHub} \cite{Morgan} package. In case the author is interested
+\textit{AnnotationHub} (\cite{Morgan}) package. In case the author is interested
 also in the metadata of the pathway database and TF - target database it can be
 received by
 
@@ -133,12 +133,12 @@ FOXO1A	TGFBR1\\
 \end{center}
 
 The STRING PPI-information is downloaded automatically while processing and
-analyzing the data: The \textit{STRINGdb} package \cite{franceschini_string_2013}
+analyzing the data: The \textit{STRINGdb} package (\cite{franceschini_string_2013})
 is used here.
 
 \section{Example dataset}
 The example dataset used here for demonstration purposes is the one presented
-in \cite{Waters2012}, which comprises the mitogenic response of human 
+in (\cite{Waters2012}), which comprises the mitogenic response of human 
 mammary epithelial cells to epidermal growth factor (EGF). This dataset includes
 whole genome time course microarray data measured with NimbleGen whole genome
 60-mer oligonucleotide arrays (Design Version 2003\_10\_27) at time points
@@ -147,7 +147,7 @@ The complementary proteomics data was measured with LC-FTICR (Fourier-transform
 ion cyclotron resonance-mass spectrometry coupled with advanced capillary
 liquid chromatography) at time points 0.25, 1, 4, 8, 13, 18 and 24 hours after
 EGF stimulation. Preprocessing of data was done as described in
-\cite{Waters2012} resulting in lists of significant genes and proteins for
+(\cite{Waters2012}) resulting in lists of significant genes and proteins for
 each time point as log10 expression ratios relative to the time 0 hr controls.
 
 
@@ -438,7 +438,7 @@ by expected signaling changes and financial limitations the potential in the
 interpretation of the results is strongly confined to the experimental design
 decisions. Thus, measured signaling changes, which naturally consist of a
 superposition of diverse time-scales of transcriptional and translational
-processes and comprehend diverse frequency patterns \cite{yosef_impulse_2011},
+processes and comprehend diverse frequency patterns (\cite{yosef_impulse_2011}),
 are dependent on the sampling. This means for some of the signaling axes it
 might be the case, that 
 \begin{itemize}
@@ -473,13 +473,13 @@ gathered over time - as it is the case in the consensus-based dynamic analysis
 is also applicable for single time point measurements.\\
 
 The static consensus analysis is conducted by generation of a Steiner tree
-\cite{Kleinberg_AlgorithmDesign_2006} on basis of matching proteins and TFs
+(\cite{Kleinberg_AlgorithmDesign_2006}) on basis of matching proteins and TFs
 identified in downstream and upstream analysis for each corresponding time
 point. The underlying graph used is the protein-protein-interaction (PPI)
 graph from the STRING database reduced to the connected nodes.
 The matching proteins and TFs are considered as terminal nodes and are
 connected via a shortest path-based approximation of the Steiner tree
-algorithm \cite{Takahashi_Steiner_1980, Sadeghi2013} across the reduced
+algorithm (\cite{Takahashi_Steiner_1980, Sadeghi2013}) across the reduced
 PPI-STRING-graph. Subsequently knowledge of TF-target gene pairs from the
 chosen database is used to expand the graph with matching genes/transcripts
 from both upstream and downstream analysis. In case the consensus graph contains
@@ -495,9 +495,9 @@ consensusGraphs = staticConsensusNet(data_omics)
 Unlike the static consensus analysis, the consensus-based dynamic analysis takes into
 consideration also the signaling changes over time by applying dynamic bayesian
 network inference. The packages used for the consensus-based dynamic analysis are
-\textit{longitudinal} \cite{Opgen_longi_2006, rainer_opgen-rhein_inferring_2006} 
+\textit{longitudinal} (\cite{Opgen_longi_2006, rainer_opgen-rhein_inferring_2006}) 
 to adjust the format of the data and the actual network inference part is done
-via the \textit{ebdbNet} \cite{Rau_ebdbnet_2010} package. 
+via the \textit{ebdbNet} (\cite{Rau_ebdbnet_2010}) package. 
 This package includes an iterative empirical Bayesian procedure with a Kalman
 filter estimating the posterior distributions of the network parameters.
 The defined prior structure of the network is used for a straightforward
@@ -530,15 +530,15 @@ the different time points.\\
 This assumption, however, has to be applied consciously and carefully, as there
 might be higher frequency signaling components superimposed (see for a
 comprehensive analysis of temporal dynamics of gene expression
-\cite{yosef_impulse_2011}).
+(\cite{yosef_impulse_2011})).
 In theory a signal has to be sampled 2 times its maximal frequency in order to
 be able to reconstruct it exactly from time discrete measurements
-(Nyquist-Shannon sampling theorem \cite{Shannon_theorem_1949, 
-Nyquist_theorem_1928}). This means only exact interpretation of those signaling
+(Nyquist-Shannon sampling theorem (\cite{Shannon_theorem_1949, 
+Nyquist_theorem_1928})). This means only exact interpretation of those signaling
 axes are possible that have a frequency which is smaller than half of the
 sampling frequency. However, under certain preconditions on signal structure
 and the sampling operator reconstruction of the original signal can be done with
-a lower sampling rate \cite{DBLP:journals/tit/BlumensathD09}.
+a lower sampling rate (\cite{DBLP:journals/tit/BlumensathD09}).
 This is an interesting starting point for a more comprehensive dynamic analysis
 of the expected signals and the sampling needed for an extensive data mining of
 omics data sets measured in parallel, but exceeds the scope of this package.
@@ -561,7 +561,7 @@ package) the number of hidden states can be determined. Here, the user can
 specify the \textit{cutoffhankel} parameter to choose the cutoff to determine
 the desired percent of total variance explained by the singular values. 
 Additional parameters on convergence criteria and iterations performed can be
-specified. For further details the user is referred to \cite{Rau_ebdbnet_2010}.
+specified. For further details the user is referred to (\cite{Rau_ebdbnet_2010}).
 \begin{verbatim}
 library(ebdbNet)
 library(longitudinal)
@@ -575,10 +575,10 @@ An additional analysis option is clustering of co-regulation patterns over time.
 It provides information about the signaling molecules with common dynamic
 behaviour and thus allows to draw conclusions in terms of signaling chronology.
 Time profile clustering is performed as soft clustering based on the
-\textit{Mfuzz} package \cite{Mfuzz2012}. The advantage of this clustering method
+\textit{Mfuzz} package (\cite{Mfuzz2012}). The advantage of this clustering method
 is that a protein, TF or gene/transcript can be assigned to several clusters,
 thus reducing the sensitivity to noise and the information loss hard clustering
-exhibits. It is implemented as fuzzy c-means algorithm \cite{Hathaway_Pattern1986} 
+exhibits. It is implemented as fuzzy c-means algorithm (\cite{Hathaway_Pattern1986}) 
 and iteratively optimizes the objective function to minimize the variation of
 objects within the clusters. The user needs to provide a `min.std' threshold
 parameter if proteins or genes/transcripts with a low standard deviation
@@ -586,7 +586,7 @@ should be excluded. In addition the maximum number of cluster centers which
 should be tested in the `minimum distance between cluster centroid test' has
 to by given. This number is used as initial number to determine the data-specific
 maximal cluster number based on the number of distinct data points. For more
-details see \cite{Mfuzz2012} and \cite{schwammle_simple_2010}.
+details see (\cite{Mfuzz2012}) and (\cite{schwammle_simple_2010}).
 \begin{verbatim}
 library(Mfuzz)
 fuzzyClusters = clusterTimeProfiles(dynInferredNet, 
@@ -601,7 +601,7 @@ To complement the results from the different comparisons and analyses
 visualization functions for the different analyses.
 The consensus graphs of the static analysis for one or more corresponding time
 points can be plotted with the following function
-(see Figure~\ref{fig:Consgraph}):
+(see Figures~\ref{fig:Consgraph1} and~\ref{fig:Consgraph2}):
 \begin{verbatim}
 plotConsensusGraph(consensusGraphs, data_omics)
 \end{verbatim}  
@@ -610,6 +610,7 @@ plotConsensusGraph(consensusGraphs, data_omics)
 \centering
 \includegraphics{ConsensusGraphs_1.pdf}
 \caption{\textit{pwOmics} static consensus graph: Time point 1 hr.}
+\label{fig:Consgraph1}
 \end{figure}
 
 
@@ -617,6 +618,7 @@ plotConsensusGraph(consensusGraphs, data_omics)
 \centering
 \includegraphics{ConsensusGraphs_2.pdf}
 \caption{\textit{pwOmics} static consensus graph: Time point 4 hrs.}
+\label{fig:Consgraph2}
 \end{figure}
 
 
@@ -628,7 +630,7 @@ plotConsDynNet(dynInferredNet, sig.level = 0.65)
 Here, the parameter `sig.level' is the significance level used as cutoff for
 plotting edges in the network and has to be specified in the range between
 0 and 1. Furthermore the user can indicate if unconnected nodes should be
-removed and provide additional \textit{igraph} \cite{igraph2006}
+removed and provide additional \textit{igraph} (\cite{igraph2006})
 layout parameters.\\
 \begin{figure}[htbp]
 \centering

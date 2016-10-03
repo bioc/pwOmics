@@ -36,7 +36,6 @@
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 #' PWdatabase = c("biocarta"), 
 #' TFtargetdatabase = c("chea"))
-#' 
 #' \dontrun{
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24),
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -127,7 +126,7 @@ readOmics <- function(tp_prots, tp_genes, omics, PWdatabase, TFtargetdatabase) {
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 #' PWdatabase = c("biocarta"), 
-#' TFtargetdatabase = c("chea"))
+#' TFtargetdatabase = c("pazar"))
 #' data_omics = readTFdata(data_omics)
 #' data_omics[[3]]
 readTFdata <- function(data_omics, TF_target_path, cell_match = 0, TF_filter_threshold = 0) {
@@ -160,7 +159,8 @@ readTFdata <- function(data_omics, TF_target_path, cell_match = 0, TF_filter_thr
     { 
         pazar = query(ah, "Pazar")
         TF_data_pazar = list()
-        for(k in 1: length(pazar))
+        ret_list = c(1:2, 4:35, 37:46, 48:49, 51:62, 64:69, 71, 73:76, 78:84, 88: length(pazar))
+        for(k in ret_list)
         {   if(class(pazar[[k]]) == "GRanges")
         { TF_data_pazar[[k]] = as.data.frame(pazar[[k]])
         }else{
