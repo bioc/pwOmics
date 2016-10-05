@@ -1,29 +1,35 @@
-%\VignetteIndexEntry{pwOmics}
-\documentclass[a4paper]{article}
+%\VignetteIndexEntry{pwOmics Vignette}
+%\VignetteDepends{pwOmics}
+%\VignettePackage{pwOmics}
+%\VignetteEngine{utils::Sweave}
 
-\usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
 
-\usepackage{graphicx}
-\usepackage{enumitem}
-\usepackage{epstopdf}
-\usepackage{csquotes} 
-%\usepackage[sort, numbers]{natbib}
-\usepackage[backend=bibtex,bibencoding=ascii,style=authoryear,sorting=none]{biblatex}
-\usepackage{subcaption}
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{tocloft}
 \usepackage{hyperref}
-
+\usepackage[backend=bibtex,bibencoding=ascii,style=authoryear,sorting=none]{biblatex}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{subcaption}
+\usepackage{enumitem}
 \addbibresource{pwOmics_vignette.bib}
-\setlength{\parindent}{0pt}
 
-\title{pwOmics - Pathway-based Integration of time-series Omics Data using public database knowledge}
-\author{Astrid Wachter\\
-Medical Statistics, University Medical Center Göttingen, Germany}
+\newcommand{\gene}[1]{\emph{#1}}
 
+\setlength{\parskip}{1.5ex}
+\setlength{\parindent}{0cm}
 
 \begin{document}
 %\bibliographystyle{ieeetr} 
 \SweaveOpts{concordance=TRUE}
+\title{pwOmics - Pathway-based Integration of time-series Omics Data using public database knowledge}
+\author{Astrid Wachter\\
+Medical Statistics, University Medical Center Göttingen, Germany}
+
 \maketitle
 
 \tableofcontents
@@ -668,35 +674,11 @@ measurements.
 
 \newpage
 \section{Session Information}
-\begin{itemize}[topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex]
-\item R Under development (unstable) (2015-03-11 r67980),
-Platform: x86\_64-unknown-linux-gnu (64-bit),
-Running under: Ubuntu precise (12.04.5 LTS)\\
-\item Locale: LC\_CTYPE=en\_US.UTF-8, LC\_NUMERIC=C,\\
-LC\_TIME=en\_US.UTF-8, LC\_COLLATE=en\_US.UTF-8,\\
-LC\_MONETARY=en\_US.UTF-8, LC\_MESSAGES=en\_US.UTF-8,\\
-LC\_PAPER=en\_US.UTF-8, LC\_NAME=C, LC\_ADDRESS=C,\\
-LC\_TELEPHONE=C, LC\_MEASUREMENT=en\_US.UTF-8,\\
-LC\_IDENTIFICATION=C\\
-\item Attached base packages: tcltk, parallel, stats, graphics, grDevices,
-utils, datasets, methods, base\\
-\item Other attached packages: ebdbNet\_1.2.3, Mfuzz\_2.27.1, DynDoc\_1.45.0,
-widgetTools\_1.45.0, e1071\_1.6-4, Biobase\_2.27.3, BiocGenerics\_0.13.11,
-longitudinal\_1.1.11, corpcor\_1.6.7, igraph\_0.7.1, pwOmics\_0.99.2\\
-\item Loaded via namespace (and not attached): Rcpp\_0.11.5, XVector\_0.7.4,
-BiocInstaller\_1.17.7, GenomeInfoDb\_1.3.19, plyr\_1.8.1,\\
-AnnotationHub\_1.99.82, tkWidgets\_1.45.0, class\_7.3-12, bitops\_1.0-6,\\
-biomaRt\_2.23.5, digest\_0.6.8, RSQLite\_1.0.0, shiny\_0.11.1, DBI\_0.3.1,\\
-rBiopaxParser\_2.5.0, stringr\_0.6.2, httr\_0.6.1, S4Vectors\_0.5.23,\\
-gtools\_3.4.2, caTools\_1.17.1, IRanges\_2.1.44, stats4\_3.2.0,\\
-data.table\_1.9.4, R6\_2.0.1, AnnotationDbi\_1.29.24, XML\_3.98-1.1,\\
-RJSONIO\_1.3-0, gdata\_2.13.3, reshape2\_1.4.1, STRINGdb\_1.7.0,\\
-gplots\_2.16.0, htmltools\_0.2.6, GenomicRanges\_1.19.54, mime\_0.3,\\
-interactiveDisplayBase\_1.5.6, xtable\_1.7-4, httpuv\_1.3.2,\\ 
-KernSmooth\_2.23-14, RCurl\_1.95-4.5, chron\_2.3-45\\
-\end{itemize}
+
+<<echo=FALSE,results=tex>>=
+toLatex(sessionInfo())
+@
 
 \printbibliography
 
 \end{document}
-
