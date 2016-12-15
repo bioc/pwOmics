@@ -4,12 +4,21 @@
 \alias{getbipartitegraphInfo}
 \title{Get TF-target gene information for the consensus graph.}
 \usage{
-getbipartitegraphInfo(data_omics, tps)
+getbipartitegraphInfo(data_omics, tps, updown = FALSE, phospho = TRUE)
 }
 \arguments{
 \item{data_omics}{OmicsData object.}
 
 \item{tps}{integer specifying current timepoint under consideration.}
+
+\item{updown}{boolean value; TRUE in case up- and downregulation should be
+checked individually for intersection. Type of checking is defined with
+parameter 'phospho'.}
+
+\item{phospho}{boolean value; TRUE in case up- and downregulation should be
+checked based on provided downstream phosphoprotein influence from 
+identifyPR function; FALSE in case up- and downregulation should be checked
+for without phosphoprotein database knowledge. Default is TRUE.}
 }
 \value{
 list of transcription factor target gene interactions.

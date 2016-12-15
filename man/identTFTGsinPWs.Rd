@@ -9,8 +9,7 @@ identTFTGsinPWs(data_omics, temp_genelist)
 \arguments{
 \item{data_omics}{OmicsData object.}
 
-\item{temp_genelist}{dataframe of unique gene IDs in enriched/not enriched
-PWs.}
+\item{temp_genelist}{dataframe of unique gene IDs in PWs.}
 }
 \value{
 list with first element being a genelist of the pathways and second

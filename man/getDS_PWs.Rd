@@ -11,30 +11,33 @@ getDS_PWs(data_omics)
 }
 \value{
 list of length = number of protein time points, each element
-containing a data frame with the pathway IDs in the generated biopax model,
-corresponding pathway names and flags if those pathways are enriched
-(1 = enriched, NA = not enriched).
+containing a data frame with the pathway IDs in the generated biopax model and
+corresponding pathway names.
 }
 \description{
 This function returns pathways identified in the downstream analysis 
 containing the significantly abundant proteins.
 }
 \examples{
-#please run with whole database files (prepared according to vignette)
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
-TFtargetdatabase = c("chea", "pazar"))
+TFtargetdatabase = c("userspec"))
+data_omics = readPhosphodata(data_omics, 
+phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+package = "pwOmics")) 
+data_omics = readTFdata(data_omics, 
+TF_target_path = system.file("extdata", "TF_targets.txt", 
+package = "pwOmics"))
+data_omics_plus = readPWdata(data_omics, 
+loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
 \dontrun{
-data_omics = readTFdata(data_omics)
-data_omics_plus = readPWdata(data_omics,  
-loadgenelists = FALSE)
+data_omics_plus = identifyPR(data_omics_plus)
+setwd(system.file("extdata/Genelists", package = "pwOmics"))
 data_omics = identifyPWs(data_omics_plus)
 data_omics = identifyTFs(data_omics)
-data_omics = enrichPWs(data_omics)
-setwd(system.file("extdata/Genelists", package = "pwOmics"))
-data_omics = identifyPWTFTGs(data_omics, only_enriched = FALSE)
+data_omics = identifyPWTFTGs(data_omics)
 getDS_PWs(data_omics)
 }
 }

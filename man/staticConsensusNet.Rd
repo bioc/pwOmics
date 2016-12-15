@@ -4,13 +4,29 @@
 \alias{staticConsensusNet}
 \title{Static analysis.}
 \usage{
-staticConsensusNet(data_omics, run_times = 3)
+staticConsensusNet(data_omics, run_times = 3, updown = FALSE,
+  tp_prot = NULL, tp_gene = NULL, phospho = TRUE)
 }
 \arguments{
 \item{data_omics}{OmicsData object.}
 
 \item{run_times}{integer specifying number of times to run SP Steiner tree 
 algorithm to find minimal graph, default is 3.}
+
+\item{updown}{boolean value; TRUE in case up- and downregulation should be
+checked individually for intersection. Type of checking is defined with
+parameter 'phospho'.}
+
+\item{tp_prot}{integer specifying the time point that should be included 
+into the static consensus net for the phosphoprotein data}
+
+\item{tp_gene}{integer specifying the time point that should be included 
+into the static consensus net for the transcriptome data}
+
+\item{phospho}{boolean value; TRUE in case up- and downregulation should be
+checked based on provided downstream phosphoprotein influence from 
+identifyPR function; FALSE in case up- and downregulation should be checked
+for without phosphoprotein database knowledge. Default is TRUE.}
 }
 \value{
 list of igraph objects; length corresponds to number of overlapping 
@@ -26,25 +42,31 @@ of [1,2].
 Target genes of this consensus network are identified via the chosen
 TF-target gene database(s). Please note that the consensus graphs can be
 different as in the Steiner Tree algorithm the start terminal node is 
-picked arbitrarily and there are always several shortest path distances.
+picked arbitrarily and there are always several shortest path distances. 
+By default the same time points of both data sets are considered.
 }
 \examples{
-#please run with whole database files (prepared according to vignette)
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
-TFtargetdatabase = c("chea", "pazar"))
-\dontrun{
-data_omics = readTFdata(data_omics)
+TFtargetdatabase = c("userspec"))
+data_omics = readPhosphodata(data_omics, 
+phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+package = "pwOmics")) 
+data_omics = readTFdata(data_omics, 
+TF_target_path = system.file("extdata", "TF_targets.txt", 
+package = "pwOmics"))
 data_omics_plus = readPWdata(data_omics,  
-loadgenelists = FALSE)
+loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
+\dontrun{
+data_omics_plus = identifyPR(data_omics_plus)    
+setwd(system.file("extdata/Genelists", package = "pwOmics"))
 data_omics = identifyPWs(data_omics_plus)
 data_omics = identifyTFs(data_omics)
-data_omics = enrichPWs(data_omics)
-data_omics = identifyRsofTFs(data_omics, only_enriched = FALSE, 
+data_omics = identifyRsofTFs(data_omics, 
 noTFs_inPW = 1, order_neighbors = 10)
-data_omics = identifyPWTFTGs(data_omics, only_enriched = FALSE)
+data_omics = identifyPWTFTGs(data_omics)
 statConsNet = staticConsensusNet(data_omics)
 }
 }

@@ -2,8 +2,7 @@
 % Please edit documentation in R/pwOmics_helper_functions.R
 \name{identTFs}
 \alias{identTFs}
-\title{This function provides a data.table of upstream transcription factors and the 
-flag for enrichment.}
+\title{This function provides a data.table of upstream transcription factors.}
 \usage{
 identTFs(data_omics, glen)
 }
@@ -13,11 +12,10 @@ identTFs(data_omics, glen)
 \item{glen}{numeric value; identifier for current timepoint.}
 }
 \value{
-data.table of upstream TFs and an enrichment flag.
+data.table of upstream TFs.
 }
 \description{
-This function provides a data.table of upstream transcription factors and the 
-flag for enrichment.
+This function provides a data.table of upstream transcription factors.
 }
 \keyword{manip}
 

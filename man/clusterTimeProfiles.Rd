@@ -34,22 +34,27 @@ function of [3]. Be aware that the cluster number determination might be
 difficult especially for short time series measurements.
 }
 \examples{
-#please run with whole database files (prepared according to vignette)
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
-TFtargetdatabase = c("chea", "pazar"))
-\dontrun{
-data_omics = readTFdata(data_omics)
+TFtargetdatabase = c("userspec"))
+data_omics = readPhosphodata(data_omics, 
+phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+package = "pwOmics")) 
+data_omics = readTFdata(data_omics, 
+TF_target_path = system.file("extdata", "TF_targets.txt", 
+package = "pwOmics"))
 data_omics_plus = readPWdata(data_omics,  
-loadgenelists = FALSE)
+loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
+\dontrun{
+data_omics_plus = identifyPR(data_omics_plus)
+setwd(system.file("extdata/Genelists", package = "pwOmics"))
 data_omics = identifyPWs(data_omics_plus)
 data_omics = identifyTFs(data_omics)
-data_omics = enrichPWs(data_omics)
-data_omics = identifyRsofTFs(data_omics, only_enriched = FALSE, 
+data_omics = identifyRsofTFs(data_omics, 
 noTFs_inPW = 1, order_neighbors = 10)
-data_omics = identifyPWTFTGs(data_omics, only_enriched = FALSE)
+data_omics = identifyPWTFTGs(data_omics)
 statConsNet = staticConsensusNet(data_omics)
 consDynNet = consDynamicNet(data_omics, statConsNet)
 clusterTimeProfiles(consDynNet)

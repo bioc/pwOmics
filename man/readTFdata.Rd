@@ -59,10 +59,14 @@ via the AnnotationHub package and merged, if necessary.
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
-PWdatabase = c("biocarta"), 
-TFtargetdatabase = c("pazar"))
-data_omics = readTFdata(data_omics)
-data_omics[[3]]
+PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
+TFtargetdatabase = c("userspec"))
+data_omics = readPhosphodata(data_omics, 
+phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+package = "pwOmics")) 
+data_omics = readTFdata(data_omics, 
+TF_target_path = system.file("extdata", "TF_targets.txt", 
+package = "pwOmics"))
 }
 \keyword{manip}
 

@@ -4,7 +4,8 @@
 \alias{getConsensusSTRINGIDs}
 \title{Get consensus graph in STRING IDs.}
 \usage{
-getConsensusSTRINGIDs(data_omics, tps, string_db)
+getConsensusSTRINGIDs(data_omics, tps, string_db, updown = FALSE,
+  phospho = TRUE)
 }
 \arguments{
 \item{data_omics}{OmicsData object.}
@@ -12,6 +13,15 @@ getConsensusSTRINGIDs(data_omics, tps, string_db)
 \item{tps}{integer specifying current timepoint under consideration.}
 
 \item{string_db}{STRING_db object.}
+
+\item{updown}{boolean value; TRUE in case up- and downregulation should be
+checked individually for intersection. Type of checking is defined with
+parameter 'phospho'.}
+
+\item{phospho}{boolean value; TRUE in case up- and downregulation should be
+checked based on provided downstream phosphoprotein influence from 
+identifyPR function; FALSE in case up- and downregulation should be checked
+for without phosphoprotein database knowledge. Default is TRUE.}
 }
 \value{
 igraph object consensus graph with STRING IDs (only including 

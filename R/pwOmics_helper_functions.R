@@ -60,8 +60,8 @@ TFidenttps <- function(data_omics){
         for(no_pro in 1: length(names_genes))                 
         {if(names_genes[no_pro] %in% names(data_omics[[1]][[3]][[2]][[1]]))
         { data_omics[[1]][[3]][[2]][[k+1]][[no_pro]] = 
-          data_omics[[1]][[3]][[2]][[1]][which(names(data_omics[[1]][[3]][[2]][[1]]) == 
-                                                       names_genes[no_pro])][[1]]   
+          data.frame(data_omics[[1]][[3]][[2]][[1]][which(names(data_omics[[1]][[3]][[2]][[1]]) == 
+                     names_genes[no_pro])][[1]], upreg = data_omics[[1]][[2]][[2]][[k]][,2][no_pro]> 0)
         }else{
             data_omics[[1]][[3]][[2]][[k+1]][[no_pro]] = NA
         }
@@ -97,8 +97,25 @@ PWidenttps <- function(data_omics)
         names_prot = names(data_omics[[1]][[3]][[1]][[k+1]])  
         for(no_pro in 1: length(names_prot))                  
         {data_omics[[1]][[3]][[1]][[k+1]][[no_pro]] = 
-             data_omics[[1]][[3]][[1]][[1]][which(names(data_omics[[1]][[3]][[1]][[1]]) 
-                                                  == names_prot[no_pro])][[1]]}   
+             data_omics[[1]][[3]][[1]][[1]][which(names(data_omics[[1]][[3]][[1]][[1]]) == names_prot[no_pro])][[1]]
+        
+         data_omics[[1]][[3]][[1]][[k+1]][[no_pro]] = 
+             data.frame(data_omics[[1]][[3]][[1]][[k+1]][[no_pro]], 
+                        upreg = (data_omics[[1]][[2]][[1]][[k]][,2][no_pro]> 0),
+                        phosphoeffect = NA   )
+         if(data_omics[[1]][[2]][[1]][[k]][,2][no_pro]> 0 & !is.na(data_omics[[1]][[2]][[1]][[k]][,3][no_pro]) & data_omics[[1]][[2]][[1]][[k]][,3][no_pro] > 0)  
+         {data_omics[[1]][[3]][[1]][[k+1]][[no_pro]]$phosphoeffect = 1 }
+         if(data_omics[[1]][[2]][[1]][[k]][,2][no_pro]< 0 & !is.na(data_omics[[1]][[2]][[1]][[k]][,3][no_pro]) & data_omics[[1]][[2]][[1]][[k]][,3][no_pro]> 0)
+         {data_omics[[1]][[3]][[1]][[k+1]][[no_pro]]$phosphoeffect = -1 }
+         if(data_omics[[1]][[2]][[1]][[k]][,2][no_pro]> 0 & !is.na(data_omics[[1]][[2]][[1]][[k]][,3][no_pro]) & data_omics[[1]][[2]][[1]][[k]][,3][no_pro]< 0)
+         {data_omics[[1]][[3]][[1]][[k+1]][[no_pro]]$phosphoeffect = -1 }
+         if(data_omics[[1]][[2]][[1]][[k]][,2][no_pro]< 0 & !is.na(data_omics[[1]][[2]][[1]][[k]][,3][no_pro]) & data_omics[[1]][[2]][[1]][[k]][,3][no_pro]< 0)
+         {data_omics[[1]][[3]][[1]][[k+1]][[no_pro]]$phosphoeffect = 1 }
+         if(data_omics[[1]][[2]][[1]][[k]][,2][no_pro]> 0 & is.na(data_omics[[1]][[2]][[1]][[k]][,3][no_pro]))
+         {data_omics[[1]][[3]][[1]][[k+1]][[no_pro]]$phosphoeffect = 1 }
+         if(data_omics[[1]][[2]][[1]][[k]][,2][no_pro]< 0 & is.na(data_omics[[1]][[2]][[1]][[k]][,3][no_pro]))
+         {data_omics[[1]][[3]][[1]][[k+1]][[no_pro]]$phosphoeffect = -1 }
+        }
     }
     return(data_omics)
 }
@@ -168,14 +185,22 @@ PWidentallprotssub <- function(data_omics, genelists, genelist_ind, datab){
     all_prots = unique(data_omics[[1]][[1]][[2]])
     genes_cha = apply(genelists[[genelist_ind]][,1, with = FALSE], 2, 
                       as.character)
+    if(datab == "reactome")
+    {   for(k in 1: length(genes_cha))
+         {  
+           if(grepl("UniProt:", genes_cha[k]))
+           {genes_cha[k] = strsplit(genes_cha[k], " ")[[1]][2] }
+         }
+    }
+    
     ind_allprots = which(all_prots[,1] %in% genes_cha)
     ind_allprotslist = which(genes_cha %in% as.character(all_prots[,1]))
     for (f in ind_allprots)
     {for(s in ind_allprotslist)
     { if(as.character(all_prots[f,1]) == genes_cha[s] )
     {df_pw = data.frame(genelists[[genelist_ind]][s,V2], 
-                        genelists[[genelist_ind]][s,V3], NA)
-     colnames(df_pw) = c("pathwayIDs", "pathwayNames", "enrichedPWs")
+                        genelists[[genelist_ind]][s,V3] )
+     colnames(df_pw) = c("pathwayIDs", "pathwayNames")
      if(is.na(data_omics[[1]][[3]][[1]]$all_prot[[f]][[1]][1]))
      {data_omics[[1]][[3]][[1]]$all_prot[[f]] =  df_pw
      }else{
@@ -301,7 +326,10 @@ readTFtargets <- function(data_omics, TF_target_path) {
 #' @keywords manip
 getAlias_Ensemble <- function(ids)
 {
-  ensembl = useDataset("hsapiens_gene_ensembl", mart = useMart("ENSEMBL_MART_ENSEMBL", dataset="hsapiens_gene_ensembl", host = "www.ensembl.org"))
+  ensembl = useDataset("hsapiens_gene_ensembl", 
+                       mart = useMart("ENSEMBL_MART_ENSEMBL", 
+                                      dataset="hsapiens_gene_ensembl", 
+                                      host = "www.ensembl.org"))
   hgnc = getBM(attributes = c('ensembl_gene_id', 'hgnc_symbol'), 
                filters = "ensembl_gene_id", values = ids, mart = ensembl)
   return(hgnc)
@@ -498,11 +526,11 @@ identRegulators <- function(pws_morex_TFs, data_omics, order_neighbors,
     regulators = list()
     regulators[1: length(pws_morex_TFs)] = NA
     names(regulators) = names(pws_morex_TFs)
-    for(pwxTFs in 1: length(pws_morex_TFs))
+    for(pwxTFs in 1:length(pws_morex_TFs))
     { 
         neighbors = findxnextneighbors(data_omics, pws_morex_TFs, pwxTFs,
-                                       order_neighbors)
-        if(length(neighbors) > 0)
+                                      order_neighbors)
+        if(length(neighbors) > 0 & !is.na(neighbors[[1]][1,1]))
         {
             if(noTFs_inPW > 1)
             {regulators[[pwxTFs]] = findxneighborsoverlap(neighbors, noTFs_inPW,
@@ -511,17 +539,24 @@ identRegulators <- function(pws_morex_TFs, data_omics, order_neighbors,
              regulators[[pwxTFs]] = neighbors
             }
         }else{
-         regulators[[pwxTFs]] = NA    
+         regulators[[pwxTFs]] = neighbors   
         }
-        if(is.na(regulators[[pwxTFs]])[[1]])
+        if(is.na(regulators[[pwxTFs]][[1]][1])[1])
         {message("Pathway '", names(pws_morex_TFs[pwxTFs]), 
                  "' is checked for regulators...\n The pathway seems to have no inhibitory/activating pathway components.\n")
         }else{
-         message("Pathway '", names(pws_morex_TFs[pwxTFs]), 
+            if(noTFs_inPW == 1)
+            {message("Pathway '", names(pws_morex_TFs[pwxTFs]), 
                  "' is checked for regulators...\n Regulators identified: ",
-                 regulators[[pwxTFs]], "\n")   
+                 paste(do.call("rbind", regulators[[pwxTFs]])[,1], collapse = ", "), "\n")     
+                                                                                               
+            }else{
+            message("Pathway '", names(pws_morex_TFs[pwxTFs]), 
+                "' is checked for regulators...\n Regulators identified: ",
+                paste(regulators[[pwxTFs]][,1], collapse = ", "), "\n") }
         }
     } 
+
     return(regulators)
 }
 
@@ -541,20 +576,25 @@ identRegulators <- function(pws_morex_TFs, data_omics, order_neighbors,
 #' 
 #' @keywords manip
 findxneighborsoverlap <- function(neighbors, noTFs_inPW, regul) {
-    if(length(unlist(neighbors))>0)
-    {for(nover in 1: length(unlist(neighbors)))
+    neighborlist = do.call("rbind", neighbors) 
+    neighborlist = na.omit(neighborlist)
+    regul_upreg = vector()
+    if(length(neighborlist[,1])>0)
+    {for(nover in 1: length(neighborlist[,1]))
     { neighbors_found = 0
       for(no_TFs in 1: length(neighbors))
-      {if(unlist(neighbors)[nover] %in% neighbors[[no_TFs]] )
+      {if(neighborlist[nover,1] %in% neighbors[[no_TFs]][,1] )
       {neighbors_found = neighbors_found + 1
        if(neighbors_found > (noTFs_inPW-1) )
-       {regul = c(regul, neighbors[[no_TFs]][which(neighbors[[no_TFs]] == 
-                                                unlist(neighbors)[nover])])}
+       {regul = c(regul, as.character(neighbors[[no_TFs]][which(as.character(neighbors[[no_TFs]][,1]) == 
+                                                       as.character(neighborlist[nover,1])),1]))}
       }
       }
     }
     }
-    regul = unique(regul[2: length(regul)])
+    regul = unique(regul[3: length(regul)])
+    regul_upreg = neighborlist[match(regul, neighborlist[,1]),2]
+    regul = data.frame(regulators = regul, upreg = regul_upreg)
     return(regul)
 }
 
@@ -584,24 +624,38 @@ findxnextneighbors <- function(data_omics, pws_morex_TFs, pwxTFs,
     if(class(mygraph)== "graphNEL")
     {   mygraph_i = igraph.from.graphNEL(mygraph, name = TRUE)
         neighbors = list()
-        for(neigh in 1: length(pws_morex_TFs[[pwxTFs]]))
-        { if(pws_morex_TFs[[pwxTFs]][neigh] %in%
+        for(neigh in 1: dim(pws_morex_TFs[[pwxTFs]])[1])
+        { if(pws_morex_TFs[[pwxTFs]][neigh,1] %in%
                  get.vertex.attribute(mygraph_i,"name"))
         {neighbors[[neigh]] = get.vertex.attribute(mygraph_i,"name",index = 
                               unlist(neighborhood(mygraph_i,order_neighbors,
-                              pws_morex_TFs[[pwxTFs]][neigh],  mode="in")))
+                              as.character(pws_morex_TFs[[pwxTFs]][neigh,1]),mode="in")))
          neighbors[[neigh]] = neighbors[[neigh]][which(neighbors[[neigh]] != 
-                              pws_morex_TFs[[pwxTFs]][neigh]) ]
+                              pws_morex_TFs[[pwxTFs]][neigh,1]) ]
+         if(length(neighbors[[neigh]]) > 0)
+         {neighbors[[neigh]] = data.frame(regulators = neighbors[[neigh]], upreg = pws_morex_TFs[[pwxTFs]][neigh,2])
+          names(neighbors)[neigh] = as.character(pws_morex_TFs[[pwxTFs]][neigh,1])
+         }else{
+          neighbors[[neigh]] = data.frame(regulators = NA, upreg = NA)
+          names(neighbors)[neigh] = NA
+         }
         }else{
-            neighbors[[neigh]] = NA
+            neighbors[[neigh]] = data.frame(regulators = NA, upreg = NA)
+            names(neighbors)[neigh] =NA
         }
-          names(neighbors)[neigh] = pws_morex_TFs[[pwxTFs]][neigh]
         }
     }else{
-    neighbors = list()    
+    neighbors[[neigh]] = data.frame(regulators = NA, upreg = NA)  
+    names(neighbors)[neigh] =NA
+    message("This pathway was not from graphNEL class and is therefore not processable.
+            Please check that only graphNEL class pathways are used.\n")
     }
     return(neighbors)
 }
+
+
+
+
 
 #' Select pathways with more than x TFs
 #'
@@ -632,6 +686,7 @@ selectPWsofTFs <- function(pathway_list, pathway_frame, noTFs_inPW) {
           pws_more_TFs[[TF_found]][2: length(pws_more_TFs[[TF_found]])]
       if(length(pws_more_TFs[[TF_found]]) >= noTFs_inPW )
       {ind_no_TFs[TF_found] = TF_found}
+      pws_more_TFs[[TF_found]] = data.frame(pws_more_TFs[TF_found], upreg = pathway_frame[TF_found,3])
     }
     ind_no_TFs = na.omit(ind_no_TFs)
     pws_more_TFs = pws_more_TFs[ind_no_TFs]
@@ -642,8 +697,8 @@ selectPWsofTFs <- function(pathway_list, pathway_frame, noTFs_inPW) {
 #' upstream analysis
 #'
 #' @param genelists data.table as read/loaded by loadGenelist function.
-#' @param tps_TFs data.table of upstream transcription factors and the flag for 
-#' enrichment as returned from identTFs function.
+#' @param tps_TFs data.table of upstream transcription factors 
+#' as returned from identTFs function.
 #' @return list with first element being a pathway list and second being a 
 #' pathway dataframe of pathways including the TFs of the specified timepoint.
 #' 
@@ -659,16 +714,19 @@ identPWsofTFs <- function(genelists, tps_TFs) {
                             as.character(tps_TFs[,upstreamTFs])[k]) 
       if(length(ind_match)> 0)
       {if(length(ind_match) == 1)
-      { df_to_bind = data.frame(matrix(unique(genelist_n[ind_match,2:3]),
-                                       ncol = 2))
-        colnames(df_to_bind) = c("V2","V3")
+      { df_to_bind = data.frame(unique(cbind(matrix(genelist_n[ind_match,2]),matrix(genelist_n[ind_match,3]))),   
+                     "upreg" = rep(tps_TFs[k,"upreg"], times = dim(matrix(unique(genelist_n[ind_match,2:3])))[1],
+                                       ncol = 3))
+        colnames(df_to_bind) = c("V2","V3", "upreg")
         pathway_frame = rbind(pathway_frame, df_to_bind)
         pathway_list[[k]] = df_to_bind
       }else
-      {pathway_frame = rbind(pathway_frame, unique(genelist_n[ind_match,2:3]))
-       pathway_list[[k]] = unique(genelist_n[ind_match,2:3])}
+      { new_pathway_frame = data.frame( unique(cbind(matrix(genelist_n[ind_match,2]),matrix(genelist_n[ind_match,3]))) , tps_TFs[k,"upreg"]) 
+        colnames(new_pathway_frame) = c("V2","V3", "upreg")
+        pathway_frame = rbind(pathway_frame, new_pathway_frame)
+        pathway_list[[k]] = data.frame(unique(genelist_n[ind_match,2:3]),tps_TFs[k,"upreg"])}
       }else{
-          pathway_list[[k]] = NA
+        pathway_list[[k]] = NA
       }
       PWTF_tp_NA[k] = is.na(pathway_list[[k]][[1]][1])
     }
@@ -677,12 +735,11 @@ identPWsofTFs <- function(genelists, tps_TFs) {
     return(list(pathway_list, pathway_frame))
 }
 
-#' This function provides a data.table of upstream transcription factors and the 
-#' flag for enrichment.
+#' This function provides a data.table of upstream transcription factors.
 #'  
 #' @param data_omics OmicsData object.
 #' @param glen numeric value; identifier for current timepoint.
-#' @return data.table of upstream TFs and an enrichment flag.
+#' @return data.table of upstream TFs.
 #' 
 #' @keywords manip
 identTFs <- function(data_omics, glen) {
@@ -701,8 +758,7 @@ identTFs <- function(data_omics, glen) {
 #' target genes on basis of the given (chosen) TF-target database(s).
 #'  
 #' @param data_omics OmicsData object.
-#' @param temp_genelist dataframe of unique gene IDs in enriched/not enriched
-#' PWs.
+#' @param temp_genelist dataframe of unique gene IDs in PWs.
 #' @return list with first element being a genelist of the pathways and second
 #' being a target gene list of TFs.
 #' 
@@ -710,20 +766,27 @@ identTFs <- function(data_omics, glen) {
 identTFTGsinPWs <- function(data_omics, temp_genelist) {
     
     temp_genelist$TFs_PW = NA
-    temp_targetlist = vector()
+    temp_targetlist = data.frame(NA, NA, NA)
+    colnames(temp_targetlist) = c("target", "upreg", "phosphoeffect")
     for(gene_no in 1: dim(temp_genelist)[1])
     { if(as.character(temp_genelist[gene_no,1]) %in% 
              as.character(data_omics[[3]][[2]][,1]))
-      {temp_genelist[gene_no,2] = 1  #identification TF
+      {temp_genelist[gene_no,4] = 1  #identification TF
        match_gene = which(as.character(data_omics[[3]][[2]][,1]) == 
                             as.character(temp_genelist[gene_no,1]))
        if(length(match_gene)>0)
        {temp_targetlist = 
-          c(temp_targetlist, as.character(data_omics[[3]][[2]][match_gene,2]))}
+          rbind(temp_targetlist, 
+                data.frame(target = as.character(data_omics[[3]][[2]][match_gene,2]), 
+                           upreg = rep(temp_genelist[gene_no,2], 
+              times = length(as.character(data_omics[[3]][[2]][match_gene,2]))),
+              phosphoeffect = rep(temp_genelist[gene_no,2], 
+                          times = length(as.character(data_omics[[3]][[2]][match_gene,2])))))}
       }else{
        temp_genelist$TFs_PW[gene_no] = NA
     } 
     }
+    temp_targetlist = temp_targetlist[-1,]
     return(list(temp_genelist, temp_targetlist))
 }
 

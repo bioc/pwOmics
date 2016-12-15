@@ -10,6 +10,7 @@
 #' TF-target gene database(s). Please note that the consensus graphs can be
 #' different as in the Steiner Tree algorithm the start terminal node is 
 #' picked arbitrarily and there are always several shortest path distances. 
+#' By default the same time points of both data sets are considered.
 #'  
 #' @references 1. Path heuristic and Original path heuristic, Section 4.1.3 of 
 #' the book "The Steiner tree Problem", Peter L. Hammer
@@ -20,30 +21,48 @@
 #' @param data_omics OmicsData object.
 #' @param run_times integer specifying number of times to run SP Steiner tree 
 #' algorithm to find minimal graph, default is 3.
+#' @param updown boolean value; TRUE in case up- and downregulation should be
+#' checked individually for intersection. Type of checking is defined with
+#' parameter 'phospho'.
+#' @param phospho boolean value; TRUE in case up- and downregulation should be
+#' checked based on provided downstream phosphoprotein influence from 
+#' identifyPR function; FALSE in case up- and downregulation should be checked
+#' for without phosphoprotein database knowledge. Default is TRUE.
+#' @param tp_prot integer specifying the time point that should be included 
+#' into the static consensus net for the phosphoprotein data
+#' @param tp_gene integer specifying the time point that should be included 
+#' into the static consensus net for the transcriptome data
+#' 
 #' @return list of igraph objects; length corresponds to number of overlapping 
 #' time points from upstream and downstream analysis.
 #' @keywords manip
 #' @export
 #' @examples
-#' #please run with whole database files (prepared according to vignette)
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 #' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
-#' TFtargetdatabase = c("chea", "pazar"))
-#' \dontrun{
-#' data_omics = readTFdata(data_omics)
+#' TFtargetdatabase = c("userspec"))
+#' data_omics = readPhosphodata(data_omics, 
+#' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+#' package = "pwOmics")) 
+#' data_omics = readTFdata(data_omics, 
+#' TF_target_path = system.file("extdata", "TF_targets.txt", 
+#' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
-#' loadgenelists = FALSE)
+#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
+#' \dontrun{
+#' data_omics_plus = identifyPR(data_omics_plus)    
+#' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
-#' data_omics = enrichPWs(data_omics)
-#' data_omics = identifyRsofTFs(data_omics, only_enriched = FALSE, 
+#' data_omics = identifyRsofTFs(data_omics, 
 #' noTFs_inPW = 1, order_neighbors = 10)
-#' data_omics = identifyPWTFTGs(data_omics, only_enriched = FALSE)
+#' data_omics = identifyPWTFTGs(data_omics)
 #' statConsNet = staticConsensusNet(data_omics)
 #' }
-staticConsensusNet <- function(data_omics, run_times = 3) {
+staticConsensusNet <- function(data_omics, run_times = 3, updown = FALSE,
+                               tp_prot = NULL, tp_gene = NULL, phospho = TRUE) {
     
     if(class(data_omics) != "OmicsData")
     {stop("Parameter 'data_omics' is not an OmicsData object.")}
@@ -53,61 +72,138 @@ staticConsensusNet <- function(data_omics, run_times = 3) {
                              score_threshold = 0, input_directory = "") 
     PPI_graph = getSTRING_graph(string_db) 
     
-    same_tps = data_omics[[1]][[1]][[1]][[1]][which(data_omics[[1]][[1]][[1]][[1]] 
-                                                    %in% data_omics[[1]][[1]][[1]][[2]])]
-    if(length(same_tps) == 0)
-    {stop("No matching time points were found in the two 
-          corresponding data sets.")}
+    if(is.null(tp_prot) & is.null(tp_gene))
+        {same_tps = data_omics[[1]][[1]][[1]][[1]][which(data_omics[[1]][[1]][[1]][[1]] 
+                                                        %in% data_omics[[1]][[1]][[1]][[2]])]
+        if(length(same_tps) == 0)
+        {stop("No matching time points were found in the two 
+              corresponding data sets.")}
+        
+        ST_proteins = vector()
+        consensus_graph = list()
+        for(tps in 1: length(same_tps))
+        {
+            STRINGIDs = getConsensusSTRINGIDs(data_omics, tps, string_db, updown, phospho)
+            if(dim(STRINGIDs)[1]>0)
+            {message("Consensus graph for time point ", same_tps[tps], 
+                    " was generated.\n")   
     
-    ST_proteins = vector()
-    consensus_graph = list()
-    for(tps in 1: length(same_tps))
-    {
-        STRINGIDs = getConsensusSTRINGIDs(data_omics, tps, string_db)
+            ST_net = SteinerTree_cons(STRINGIDs$STRING_id, 
+                                      PPI_graph, run_times) 
+            ST_net = getAliasfromSTRINGIDs(data_omics, ST_net, updown, phospho,
+                                           STRINGIDs, tps, string_db)
+            
+            V(ST_net)$label.cex = 1
+            plot(ST_net, main = paste("Steiner tree of consensus graph\n time ", 
+                                      same_tps[tps], sep = ""))
+            legend(x = 0, y = -1.2 , legend = c("consensus proteins",
+                                                "steiner node proteins", "consensus TFs"), 
+                   fill = c("red", "yellow", "lightblue"), cex = 0.7)
+            message("Steiner tree of consensus graph for time point ", same_tps[tps],
+                    " was build.\n")
+            
+            ST_TFTG = getbipartitegraphInfo(data_omics, tps, updown, phospho)
+            ST_net_targets = genfullConsensusGraph(ST_net, ST_TFTG)
+            V(ST_net_targets)$label.cex = 0.6
+            plot.igraph(ST_net_targets, main = paste("Consensus graph\n time ", 
+                                                     same_tps[tps], sep = ""), vertex.size = 18)
+            if("yellow" %in% V(ST_net_targets)$color)
+            {legend(x = 0, y = -1.2 , legend = c("consensus proteins", 
+                "steiner node proteins", "consensus TFs", "consensus target genes"), 
+                   fill = c("red", "yellow", "lightblue", "green"), cex = 0.7)
+            }else{
+            legend(x = 0, y = -1.2 , legend = c("consensus proteins", 
+                     "consensus TFs", "consensus target genes"), 
+                     fill = c("red", "lightblue", "green"), cex = 0.7)   
+            }
+            
+            ST_net_targets = addFeedbackLoops(ST_net_targets)
+            consensus_graph[[tps]] = ST_net_targets
+            }else{
+            consensus_graph[[tps]] = NA
+                message("Not enough intersecting molecules to generate
+                        a consensus graph for time point ", same_tps[tps], "\n")   
+            }
+        }
+        names(consensus_graph) = as.character(same_tps)
+    }else{
+        ST_proteins = vector()
+        consensus_graph = list()
+        TF_proteins = getTFIntersection(data_omics, tp_prot, tp_gene, updown, phospho)$TF_Intersection
+        proteins = c(getProteinIntersection(data_omics, tp_prot, tp_gene, updown, phospho)$Protein_Intersection,
+                     TF_proteins)
+        ST_proteins_STRINGid = string_db$map(as.data.frame(proteins), "proteins", takeFirst = TRUE)
+        doubID = which(duplicated(ST_proteins_STRINGid$ST_proteins))
+        if(length(doubID)>0)
+        {STRINGIDs = ST_proteins_STRINGid[-doubID,]  
+        }else{
+         STRINGIDs = na.omit(ST_proteins_STRINGid)}
         if(dim(STRINGIDs)[1]>0)
-        {message("Consensus graph for time point ", same_tps[tps], 
-                " was generated.\n")   
-
-        ST_net = SteinerTree_cons(STRINGIDs$STRING_id, 
-                                  PPI_graph, run_times) 
-        ST_net = getAliasfromSTRINGIDs(data_omics, ST_net, 
-                                       STRINGIDs, tps, string_db)
-        
-        V(ST_net)$label.cex = 1
-        plot(ST_net, main = paste("Steiner tree of consensus graph\n time ", 
-                                  same_tps[tps], sep = ""))
-        legend(x = 0, y = -1.2 , legend = c("consensus proteins",
-                                            "steiner node proteins", "consensus TFs"), 
-               fill = c("red", "yellow", "lightblue"), cex = 0.7)
-        message("Steiner tree of consensus graph for time point ", same_tps[tps],
-                " was build.\n")
-        
-        ST_TFTG = getbipartitegraphInfo(data_omics, tps)
-        ST_net_targets = genfullConsensusGraph(ST_net, ST_TFTG)
-        V(ST_net_targets)$label.cex = 0.6
-        plot.igraph(ST_net_targets, main = paste("Consensus graph\n time ", 
-                                                 same_tps[tps], sep = ""), vertex.size = 18)
-        if("yellow" %in% V(ST_net_targets)$color)
-        {legend(x = 0, y = -1.2 , legend = c("consensus proteins", 
-            "steiner node proteins", "consensus TFs", "consensus target genes"), 
-               fill = c("red", "yellow", "lightblue", "green"), cex = 0.7)
+        {message("Consensus graph for protein time point ", tp_prot, " and transcript/gene time point ", tp_gene,
+                 " was generated.\n")   
+            
+            ST_net = SteinerTree_cons(STRINGIDs$STRING_id, 
+                                      PPI_graph, run_times) 
+            ###
+            ST_netnames = V(ST_net)$name
+            ind_name = which(ST_netnames %in% STRINGIDs$STRING_id)
+            ST_netnames[ind_name] = STRINGIDs$proteins[na.omit(match(ST_netnames, STRINGIDs$STRING_id))]
+            temp_STR = as.data.frame(ST_netnames[-ind_name])
+            colnames(temp_STR) = "STRING_id"
+            ST_netnames[-ind_name] = 
+                string_db$add_proteins_description(temp_STR)$preferred_name
+            V(ST_net)$name = ST_netnames
+            V(ST_net)$color[which(V(ST_net)$name %in% TF_proteins)] = "lightblue"
+            ###
+            
+            V(ST_net)$label.cex = 1
+            plot(ST_net, main = paste("Steiner tree of phosphoprotein time\n ", 
+                                      tp_prot, " and transcript time ", tp_gene, sep = ""))
+            legend(x = 0, y = -1.2 , legend = c("consensus proteins",
+                                                "steiner node proteins", "consensus TFs"), 
+                   fill = c("red", "yellow", "lightblue"), cex = 0.7)
+            message("Steiner tree of graph phosphoprotein time point", 
+                    tp_prot, " and transcript time point ", tp_gene," was build.\n")
+            
+            ###
+            ST_TFs = TF_proteins
+            ST_targets = getGenesIntersection(data_omics, tp_prot, tp_gene, updown, phospho)$Genes_Intersection
+            ST_TFTG = list()
+            for(k in 1: length(ST_TFs))
+            {ST_TFTG[[k]] = as.character(data_omics[[3]][[2]][which(as.character(data_omics[[3]][[2]][,1]) == ST_TFs[k]),2])
+            ST_TFTG[[k]] = ST_TFTG[[k]][which(ST_TFTG[[k]] %in% ST_targets)]
+            }
+            names(ST_TFTG) = ST_TFs
+            ###
+            ST_net_targets = genfullConsensusGraph(ST_net, ST_TFTG)
+            V(ST_net_targets)$label.cex = 0.6
+            plot.igraph(ST_net_targets, main = paste("Consensus graph phosphoprotein time\n ", 
+                                                     tp_prot, " and transcript time ", tp_gene, 
+                                                     sep = ""), vertex.size = 18)
+            if("yellow" %in% V(ST_net_targets)$color)
+            {legend(x = 0, y = -1.2 , legend = c("consensus proteins", 
+                                                 "steiner node proteins", "consensus TFs", "consensus target genes"), 
+                    fill = c("red", "yellow", "lightblue", "green"), cex = 0.7)
+            }else{
+                legend(x = 0, y = -1.2 , legend = c("consensus proteins", 
+                                                    "consensus TFs", "consensus target genes"), 
+                       fill = c("red", "lightblue", "green"), cex = 0.7)   
+            }
+            
+            ST_net_targets = addFeedbackLoops(ST_net_targets)
+            consensus_graph = ST_net_targets
         }else{
-        legend(x = 0, y = -1.2 , legend = c("consensus proteins", 
-                 "consensus TFs", "consensus target genes"), 
-                 fill = c("red", "lightblue", "green"), cex = 0.7)   
-        }
-        
-        ST_net_targets = addFeedbackLoops(ST_net_targets)
-        consensus_graph[[tps]] = ST_net_targets
-        }else{
-        consensus_graph[[tps]] = NA
+            consensus_graph[[tps]] = NA
             message("Not enough intersecting molecules to generate
-                    a consensus graph for time point ", same_tps[tps], "\n")   
+                        a consensus graph for time point ", same_tps[tps], "\n")   
         }
-    }
-    names(consensus_graph) = as.character(same_tps)
+    }   
     return(consensus_graph)
-    }
+}
+
+
+
+
 
 #' Generate STRING PPI graph.
 #' 
@@ -182,7 +278,7 @@ genfullConsensusGraph <- function(ST_net, ST_TFTG){
                         V(ST_net_targets)$color == "lightblue")
         ind_green = which(V(ST_net_targets)$color == "green" &
                               V(ST_net_targets)$name %in% unique(ST_TFTG[[s]]) )
-        if(length(ind)>0)
+        if(length(ind)>0 & length(ind_green)>0)
         {ST_net_targets = add.edges(ST_net_targets, rbind(ind_green, ind))}
         
     }
@@ -195,14 +291,23 @@ genfullConsensusGraph <- function(ST_net, ST_TFTG){
 #' 
 #' @param data_omics OmicsData object.
 #' @param tps integer specifying current timepoint under consideration.
+#' @param updown boolean value; TRUE in case up- and downregulation should be
+#' checked individually for intersection. Type of checking is defined with
+#' parameter 'phospho'.
+#' @param phospho boolean value; TRUE in case up- and downregulation should be
+#' checked based on provided downstream phosphoprotein influence from 
+#' identifyPR function; FALSE in case up- and downregulation should be checked
+#' for without phosphoprotein database knowledge. Default is TRUE.
 #' @return list of transcription factor target gene interactions.
 #' 
 #' @keywords manip
-getbipartitegraphInfo <- function(data_omics, tps){
+getbipartitegraphInfo <- function(data_omics, tps, updown = FALSE, phospho = TRUE){
+    same_tps = data_omics[[1]][[1]][[1]][[1]][which(data_omics[[1]][[1]][[1]][[1]] 
+                                                    %in% data_omics[[1]][[1]][[1]][[2]])]
     ST_TFs = 
-        gettpIntersection(data_omics)$Intersection$TF_Intersection[tps][[1]]
+        getTFIntersection(data_omics, same_tps[tps], same_tps[tps], updown, phospho)$TF_Intersection
     ST_targets = 
-        gettpIntersection(data_omics)$Intersection$Genes_Intersection[tps][[1]]
+        getGenesIntersection(data_omics, same_tps[tps], same_tps[tps], updown, phospho)$Genes_Intersection
     ST_TFTG = list()
     for(k in 1: length(ST_TFs))
     {ST_TFTG[[k]] = as.character(data_omics[[3]][[2]][which(as.character
@@ -217,6 +322,13 @@ getbipartitegraphInfo <- function(data_omics, tps){
 #' 
 #' @param data_omics OmicsData object.
 #' @param ST_net steiner tree graph generated by SteinerTree_cons function.
+#' @param updown boolean value; TRUE in case up- and downregulation should be
+#' checked individually for intersection. Type of checking is defined with
+#' parameter 'phospho'.
+#' @param phospho boolean value; TRUE in case up- and downregulation should be
+#' checked based on provided downstream phosphoprotein influence from 
+#' identifyPR function; FALSE in case up- and downregulation should be checked
+#' for without phosphoprotein database knowledge. Default is TRUE.
 #' @param consSTRINGIDs first element of list generated by getConsensusSTRINGIDs 
 #' function; a data.frame including the proteins to be considered as terminal 
 #' nodes in Steiner tree with colnames ST_proteins and the corresponding STRING 
@@ -227,9 +339,10 @@ getbipartitegraphInfo <- function(data_omics, tps){
 #' @return igraph object with alias name annotation.
 #' 
 #' @keywords manip
-getAliasfromSTRINGIDs <- function(data_omics, ST_net, consSTRINGIDs, tps,
-                                  string_db){
-    
+getAliasfromSTRINGIDs <- function(data_omics, ST_net, updown = FALSE, phospho = TRUE,
+                                  consSTRINGIDs, tps, string_db){
+    same_tps = data_omics[[1]][[1]][[1]][[1]][which(data_omics[[1]][[1]][[1]][[1]] 
+                                                    %in% data_omics[[1]][[1]][[1]][[2]])]
     ST_netnames = V(ST_net)$name
     ind_name = which(ST_netnames %in% consSTRINGIDs$STRING_id)
     ST_netnames[ind_name] = consSTRINGIDs$ST_proteins[na.omit(match(ST_netnames, 
@@ -240,7 +353,7 @@ getAliasfromSTRINGIDs <- function(data_omics, ST_net, consSTRINGIDs, tps,
         string_db$add_proteins_description(temp_STR)$preferred_name
     V(ST_net)$name = ST_netnames
     TF_proteins = 
-        gettpIntersection(data_omics)$Intersection$TF_Intersection[tps][[1]]
+        getTFIntersection(data_omics, same_tps[tps], same_tps[tps], updown, phospho)$TF_Intersection
     V(ST_net)$color[which(V(ST_net)$name %in% TF_proteins)] = "lightblue"
     
     return(ST_net)
@@ -251,16 +364,24 @@ getAliasfromSTRINGIDs <- function(data_omics, ST_net, consSTRINGIDs, tps,
 #' @param data_omics OmicsData object.
 #' @param tps integer specifying current timepoint under consideration.
 #' @param string_db STRING_db object.
+#' @param updown boolean value; TRUE in case up- and downregulation should be
+#' checked individually for intersection. Type of checking is defined with
+#' parameter 'phospho'.
+#' @param phospho boolean value; TRUE in case up- and downregulation should be
+#' checked based on provided downstream phosphoprotein influence from 
+#' identifyPR function; FALSE in case up- and downregulation should be checked
+#' for without phosphoprotein database knowledge. Default is TRUE.
 #' @return igraph object consensus graph with STRING IDs (only including 
 #' proteins and transcription factors).
 #' 
 #' @keywords manip
-getConsensusSTRINGIDs <- function(data_omics, tps, string_db){
-    
+getConsensusSTRINGIDs <- function(data_omics, tps, string_db, updown = FALSE, phospho = TRUE){
+    same_tps = data_omics[[1]][[1]][[1]][[1]][which(data_omics[[1]][[1]][[1]][[1]] 
+                                                    %in% data_omics[[1]][[1]][[1]][[2]])]
     ST_proteins = 
-        gettpIntersection(data_omics)$Intersection$Protein_Intersection[tps][[1]]
+        as.character(getProteinIntersection(data_omics, same_tps[tps], same_tps[tps], updown, phospho)$Protein_Intersection)
     ST_proteins = unique(c(ST_proteins,
-                           gettpIntersection(data_omics)$Intersection$TF_Intersection[tps][[1]]))
+                           getTFIntersection(data_omics, same_tps[tps], same_tps[tps], updown, phospho)$TF_Intersection))
     ST_proteins_STRINGid = string_db$map(as.data.frame(ST_proteins),
                                          "ST_proteins", takeFirst = TRUE)
     doubID = which(duplicated(ST_proteins_STRINGid$ST_proteins))
@@ -377,24 +498,29 @@ SteinerTree_cons <- function(terminal_nodes, PPI_graph, run_times) {
 #' @keywords manip
 #' @export
 #' @examples
-#' #please run with whole database files (prepared according to vignette)
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 #' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
-#' TFtargetdatabase = c("chea", "pazar"))
-#' \dontrun{
-#' data_omics = readTFdata(data_omics)
+#' TFtargetdatabase = c("userspec"))
+#' data_omics = readPhosphodata(data_omics, 
+#' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+#' package = "pwOmics")) 
+#' data_omics = readTFdata(data_omics, 
+#' TF_target_path = system.file("extdata", "TF_targets.txt", 
+#' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
-#' loadgenelists = FALSE)
+#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
+#' \dontrun{
+#' data_omics_plus = identifyPR(data_omics_plus) 
+#' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
-#' data_omics = enrichPWs(data_omics)
-#' data_omics = identifyRsofTFs(data_omics, only_enriched = FALSE, 
+#' data_omics = identifyRsofTFs(data_omics, 
 #' noTFs_inPW = 1, order_neighbors = 10)
-#' data_omics = identifyPWTFTGs(data_omics, only_enriched = FALSE)
+#' data_omics = identifyPWTFTGs(data_omics)
 #' statConsNet = staticConsensusNet(data_omics)
-#' consDynamicNet(data_omics, statConsNet)
+#' dynConsNet = consDynamicNet(data_omics, statConsNet)
 #' }
 consDynamicNet <- function(data_omics, consensusGraphs, laghankel = 3, 
                            cutoffhankel = 0.9, conv.1 = 0.15, 

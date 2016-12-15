@@ -17,6 +17,16 @@
 	pages = {316--323}
 }
 
+@article{kholodenko2012,
+    title = {Computational Approaches for Analyzing Information Flow in Biological Networks},
+    author = {Boris Kholodenko et al.},
+    journal = {Science Signaling},
+    volume = {5},
+    pages = {re1},
+    year = {2012}
+}
+
+
 @article{nishimura_biocarta_2001,
 	title = {{BioCarta}},
 	volume = {2},
@@ -66,6 +76,26 @@
 	pages = {D472--477}
 }
 
+
+@article{schaefer_pid:_2009,
+	title = {{PID}: the Pathway Interaction Database},
+	volume = {37},
+	issn = {1362-4962},
+	shorttitle = {{PID}},
+	doi = {10.1093/nar/gkn653},
+	abstract = {The Pathway Interaction Database ({PID}, http://pid.nci.nih.gov) is a freely available collection of curated and peer-reviewed pathways composed of human molecular signaling and regulatory events and key cellular processes. Created in a collaboration between the {US} National Cancer Institute and Nature Publishing Group, the database serves as a research tool for the cancer research community and others interested in cellular pathways, such as neuroscientists, developmental biologists and immunologists. {PID} offers a range of search features to facilitate pathway exploration. Users can browse the predefined set of pathways or create interaction network maps centered on a single molecule or cellular process of interest. In addition, the batch query tool allows users to upload long list(s) of molecules, such as those derived from microarray experiments, and either overlay these molecules onto predefined pathways or visualize the complete molecular connectivity map. Users can also download molecule lists, citation lists and complete database content in extensible markup language ({XML}) and Biological Pathways Exchange ({BioPAX}) Level 2 format. The database is updated with new pathway content every month and supplemented by specially commissioned articles on the practical uses of other relevant online tools.},
+	language = {eng},
+	number = {Database issue},
+	journal = {Nucleic Acids Research},
+	author = {Schaefer, Carl F. and Anthony, Kira and Krupa, Shiva and Buchoff, Jeffrey and Day, Matthew and Hannay, Timo and Buetow, Kenneth H.},
+	month = jan,
+	year = {2009},
+	pmid = {18832364},
+	pmcid = {PMC2686461},
+	keywords = {Biological Transport, Cell Physiological Processes, Databases, Factual, Gene Expression Regulation, Humans, Internet, Protein Interaction Mapping, Proteins, {RNA}, Signal Transduction, User-Computer Interface},
+	pages = {D674--679}
+}
+
 @article{kanehisa_data_2014,
 	title = {Data, information, knowledge and principle: back to metabolism in {KEGG}},
 	volume = {42},
@@ -103,24 +133,6 @@
 	pages = {27--30}
 }
 
-@article{schaefer_pid:_2009,
-	title = {{PID}: the Pathway Interaction Database},
-	volume = {37},
-	issn = {1362-4962},
-	shorttitle = {{PID}},
-	doi = {10.1093/nar/gkn653},
-	abstract = {The Pathway Interaction Database ({PID}, http://pid.nci.nih.gov) is a freely available collection of curated and peer-reviewed pathways composed of human molecular signaling and regulatory events and key cellular processes. Created in a collaboration between the {US} National Cancer Institute and Nature Publishing Group, the database serves as a research tool for the cancer research community and others interested in cellular pathways, such as neuroscientists, developmental biologists and immunologists. {PID} offers a range of search features to facilitate pathway exploration. Users can browse the predefined set of pathways or create interaction network maps centered on a single molecule or cellular process of interest. In addition, the batch query tool allows users to upload long list(s) of molecules, such as those derived from microarray experiments, and either overlay these molecules onto predefined pathways or visualize the complete molecular connectivity map. Users can also download molecule lists, citation lists and complete database content in extensible markup language ({XML}) and Biological Pathways Exchange ({BioPAX}) Level 2 format. The database is updated with new pathway content every month and supplemented by specially commissioned articles on the practical uses of other relevant online tools.},
-	language = {eng},
-	number = {Database issue},
-	journal = {Nucleic Acids Research},
-	author = {Schaefer, Carl F. and Anthony, Kira and Krupa, Shiva and Buchoff, Jeffrey and Day, Matthew and Hannay, Timo and Buetow, Kenneth H.},
-	month = jan,
-	year = {2009},
-	pmid = {18832364},
-	pmcid = {PMC2686461},
-	keywords = {Biological Transport, Cell Physiological Processes, Databases, Factual, Gene Expression Regulation, Humans, Internet, Protein Interaction Mapping, Proteins, {RNA}, Signal Transduction, User-Computer Interface},
-	pages = {D674--679}
-}
 
 @article{franceschini_string_2013,
 	title = {{STRING} v9.1: protein-protein interaction networks, with increased coverage and integration},
@@ -201,23 +213,10 @@
 	pages = {R207}
 }
 
-@article{kramer_rbiopaxparser--r_2013,
-	title = {{rBiopaxParser}--an R package to parse, modify and visualize {BioPAX} data},
-	volume = {29},
-	issn = {1367-4811},
-	doi = {10.1093/bioinformatics/bts710},
-	abstract = {{MOTIVATION}: Biological pathway data, stored in structured databases, is a useful source of knowledge for a wide range of bioinformatics algorithms and tools. The Biological Pathway Exchange ({BioPAX}) language has been established as a standard to store and annotate pathway information. However, use of these data within statistical analyses can be tedious. On the other hand, the statistical computing environment R has become the standard for bioinformatics analysis of large-scale genomics data. With this package, we hope to enable R users to work with {BioPAX} data and make use of the always increasing amount of biological pathway knowledge within data analysis methods.
-{RESULTS}: {rBiopaxParser} is a software package that provides a comprehensive set of functions for parsing, viewing and modifying {BioPAX} pathway data within R. These functions enable the user to access and modify specific parts of the {BioPAX} model. Furthermore, it allows to generate and layout regulatory graphs of controlling interactions and to visualize {BioPAX} pathways.
-{AVAILABILITY}: {rBiopaxParser} is an open-source R package and has been submitted to Bioconductor.},
-	language = {eng},
-	number = {4},
-	journal = {Bioinformatics (Oxford, England)},
-	author = {Kramer, Frank and Bayerlová, Michaela and Klemm, Florian and Bleckmann, Annalen and Beissbarth, Tim},
-	month = feb,
-	year = {2013},
-	pmid = {23274212},
-	keywords = {Algorithms, Computational Biology, Computer Graphics, Databases, Factual, Genomics, Models, Biological, Signal Transduction, Software, Vocabulary, Controlled},
-	pages = {520--522}
+@misc{Morgan,
+  author       = {Morgan M, Carlson M, Tenenbaum D and Arora S}, 
+  title        = {AnnotationHub: Client to access AnnotationHub resources},
+  howpublished = {R package version 2.22.0},
 }
 
 @article{yosef_impulse_2011,
@@ -239,6 +238,39 @@
 	pages = {886--896}
 }
 
+@book{Kleinberg_AlgorithmDesign_2006,
+    author    = {Kleinberg, J and Tardos, E},
+    title     = {Algorithm Design},
+    publisher = {Pearson, Boston, MA},
+    year      = {2006}
+}
+
+@article{Takahashi_Steiner_1980,
+    title = {An approximate solution for the Steiner problem in graphs},
+    journal = {Math. Jap.},
+    volume = {24},
+    year = {1980},
+    author = {Takahashi, H and Matsuyama, A},
+    pages = {573--577}
+  }
+
+@article{Sadeghi2013,
+    title = {Steiner tree methods for optimal sub-network identification: an empirical study},
+    author = {Afshin Sadeghi and Holger Fröhlich},
+    journal = {BMC Bioinformatics},
+    volume = {14},
+    pages = {144},
+    year = {2013}
+  }
+
+@article{Opgen_longi_2006,
+    title = {Using regularized dynamic correlation to infer gene dependency networks from time-series microarray data},
+    journal = {Proceedings of the 4th International Workshop on Computational Systems Biology, WCSB 2006},
+    year = {2006},
+    author = {Opgen-Rhein, R and Strimmer, K},
+    pages = {73--76}
+  }
+
 @article{rainer_opgen-rhein_inferring_2006,
 	title = {Inferring gene dependency networks from genomic longitudinal data: a functional data approach},
 	volume = {4},
@@ -250,6 +282,58 @@
 	year = {2006},
 	pages = {53--65}
 }
+
+@article{Rau_ebdbnet_2010,
+    title = {An empirical Bayesian method for estimating biological
+      networks from temporal microarray data},
+    journal = {Statistical Applications in Genetics and Molecular
+      Biology},
+    volume = {9},
+    number = {1},
+    year = {2010},
+    author = {Andrea Rau and Florence Jaffrezic and Jean-Louis Foulley
+      and Rebecca Doerge}
+  }
+
+@book{Shannon_theorem_1949,
+    title = {The mathematical theory of communication},
+    year = {1949},
+    publisher = {University of Illinois Press},
+    author = {Shannon, CA and Weaver, W}
+  }
+
+@article{Nyquist_theorem_1928,
+    title = {Certain topics in telegraph transmission theory},
+    journal = {Transactions of the A. I. E. E.},
+    year = {1928},
+    author = {Nyquist, H},
+    pages = {617--644}
+}
+
+@article{DBLP:journals/tit/BlumensathD09,
+  author    = {Thomas Blumensath and
+               Michael E. Davies},
+  title     = {Sampling Theorems for Signals From the Union of Finite-Dimensional
+               Linear Subspaces},
+  journal   = {{IEEE} Transactions on Information Theory},
+  volume    = {55},
+  number    = {4},
+  pages     = {1872--1882},
+  year      = {2009},
+  url       = {http://dx.doi.org/10.1109/TIT.2009.2013003},
+  doi       = {10.1109/TIT.2009.2013003},
+  timestamp = {Wed, 01 Apr 2009 14:03:40 +0200},
+  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/tit/BlumensathD09},
+  bibsource = {dblp computer science bibliography, http://dblp.org}
+}
+
+@Manual{Mfuzz2012,
+    title = {Mfuzz: Soft clustering of time series gene expression data},
+    author = {Matthias Futschik},
+    year = {2012},
+    note = {R package version 2.22.0},
+    url = {http://itb.biologie.hu-berlin.de/~futschik/software/R/Mfuzz/}
+  }
 
 @article{schwammle_simple_2010,
 	title = {A simple and fast method to determine the parameters for fuzzy c–means cluster analysis},
@@ -272,85 +356,6 @@ Supplementary information: Supplementary data are available at Bioinformatics on
 	pages = {2841--2848}
 }
 
-@article{Rau_ebdbnet_2010,
-    title = {An empirical Bayesian method for estimating biological
-      networks from temporal microarray data},
-    journal = {Statistical Applications in Genetics and Molecular
-      Biology},
-    volume = {9},
-    number = {1},
-    year = {2010},
-    author = {Andrea Rau and Florence Jaffrezic and Jean-Louis Foulley
-      and Rebecca Doerge}
-  }
-
-@article{Opgen_longi_2006,
-    title = {Using regularized dynamic correlation to infer gene dependency networks from time-series microarray data},
-    journal = {Proceedings of the 4th International Workshop on Computational Systems Biology, WCSB 2006},
-    year = {2006},
-    author = {Opgen-Rhein, R and Strimmer, K},
-    pages = {73--76}
-  }
-@article{Takahashi_Steiner_1980,
-    title = {An approximate solution for the Steiner problem in graphs},
-    journal = {Math. Jap.},
-    volume = {24},
-    year = {1980},
-    author = {Takahashi, H and Matsuyama, A},
-    pages = {573--577}
-  }
-@book{Kleinberg_AlgorithmDesign_2006,
-    author    = {Kleinberg, J and Tardos, E},
-    title     = {Algorithm Design},
-    publisher = {Pearson, Boston, MA},
-    year      = {2006}
-}
-@article{DBLP:journals/tit/BlumensathD09,
-  author    = {Thomas Blumensath and
-               Michael E. Davies},
-  title     = {Sampling Theorems for Signals From the Union of Finite-Dimensional
-               Linear Subspaces},
-  journal   = {{IEEE} Transactions on Information Theory},
-  volume    = {55},
-  number    = {4},
-  pages     = {1872--1882},
-  year      = {2009},
-  url       = {http://dx.doi.org/10.1109/TIT.2009.2013003},
-  doi       = {10.1109/TIT.2009.2013003},
-  timestamp = {Wed, 01 Apr 2009 14:03:40 +0200},
-  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/tit/BlumensathD09},
-  bibsource = {dblp computer science bibliography, http://dblp.org}
-}
-@article{Nyquist_theorem_1928,
-    title = {Certain topics in telegraph transmission theory},
-    journal = {Transactions of the A. I. E. E.},
-    year = {1928},
-    author = {Nyquist, H},
-    pages = {617--644}
-}
-@book{Shannon_theorem_1949,
-    title = {The mathematical theory of communication},
-    year = {1949},
-    publisher = {University of Illinois Press},
-    author = {Shannon, CA and Weaver, W}
-  }
-@Manual{Mfuzz2012,
-    title = {Mfuzz: Soft clustering of time series gene expression data},
-    author = {Matthias Futschik},
-    year = {2012},
-    note = {R package version 2.22.0},
-    url = {http://itb.biologie.hu-berlin.de/~futschik/software/R/Mfuzz/}
-  }
-@article{Hathaway_Pattern1986,
-    title = {Local convergence of the fuzzy c-means algorithm},
-    journal = {Pattern Recognition},
-    volume = {19},
-    pages = {477--480},
-    year = {1986},
-    publisher = {University of Illinois Press},
-    author = {Hathaway, R and Bezdek, J}
-  }
-
 @article{igraph2006,
     title = {The igraph software package for complex network research},
     author = {Gabor Csardi and Tamas Nepusz},
@@ -361,32 +366,4 @@ Supplementary information: Supplementary data are available at Bioinformatics on
     url = {http://igraph.org}
   }
 
-@article{Kholodenko2012,
-    title = {Computational Approaches for Analyzing Information Flow in Biological Networks},
-    author = {Boris Kholodenko et al.},
-    journal = {Science Signaling},
-    volume = {5},
-    pages = {re1},
-    year = {2012}
-  }
-@article{Waters2012,
-    title = {Network Analysis of Epidermal Growth Factor Signaling Using Integrated Genomic, Proteomic and Phosphorylation Data},
-    author = {Waters, K.M. et al.},
-    journal = {PLoS ONE},
-    volume = {7},
-    pages = {e34515},
-    year = {2012}
-  }
-@article{Sadeghi2013,
-    title = {Steiner tree methods for optimal sub-network identification: an empirical study},
-    author = {Afshin Sadeghi and Holger Fröhlich},
-    journal = {BMC Bioinformatics},
-    volume = {14},
-    pages = {144},
-    year = {2013}
-  }
-@article{Morgan,
-    title = {AnnotationHub: Client to access AnnotationHub resources},
-    author = {Morgan M, Carlson M, Tenenbaum D and Arora S},
-    note = {R package version 2.22.0}
-  }
+

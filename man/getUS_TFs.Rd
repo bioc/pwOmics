@@ -11,8 +11,7 @@ getUS_TFs(data_omics)
 }
 \value{
 list of length = number of gene/transcript time points, each element
-containing a data frame with upstream transcription factors and flag if
-these transcription factors are enriched (1 = enriched, NA = not enriched).
+containing a data frame with upstream transcription factors.
 }
 \description{
 Get upstream TFs.
@@ -21,17 +20,22 @@ Get upstream TFs.
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
-PWdatabase = c("biocarta"), 
-TFtargetdatabase = c("chea"))
-\dontrun{
-data_omics = readTFdata(data_omics)
+PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
+TFtargetdatabase = c("userspec"))
+data_omics = readPhosphodata(data_omics, 
+phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+package = "pwOmics")) 
+data_omics = readTFdata(data_omics, 
+TF_target_path = system.file("extdata", "TF_targets.txt", 
+package = "pwOmics"))
 data_omics_plus = readPWdata(data_omics,  
-loadgenelists = FALSE)
+loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
+data_omics_plus = identifyPR(data_omics_plus)
+\dontrun{
+setwd(system.file("extdata/Genelists", package = "pwOmics"))
 data_omics = identifyPWs(data_omics_plus)
 data_omics = identifyTFs(data_omics)
-data_omics = enrichPWs(data_omics)
-setwd(system.file("extdata/Genelists", package = "pwOmics"))
-data_omics = identifyRsofTFs(data_omics, only_enriched = FALSE, 
+data_omics = identifyRsofTFs(data_omics, 
 noTFs_inPW = 1, order_neighbors = 10)
 getUS_TFs(data_omics)
 }

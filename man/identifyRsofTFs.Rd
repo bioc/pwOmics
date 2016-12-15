@@ -2,17 +2,12 @@
 % Please edit documentation in R/pwOmics_upstream_analysis.R
 \name{identifyRsofTFs}
 \alias{identifyRsofTFs}
-\title{Identify regulators of enriched transcription factors - upstream analysis.}
+\title{Identify regulators of transcription factors - upstream analysis.}
 \usage{
-identifyRsofTFs(data_omics, only_enriched = TRUE, noTFs_inPW = 2,
-  order_neighbors = 6)
+identifyRsofTFs(data_omics, noTFs_inPW = 2, order_neighbors = 6)
 }
 \arguments{
 \item{data_omics}{OmicsData object.}
-
-\item{only_enriched}{boolean value defining if transcription factors should
-be identifies only for enriched pathways (TRUE); or for all identified
-pathways (FALSE); default is TRUE.}
 
 \item{noTFs_inPW}{integer; only regulators in upstream pathways with more
 than this number of TFs are identified.}
@@ -27,7 +22,7 @@ PathwayD containing selected pathway databases + biopax model;
 TFtargetsD containing selected TF target gene databases + TF target gene data.
 }
 \description{
-This function identifies the regulators upstream of the enriched/identified 
+This function identifies the regulators upstream of the identified 
 transcription factors in upstream analysis.
 Converting the pathway information to a regulatory graph needs some time...
 Warnings regarding the skipping of edges in building the regulatory graph can 
@@ -37,20 +32,24 @@ be ignored.
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
-PWdatabase = c("biocarta"), 
-TFtargetdatabase = c("chea"))
-\donttest{
-data_omics = readTFdata(data_omics)
+PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
+TFtargetdatabase = c("userspec"))
+data_omics = readPhosphodata(data_omics, 
+phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+package = "pwOmics")) 
+data_omics = readTFdata(data_omics, 
+TF_target_path = system.file("extdata", "TF_targets.txt", 
+package = "pwOmics"))
 data_omics_plus = readPWdata(data_omics,  
-loadgenelists = FALSE)
-}
+loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
 \dontrun{
+data_omics_plus = identifyPR(data_omics_plus)
+setwd(system.file("extdata/Genelists", package = "pwOmics"))
 data_omics = identifyPWs(data_omics_plus)
 data_omics = identifyTFs(data_omics)
-data_omics = enrichPWs(data_omics)
 setwd(system.file("extdata/Genelists", package = "pwOmics"))
-identifyRsofTFs(data_omics, only_enriched = FALSE, noTFs_inPW = 1, 
-order_neighbors = 10)
+data_omics = identifyRsofTFs(data_omics, 
+noTFs_inPW = 1, order_neighbors = 10)
 }
 }
 \keyword{manip}

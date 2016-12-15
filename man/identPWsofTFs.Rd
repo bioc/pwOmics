@@ -10,8 +10,8 @@ identPWsofTFs(genelists, tps_TFs)
 \arguments{
 \item{genelists}{data.table as read/loaded by loadGenelist function.}
 
-\item{tps_TFs}{data.table of upstream transcription factors and the flag for 
-enrichment as returned from identTFs function.}
+\item{tps_TFs}{data.table of upstream transcription factors 
+as returned from identTFs function.}
 }
 \value{
 list with first element being a pathway list and second being a 

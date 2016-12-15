@@ -1,35 +1,31 @@
-%\VignetteIndexEntry{pwOmics Vignette}
-%\VignetteDepends{pwOmics}
-%\VignettePackage{pwOmics}
-%\VignetteEngine{utils::Sweave}
+%\VignetteIndexEntry{pwOmics}
+\documentclass[a4paper]{article}
 
-
-\documentclass[11pt,a4paper]{article}
-
-\usepackage{tocloft}
-\usepackage{hyperref}
-\usepackage[backend=bibtex,bibencoding=ascii,style=authoryear,sorting=none]{biblatex}
-\usepackage{float}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{graphicx}
 \usepackage[utf8]{inputenc}
-\usepackage{subcaption}
+\usepackage[english]{babel}
+
+\usepackage{graphicx}
 \usepackage{enumitem}
+\usepackage{epstopdf}
+\usepackage{csquotes}
+%\usepackage[sort, numbers]{natbib}
+\usepackage[backend=bibtex,bibencoding=ascii,style=authoryear,sorting=none]{biblatex}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage[noae]{Sweave}
+
 \addbibresource{pwOmics_vignette.bib}
+\setlength{\parindent}{0pt}
 
-\newcommand{\gene}[1]{\emph{#1}}
-
-\setlength{\parskip}{1.5ex}
-\setlength{\parindent}{0cm}
-
-\begin{document}
-%\bibliographystyle{ieeetr} 
-\SweaveOpts{concordance=TRUE}
-\title{pwOmics - Pathway-based Integration of time-series Omics Data using public database knowledge}
+\title{pwOmics - Pathway-based integration of time-series omics data using public database knowledge}
 \author{Astrid Wachter\\
 Medical Statistics, University Medical Center Göttingen, Germany}
 
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+%\bibliographystyle{ieeetr}
+\input{pwOmics-concordance}
 \maketitle
 
 \tableofcontents
@@ -45,26 +41,19 @@ bias and has natural limitations in identifying full signaling responses
 approach in order to connect biological implications on different signaling
 levels. Using diverse data types is expected to provide a deeper understanding
 of global biological functions and the underlying complex processes
-(\cite{Kholodenko2012}).\\
+(Kholodenko et \cite{kholodenko2012}).\\
 This is why computational data analysis tools for interpretation of data from
 proteomics and transcriptomics measurements in parallel are needed.\\
 \textit{pwOmics} is a tool for pathway-based level-specific data comparison and
 analysis of single time point or time-series omics data measured in parallel.
 It provides individual analysis workflows for the different omics data sets
 (see Figure~\ref{fig:analysis}) and in addition enables consensus analysis of
-omics data as shown in the workflow overview in Figure~\ref{fig:workflow}.
+omics data.
 \begin{figure}[htbp]
 \centering
-\includegraphics [angle=270, width = 320pt]{updown.pdf}
+\includegraphics [width=100px, height=300px, angle = 270]{updown.pdf}
 \caption{\textit{pwOmics} downstream and upstream analysis.}
 \label{fig:analysis}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics [width = 360pt]{workflow.pdf}
-\caption{\textit{pwOmics} workflow overview.}
-\label{fig:workflow}
 \end{figure}
 
 Up to this point analysis is restricted to human species. In future an expansion
@@ -79,12 +68,12 @@ and transcription knowledge data, it is necessary to define the databases to
 work with. Three different kinds of databases are necessary to do all analyses
 steps:\\
 \begin{enumerate}[topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex]
-\item Pathway databases:\\ The user can choose from Biocarta 
-(\cite{nishimura_biocarta_2001}), Reactome (\cite{milacic_annotating_2012, 
-croft_reactome_2014}), PID (\cite{schaefer_pid:_2009}) from the National 
-Cancer Institute (NCI) and KEGG (\cite{kanehisa_data_2014, 
+\item Pathway databases:\\ The user can choose from Biocarta
+(\cite{nishimura_biocarta_2001}), Reactome (\cite{milacic_annotating_2012,
+croft_reactome_2014}), PID (\cite{schaefer_pid:_2009}) from the National
+Cancer Institute (NCI) and KEGG (\cite{kanehisa_data_2014,
 kanehisa_kegg:_2000}).\\
-\item Protein-protein interaction (PPI) database:\\ STRING 
+\item Protein-protein interaction (PPI) database:\\ STRING
 (\cite{franceschini_string_2013}).\\
 \item Transcription factor (TF) - target gene databases:\\ The user can choose
 from ChEA (\cite{lachmann_chea:_2010}), Pazar (\cite{portales-casamar_pazar_2009,
@@ -93,10 +82,10 @@ on a commercial database.\\
 \end{enumerate}
 
 The pathway database information is used to identify the pathways of the
-differentially abundant proteins in the downstream analysis as well as upstream
+differentially abundant phosphoproteins in the downstream analysis as well as upstream
 protein regulators of TFs in the upstream analysis. The PPI database STRING
 (\cite{franceschini_string_2013}) was chosen to define the protein net for the
-consensus analysis. The TF - target gene databases information is necessary for
+consensus analysis. TF - target gene database information is necessary for
 the TF identification in pathways in the downstream analysis. Additionally the
 upstream TFs of differentially expressed genes/transcripts are identified in the
 upstream analysis based on this information.\\
@@ -108,19 +97,79 @@ The database information is downloaded internally via \textit{STRINGdb} and
 also in the metadata of the pathway database and TF - target database it can be
 received by
 
-<<mychunk1,  eval=TRUE, echo=TRUE>>=
-library(pwOmics)
-library(AnnotationHub)
-ah = AnnotationHub()
-#pathway databases
-pw = query(ah, "NIH Pathway Interaction Database")
-pw[1]
-#TF-target databases
-chea = query(ah, "ChEA")
-chea[1]
-pazar = query(ah, "Pazar")
-pazar[1]
-@
+\begin{Schunk}
+\begin{Sinput}
+> library(pwOmics)
+> library(AnnotationHub)
+> ah = AnnotationHub()
+> #pathway databases
+> pw = query(ah, "NIH Pathway Interaction Database")
+> pw[1]
+\end{Sinput}
+\begin{Soutput}
+AnnotationHub with 1 record
+# snapshotDate(): 2016-08-15 
+# names(): AH22329
+# $dataprovider: NIH Pathway Interaction Database
+# $species: Homo sapiens
+# $rdataclass: biopax
+# $title: BioCarta.owl.gz
+# $description: BioCarta BioPax file from NCI Pathway Interaction Database
+# $taxonomyid: 9606
+# $genome: hg19
+# $sourcetype: BioPax
+# $sourceurl: ftp://ftp1.nci.nih.gov/pub/PID/BioPAX/BioCarta.owl.gz
+# $sourcelastmodifieddate: 2009-09-09
+# $sourcesize: 338343
+# $tags: BioCarta, BioPax, Pathway Interaction Database 
+# retrieve record with 'object[["AH22329"]]' 
+\end{Soutput}
+\begin{Sinput}
+> #TF-target databases
+> chea = query(ah, "ChEA")
+> chea[1]
+\end{Sinput}
+\begin{Soutput}
+AnnotationHub with 1 record
+# snapshotDate(): 2016-08-15 
+# names(): AH22237
+# $dataprovider: ChEA
+# $species: NA
+# $rdataclass: data.frame
+# $title: chea-background.zip
+# $description: ChEA background file, containing transcription factor data t...
+# $taxonomyid: NA
+# $genome: NA
+# $sourcetype: Zip
+# $sourceurl: http://amp.pharm.mssm.edu/result/kea/chea-background.zip
+# $sourcelastmodifieddate: 2015-03-09
+# $sourcesize: 3655103
+# $tags: ChEA, Transcription Factors 
+# retrieve record with 'object[["AH22237"]]' 
+\end{Soutput}
+\begin{Sinput}
+> pazar = query(ah, "Pazar")
+> pazar[1]
+\end{Sinput}
+\begin{Soutput}
+AnnotationHub with 1 record
+# snapshotDate(): 2016-08-15 
+# names(): AH22238
+# $dataprovider: Pazar
+# $species: NA
+# $rdataclass: GRanges
+# $title: pazar_ABS_20120522.csv
+# $description: TF - Target Gene file from pazar_ABS_20120522
+# $taxonomyid: NA
+# $genome: NA
+# $sourcetype: CSV
+# $sourceurl: http://www.pazar.info/tftargets/pazar_ABS_20120522.csv
+# $sourcelastmodifieddate: 2012-06-04
+# $sourcesize: 120202
+# $tags: Pazar, Transcription Factors 
+# retrieve record with 'object[["AH22238"]]' 
+\end{Soutput}
+\end{Schunk}
 
 In case you want to use TF - target gene information which is not part of the
 mentioned databases but e.g. part of a commercial database, a
@@ -143,18 +192,15 @@ analyzing the data: The \textit{STRINGdb} package (\cite{franceschini_string_201
 is used here.
 
 \section{Example dataset}
-The example dataset used here for demonstration purposes is the one presented
-in (\cite{Waters2012}), which comprises the mitogenic response of human 
-mammary epithelial cells to epidermal growth factor (EGF). This dataset includes
-whole genome time course microarray data measured with NimbleGen whole genome
-60-mer oligonucleotide arrays (Design Version 2003\_10\_27) at time points
-0, 1, 4, 8, 13, 18 and 24 hr after EGF stimulation.
-The complementary proteomics data was measured with LC-FTICR (Fourier-transform
-ion cyclotron resonance-mass spectrometry coupled with advanced capillary
-liquid chromatography) at time points 0.25, 1, 4, 8, 13, 18 and 24 hours after
-EGF stimulation. Preprocessing of data was done as described in
-(\cite{Waters2012}) resulting in lists of significant genes and proteins for
-each time point as log10 expression ratios relative to the time 0 hr controls.
+The example dataset used here for demonstration purposes comprises 
+whole genome time course microarray data at time points
+0, 1, 4, 8, 13, 18 and 24 hr after stimulation.
+The complementary phosphoproteomics data was measured 
+at time points 0.25, 1, 4, 8, 13, 18 and 24 hours after
+stimulation. Preprocessing of data is presupposed with given lists of 
+significant genes and phosphoproteins for
+each time point as logarithmized expression ratios relative to 
+the time 0 hr controls.
 
 
 \section{Data pre-processing}
@@ -163,15 +209,15 @@ each time point as log10 expression ratios relative to the time 0 hr controls.
 \textit{pwOmics} is a package for secondary data analysis, i.e. it needs already
 pre-processed data as input for the analysis. The input required is\\
 \begin{enumerate}[topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex]
-\item a list of all protein IDs measured,\\
+\item a list of all phosphoprotein IDs measured,\\
 \item a list of all gene/transcript IDs measured,\\
-\item a list of differentially abundant proteins + log fold changes,\\
+\item a list of differentially abundant phosphoproteins + log fold changes,\\
 \item a list of differentially expressed genes/transcripts + log fold changes.\\
 \end{enumerate}
-The IDs need to be gene symbols, both for protein and gene/transcript data.
+The IDs need to be gene symbols, both for phosphoprotein and gene/transcript data.
 In case time-series data is analyzed inputs 3. and 4. needs to be specified for
-each time point. It is absolutely necessary, that all proteins and
-genes/transcript in inputs 3. and 4. are part of the lists of all protein IDs
+each time point. It is absolutely necessary, that all phosphoproteins and
+genes/transcript in inputs 3. and 4. are part of the lists of all phosphoprotein IDs
 and all gene/transcript IDs, respectively.
 \\
 
@@ -197,49 +243,64 @@ first element of the OmicsData object and further on stores all the results in
 this part as well.\\
 
 This is why the user has to provide the omics data set in a special format: A
-list needs to be generated with a protein list named `P' as first element and a
+list needs to be generated with a phosphoprotein list named `P' as first element and a
 gene/transcript list named `G' as second element. These lists contain as first
-element a data frame with all (unique) protein IDs and gene/transcript IDs in
+element a data frame with all (unique) phosphoprotein IDs and gene/transcript IDs in
 the first column, respectively, and as second element a list with data frames
 for each time point of measurement. The data frames have two columns with the
-first one containing the differentially abundant/expressed proteins or
+first one containing the differentially abundant/expressed phosphoproteins or
 genes/transcripts as gene symbols and the second column containing the
 corresponding log fold changes, e.g.:\\
-<<mychunk2,  eval=TRUE, echo=TRUE, results=hide>>=
-data(OmicsExampleData)
-OmicsExampleData
-@
+\begin{Schunk}
+\begin{Sinput}
+> data(OmicsExampleData)
+> OmicsExampleData
+\end{Sinput}
+\end{Schunk}
 Generated as in the following example:
 \begin{verbatim}
-OmicsExampleData = list(P = list(allPIDs, 
-                   list(PIDstp0.25, PIDstp1, PIDstp4, PIDstp8, 
-                        PIDstp13, PIDstp18, PIDstp24)), 
-                        G = list(allGIDs, 
-                   list(GIDstp1, GIDstp4, GIDstp8, GIDstp13, 
+OmicsExampleData = list(P = list(allPIDs,
+                   list(PIDstp0.25, PIDstp1, PIDstp4, PIDstp8,
+                        PIDstp13, PIDstp18, PIDstp24)),
+                        G = list(allGIDs,
+                   list(GIDstp1, GIDstp4, GIDstp8, GIDstp13,
                         GIDstp18, GIDstp24)))
 \end{verbatim}
 
-<<mychunk3,  eval=TRUE, echo=TRUE>>=
-head(OmicsExampleData$P[[2]][[1]])
-@
+\begin{Schunk}
+\begin{Sinput}
+> head(OmicsExampleData$P[[2]][[1]])
+\end{Sinput}
+\begin{Soutput}
+  GeneSymbol     X15min
+1     MRPS17  0.6976049
+2      RPS12 -1.0297977
+3     SLC3A2 -1.2623327
+4       RPL8  0.8304820
+5       ACTB -2.4914461
+6      ALDOA  0.8637013
+\end{Soutput}
+\end{Schunk}
 
 
 
 
 In case the user only wants to analyze omics data from a single time point just
 one data frame has to be specified.\\
-The time points do not have to be the same for protein and gene/transcript data
+The time points do not have to be the same for phosphoprotein and gene/transcript data
 and need to be specified when reading in the omics data set separately via the
-`tp\_prots' and `tp\_genes' parameters of the `readOmics' function. 
+`tp\_prots' and `tp\_genes' parameters of the `readOmics' function.
 
-<<mychunk4,  eval=TRUE, echo=TRUE>>=
-data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
-                       tp_genes = c(1, 4, 8, 13, 18, 24), 
-                       OmicsExampleData,
-                       PWdatabase = c("biocarta", "kegg", "nci",
-                                      "reactome"),
-                       TFtargetdatabase = c("chea", "pazar"))
-@
+\begin{Schunk}
+\begin{Sinput}
+> data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24),
++                        tp_genes = c(1, 4, 8, 13, 18, 24),
++                        OmicsExampleData,
++                        PWdatabase = c("biocarta", "kegg", "nci",
++                                       "reactome"),
++                        TFtargetdatabase = c("userspec"))
+\end{Sinput}
+\end{Schunk}
 
 If data from a single timepoint measurement should be analyzed the user simply
 assigns the experiment number `1' for these parameters:\\
@@ -247,95 +308,112 @@ assigns the experiment number `1' for these parameters:\\
 #for single time point data set:
 omics = list(P = list(allPIDs, list(PIDs_1)),
              G = list(allGIDs, list(GIDs_1)))
-data_omics = readOmics(tp_prots = c(1), 
-                    tp_genes = c(1), 
+data_omics = readOmics(tp_prots = c(1),
+                    tp_genes = c(1),
                     OmicsExampleData,
-                    PWdatabase = c("biocarta", "kegg", "nci", 
-                                      "reactome"), 
-                    TFtargetdatabase = c("chea", "pazar"))
+                    PWdatabase = c("biocarta", "kegg", "nci",
+                                      "reactome"),
+                    TFtargetdatabase = c("userspec"))
 \end{verbatim}
 Additionally the selected databases have to be specified.\\
 
 The stored information can be easily accessed via the following functions:
-<<mychunk5,  eval=FALSE, echo=TRUE>>=
-getOmicsTimepoints(data_omics)
-head(getOmicsallProteinIDs(data_omics))
-head(getOmicsallGeneIDs(data_omics))
-head(getOmicsDataset(data_omics, writeData = FALSE)[[1]])
-@
+\begin{Schunk}
+\begin{Sinput}
+> getOmicsTimepoints(data_omics)
+> head(getOmicsallProteinIDs(data_omics))
+> head(getOmicsallGeneIDs(data_omics))
+> head(getOmicsDataset(data_omics, writeData = FALSE)[[1]])
+\end{Sinput}
+\end{Schunk}
 
 
 \section{Individual analysis}
 
 As shown in Figure~\ref{fig:analysis} the analysis is based on an individual
-analysis of the proteomic and the genomic/transcriptomic data. The downstream
+analysis of the phosphoproteomic and the genomic/transcriptomic data. The downstream
 analysis and upstream analysis are described in the following subsections.
 
-Prior to that the database information has to be read in. In a first step 
-the TF- target information can be made accessible to the OmicsData object by:
+Prior to that the database information has to be read in. In a first step the
+phosphoprotein information about downstream activating/inactivating effects 
+should be read in.
 
 \begin{verbatim}
-data_omics = readTFdata(data_omics)
+data_omics = readPhosphodata(data_omics, phosphoreg)
 \end{verbatim}
 
-Via the `TF\_target\_path' parameter the path of the user-specified file can be
-given. This information can be used additionally to the selected database
-content.
+The parameter `phosphoreg' should be a tab-separated .txt file with two columns, 
+but no header. The first column should include the HUGO gene symbols of the 
+phosphoproteins with known downstream effects, the second column should include
+either activating (1) or inactivating (-1) downstream effect coding upon
+phosphorylation of the corresponding phosphoprotein. So far, there is no 
+possibility to include multiple phosphorylation events individually.
+However, if no information for a phosphoprotein is available in this file, any
+up/downregulation match is allowed for the molecules identified
+in the intersection analyses.
 
-Secondly, the `readPWdata' function takes the OmicsData object with the
-provided information about the omics data set and the path of the prepared
-`.RData' files from the pathway databases (see section~\ref{sec:Databases})
-and automatically generates the corresponding genelists of the pathway data
-if `loadgenelists = FALSE'. In this step the automatic definition of internal
-differing IDs for different pathway databases is necessary, which are stored
-in a new biopax model in the OmicsData object.
+In a second step the TF- target information can be made accessible to the 
+`OmicsData' object by:
+
 \begin{verbatim}
-data_omicsPW = readPWdata(data_omics, 
+data_omics = readTFdata(data_omics, TF_target_path)
+\end{verbatim}
+
+Via the `TF\_target\_path' parameter a path of a user-specified file specifying
+transcription factors and corresponding target genes can be given. This should be
+a tab-separated .txt file with two columns, but no header, giving HUGO gene
+symbols of transcription factors in the first column and gene symbols of corresponding
+target genes in a second column. This information can be used additionally to 
+the selected database content.
+
+
+Thirdly, the `readPWdata' function takes the `OmicsData' object with the
+provided information about the omics data set and the path of the prepared
+`.RData' genelists from the pathway databases (see Section~\ref{sec:Databases})
+or automatically generates the corresponding genelists of the pathway data
+if `loadgenelists = FALSE'. In this step the automatic definition of internal
+IDs for different pathway databases is necessary, which are stored
+in a new biopax model in the `OmicsData' object.
+\begin{verbatim}
+data_omicsPW = readPWdata(data_omics,
                loadgenelists = FALSE)
 \end{verbatim}
-As the process of generating genelists with these IDs can take some time - 
-especially for rather big databases such as Reactome 
-\cite{milacic_annotating_2012, croft_reactome_2014} - the genelists for the
+As the process of generating genelists with these IDs can take some time -
+especially for rather big databases such as Reactome
+(\cite{milacic_annotating_2012, croft_reactome_2014}) - the genelists for the
 different databases are automatically stored in the working directory and can
 be reused in another analysis when the corresponding path containing these files
 is given to the `readPWdata' function as loadgenelists parameter.
 \begin{verbatim}
-data_omicsPW = readPWdata(data_omics, 
+data_omics = readPWdata(data_omics,
              loadgenelists = "Genelist_reactome.RData")
 \end{verbatim}
-Automatically the information of the selected databases and/or the corresponding
-user-specified file are merged. The file format (if this option is used) should
-be exactly as specified in section~\ref{sec:Databases}.\\ 
 
 
 \subsection{Downstream analysis}
-The downstream analysis is starting with the provided proteomic data (either
-single time point data or time-series data). The first step is the 
-identification of the pathways in which the differentially abundant proteins 
-play a role. \textit{pwOmics} performs this searching step on the basis of the 
-provided proteomic data set and the selected pathway database(s). 
-
-After reading in these information the user can follow the workflow for 
-downstream analysis and identify the pathways in which the differentially 
-abundant proteins are present:
+The downstream analysis is starting with the provided phosphoproteomic data (either
+single time point data or time-series data). The first step is the identification
+of downstream regulation influence of phosphoproteins based on the file read in
+by `readPhosphodata' function. 
 \begin{verbatim}
-data_omics = identifyPWs(data_omicsPW)
+data_omics = identifyPR(data_omics)
 \end{verbatim}
-In a next step pathway enrichment can be conducted. The user can specify the 
-multiple testing correction method as well as the significance level for this 
-step. In case of few identified pathways this might result in too few pathways
-for further analysis. In this case the enrichment step should be skipped.
+The second step is the identification of the pathways in which the 
+differentially abundant phosphoproteins play a role. \textit{pwOmics} 
+performs this searching step on the basis of the
+provided phosphoproteomic data set and the selected pathway database(s). 
+As this function exploits pathway knowledge, it is necessary to be in the working
+directory of the genelists that were generate by function `readPWdata'.
 \begin{verbatim}
-data_omics = enrichPWs(data_omics, "BH", alpha = 0.05)
+data_omics = identifyPWs(data_omics)
 \end{verbatim}
 Following the workflow the next step is the identification of the transcription
-factors in these (enriched) pathways, which is done with the information
-provided by the chosen TF-target gene database. The user can choose if only the
-enriched pathways or all pathways should be considered for further analysis:
+factors in these pathways, which is done with the information
+provided by the chosen TF-target gene database. 
 \begin{verbatim}
-data_omics = identifyPWTFTGs(data_omics, only_enriched = FALSE)
+data_omics = identifyPWTFTGs(data_omics)
 \end{verbatim}
-For use of this function the working directory should contain the previously
+For use of this function the working directory should still contain the previously
 generated genelists.\\
 
 The results of the downstream analysis can be easily accessed by the following
@@ -345,7 +423,7 @@ getDS_PWs(data_omics)
 getDS_TFs(data_omics)
 getDS_TGs(data_omics)
 
-#Access biopax model generated newly on basis of selected 
+#Access biopax model generated newly on basis of selected
 #pathway databases:
 getBiopaxModel(data_omics)
 \end{verbatim}
@@ -363,33 +441,24 @@ Given this information, the identification of upstream TFs can be done:
 data_omics = identifyTFs(data_omics)
 \end{verbatim}
 
-Similarly as in the downstream analysis also in the upstream analysis an optional
-enrichment step can be conducted, but here on the TF level.
-\begin{verbatim}
-data_omics = enrichTFs(data_omics, "BH", alpha = 0.05)
-\end{verbatim}
-
-Upstream of the (enriched) TFs the regulator proteins can be identified with the
+Upstream of the TFs the potential regulator proteins can be identified with the
 following function:
 \begin{verbatim}
-data_omics = identifyRsofTFs(data_omics, only_enriched = FALSE,
-             noTFs_inPW = 1, order_neighbors = 10)
+data_omics = identifyRsofTFs(data_omics, 
+                       noTFs_inPW = 1, order_neighbors = 10)
 \end{verbatim}
-Again, the user can specify if only the enriched TFs or all TFs should be
-considered for further analysis. The identification of upstream regulators
-is done in the following way:\\
+The identification of potential upstream regulators is done in the following way:\\
 \begin{enumerate}[topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex]
 \item Identification of the pathways the previously identified TFs are part of.\\
 \item Selection of pathways according to the user-specified parameter
 `noTFs\_inPW': Only those pathways are considered in further analysis with at
-least this number of TFs in the pathway. Minimum number of TFs in the pathway
-is 2.\\
+least this number of TFs present in the pathway.\\
 \item Upstream regulators are identified for these TFs. This is done by finding
 first for each TF the pathway neighborhood according to the user-specified
 parameter `order\_neighbors'. This parameter specifies the order of the
 identified pathway neighborhood. Then the intersection of all identified
 neighborhoods for all TFs in a pathway is determined. The resulting pathway
-node set is defined here as the set of regulator proteins.\\
+node set is defined here as the set of potential regulator proteins.\\
 \end{enumerate}
 
 In case the pathways under consideration do not have pathway components in the
@@ -406,15 +475,16 @@ getUS_regulators(data_omics)
 
 \section{Consensus analysis}
 
-The consensus analysis combines the results from upstream and downstream analysis 
+The consensus analysis combines the results from upstream and downstream analysis
 by constituting in particular the comparative analysis of the results of the
-two different data sets. The intersection analysis simply compares the results
-of the separate upstream and downstream analysis. The static consensus analysis
-enables setting up static consensus graphs for each time point measured in
+two different data sets on each cellular level individually. 
+The intersection analysis thus simply compares the results
+of the separate upstream and downstream analyses. The static consensus analysis
+allows to determine static consensus graphs for each time point measured in
 parallel. Finally, the consensus-based dynamic analysis provides the user with one
 final dynamic network obtained from the data changes over time
 based on dynamic bayesian network inference. The consensus-based dynamic analysis is
-self-evidently only conductable with time-series data sets measured for proteome
+only conductable with time-series data sets measured for both phosphoproteome
 and genome/transcriptome data in parallel.
 
 
@@ -424,17 +494,30 @@ of the results of upstream and downstream analysis. Thus, it enables a
 comparison of single time point data and time-series data, the latter also for
 non-corresponding time points in the different data sets. The comparison is
 possible on the three different functional levels considered in this package:
-On the proteome level, the transcription factor level and gene/transcript level.
+On the pathway level, the transcription factor level and gene/transcript level.
+The parameters `updown' and `phospho' enable to define, whether the direction
+of regulation should be considered in the comparison and whether the 
+phosphosite information should be considered. The consensus
+molecule sets (C) for each of the molecular levels (protein level,
+transcription factor level and gene/transcript level) are defined as: 
+\begin{enumerate}[topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex]
+\item if phosphoprotein downstream activity is induced:\\
+$C = (X'\uparrow \cap ~X	\uparrow) \cup (X'\downarrow \cap ~X\downarrow)$ \\
+\item if phosphoprotein downstream activity is inhibited:\\
+$C = (X'\uparrow \cap ~X	\downarrow) \cup (X'\downarrow \cap ~X\uparrow)$ \\
+\item if no information is available for a specific phosphoprotein:\\
+$C = (X'\uparrow \cap ~X	\uparrow) \cup (X'\downarrow \cap ~X\downarrow) 
+\cup (X'\uparrow \cap ~X	\downarrow) \cup (X'\downarrow \cap ~X\uparrow)$\\
+\end{enumerate}
+with $\uparrow$ = upregulated and $\downarrow$ = downregulated and $X$ = 
+molecules in downstream analysis, $X'$ = molecules in upstream analysis.
 \begin{verbatim}
-getProteinIntersection(data_omics, 
-                       tp_prot = 4, 
-                       tp_genes = 4)
-getTFIntersection(data_omics, 
-                  tp_prot = 4,
-                  tp_genes = 1)
-getGenesIntersection(data_omics,
-                     tp_prot = 4,
-                     tp_genes = 13)
+getProteinIntersection(data_omics, tp_prot = 4, tp_genes = 18, 
+                       updown = TRUE, phospho = TRUE)
+getTFIntersection(data_omics, tp_prot = 13, tp_genes = 13, 
+                       updown = TRUE, phospho = TRUE)
+getGenesIntersection(data_omics, tp_prot = 24, tp_genes = 24, 
+                        updown = TRUE, phospho = TRUE)
 \end{verbatim}
 These functions not only enable a comparison of the same timepoints on the
 distinct levels, but for time-series data sets also for non-matching time
@@ -446,26 +529,32 @@ decisions. Thus, measured signaling changes, which naturally consist of a
 superposition of diverse time-scales of transcriptional and translational
 processes and comprehend diverse frequency patterns (\cite{yosef_impulse_2011}),
 are dependent on the sampling. This means for some of the signaling axes it
-might be the case, that 
+might be the case, that
 \begin{itemize}
 \item changes are not detected at all as their rate is too high,
-\item hopefully most are represented in the data and 
+\item some are represented in the data and
 \item some might be so slow that their change is not considered significant and
 thus are excluded from analysis.
 \end{itemize}
 As the corresponding signaling changes are not expected to be seen at the same
-time point in proteome data and gene/transcript data it is necessary to enable
+time point in phosphoproteome data and gene/transcript data it is necessary to enable
 also the comparison of non-corresponding time points.\\
-The possibility to compare such time points naturally cannot account for the
+The option to compare non-corresponding time points cannot account for the
 changes not captured during measurement, however, it gives the possibility to
 consider also the time needed for regulatory control mechanisms in the
-interpretation of the measurement results - even if this shows considerable
-variations as well.\\
+interpretation of the measurement results.\\
 In case the user wants to compare the corresponding time points on the three
 levels simultaneously he can do so by using the following function:
 \begin{verbatim}
-gettpIntersection(data_omics)
+gettpIntersection(data_omics, updown = TRUE, phospho = TRUE)
 \end{verbatim}
+The parameters `updown' and `phospho' allow to select whether different regulation
+directions in the data sets (phosphoproteome vs. transcriptome) should be filtered out
+in the comparison, and whether the downstream regulation influence of 
+phosphoproteins read in with the `readPhosphodata' function should be considered
+in the comparison.
+
+
 
 \subsection{Static consensus analysis}
 
@@ -474,25 +563,28 @@ gained from the comparative analysis of the corresponding time points to a
 consensus net for each time point. The change of this consensus net over time
 gives a first insight into the changes seen statically at the different time
 points. However, the static consensus nets do not yet include information
-gathered over time - as it is the case in the consensus-based dynamic analysis
-(see section~\ref{sec:DynCons}). This is why the static consensus analysis
+gathered over time - as it is the case for the consensus-based dynamic analysis
+(see Section~\ref{sec:DynCons}). This is why the static consensus analysis
 is also applicable for single time point measurements.\\
 
 The static consensus analysis is conducted by generation of a Steiner tree
-(\cite{Kleinberg_AlgorithmDesign_2006}) on basis of matching proteins and TFs
+(\cite{Kleinberg_AlgorithmDesign_2006}) on basis of consensus proteins and TFs
 identified in downstream and upstream analysis for each corresponding time
 point. The underlying graph used is the protein-protein-interaction (PPI)
 graph from the STRING database reduced to the connected nodes.
-The matching proteins and TFs are considered as terminal nodes and are
+The consensus proteins and TFs are considered as terminal nodes and are
 connected via a shortest path-based approximation of the Steiner tree
 algorithm (\cite{Takahashi_Steiner_1980, Sadeghi2013}) across the reduced
 PPI-STRING-graph. Subsequently knowledge of TF-target gene pairs from the
 chosen database is used to expand the graph with matching genes/transcripts
 from both upstream and downstream analysis. In case the consensus graph contains
-corresponding proteins and genes/transcripts, feedback loops are added automically.
+corresponding proteins and genes/transcripts, feedback loops are added automatically.
 \begin{verbatim}
-consensusGraphs = staticConsensusNet(data_omics)
+consensusGraphs = staticConsensusNet(data_omics, updown = TRUE,
+                                     phospho = TRUE)
 \end{verbatim}
+The parameters `updown' and `phospho' give the same filtering options as in
+the intersection analysis.
 
 
 \subsection{Consensus-based dynamic analysis}
@@ -501,9 +593,9 @@ consensusGraphs = staticConsensusNet(data_omics)
 Unlike the static consensus analysis, the consensus-based dynamic analysis takes into
 consideration also the signaling changes over time by applying dynamic bayesian
 network inference. The packages used for the consensus-based dynamic analysis are
-\textit{longitudinal} (\cite{Opgen_longi_2006, rainer_opgen-rhein_inferring_2006}) 
+\textit{longitudinal} (\cite{Opgen_longi_2006, rainer_opgen-rhein_inferring_2006})
 to adjust the format of the data and the actual network inference part is done
-via the \textit{ebdbNet} (\cite{Rau_ebdbnet_2010}) package. 
+via the \textit{ebdbNet} (\cite{Rau_ebdbnet_2010}) package.
 This package includes an iterative empirical Bayesian procedure with a Kalman
 filter estimating the posterior distributions of the network parameters.
 The defined prior structure of the network is used for a straightforward
@@ -523,10 +615,10 @@ points and\\
 \item genes/transcripts identified in upstream and downstream analysis at the
 same time points.\\
 \end{enumerate}
-
+However, all measured time points of these nodes are taken into consideration.
 
 To apply dynamic network inference a reasonable number of measurements needs
-to be available. As in most cases of parallel protein and gene/transcript
+to be available. As in most cases of parallel phosphoprotein and gene/transcript
 measurements only very few corresponding time steps are available it is
 necessary to artificially introduce additional time steps. This is done by
 generating smoothing splines applied on the log fold changes provided by the
@@ -537,9 +629,9 @@ This assumption, however, has to be applied consciously and carefully, as there
 might be higher frequency signaling components superimposed (see for a
 comprehensive analysis of temporal dynamics of gene expression
 (\cite{yosef_impulse_2011})).
-In theory a signal has to be sampled 2 times its maximal frequency in order to
+In theory a signal has to be sampled two times its maximal frequency in order to
 be able to reconstruct it exactly from time discrete measurements
-(Nyquist-Shannon sampling theorem (\cite{Shannon_theorem_1949, 
+(Nyquist-Shannon sampling theorem (\cite{Shannon_theorem_1949,
 Nyquist_theorem_1928})). This means only exact interpretation of those signaling
 axes are possible that have a frequency which is smaller than half of the
 sampling frequency. However, under certain preconditions on signal structure
@@ -565,15 +657,14 @@ relevant time lag to be used in constructing the block-Hankel matrix.
 With a singular value decomposition (see function `hankel' of \textit{ebdbNet}
 package) the number of hidden states can be determined. Here, the user can
 specify the \textit{cutoffhankel} parameter to choose the cutoff to determine
-the desired percent of total variance explained by the singular values. 
+the desired percent of total variance explained by the singular values.
 Additional parameters on convergence criteria and iterations performed can be
 specified. For further details the user is referred to (\cite{Rau_ebdbnet_2010}).
 \begin{verbatim}
 library(ebdbNet)
 library(longitudinal)
-dynInferredNet = consDynamicNet(data_omics, consensusGraphs,
-                 laghankel = 3, 
-                 cutoffhankel = 0.9)
+dynInferredNet = consDynamicNet(data_omics, consensusGraphs, 
+                 laghankel = 3, cutoffhankel = 0.9)
 \end{verbatim}
 
 \section{Time profile clustering}
@@ -584,7 +675,7 @@ Time profile clustering is performed as soft clustering based on the
 \textit{Mfuzz} package (\cite{Mfuzz2012}). The advantage of this clustering method
 is that a protein, TF or gene/transcript can be assigned to several clusters,
 thus reducing the sensitivity to noise and the information loss hard clustering
-exhibits. It is implemented as fuzzy c-means algorithm (\cite{Hathaway_Pattern1986}) 
+exhibits. It is implemented as fuzzy c-means algorithm (\cite{Hathaway_Pattern1986})
 and iteratively optimizes the objective function to minimize the variation of
 objects within the clusters. The user needs to provide a `min.std' threshold
 parameter if proteins or genes/transcripts with a low standard deviation
@@ -595,10 +686,55 @@ maximal cluster number based on the number of distinct data points. For more
 details see (\cite{Mfuzz2012}) and (\cite{schwammle_simple_2010}).
 \begin{verbatim}
 library(Mfuzz)
-fuzzyClusters = clusterTimeProfiles(dynInferredNet, 
-                                    min.std = 0, 
+fuzzyClusters = clusterTimeProfiles(dynInferredNet,
+                                    min.std = 0,
                                     ncenters = 12)
+fuzzyClusters$size
+fuzzyClusters$cluster
 \end{verbatim}
+
+\section{Identification of signaling axes}
+Based on the provided data it is also possible to follow the signal through the
+different cellular levels individually, such that individual signaling axes can
+be identified.
+
+The user can seach for individual axes downstream of a certain phosphoprotein by
+using the `findSignalingAxes' function and indicating the time point of interest.
+The time point needs to comply with the ones read in in the `readOmics' function.
+\begin{verbatim}
+MAPK1_axis1 = findSignalingAxes(data_omics, 
+                                phosphoprot = "MAPK1", tpDS = 1)
+MAPK1_axis18 = findSignalingAxes(data_omics, 
+                                phosphoprot = "MAPK1", tpDS = 18)
+BLNK_axis13 = findSignalingAxes(data_omics, 
+                                phosphoprot = "BLNK", tpDS = 13)
+\end{verbatim}
+The output is a list of pathways that are identified for this time point 
+downstream of the phosphoprotein of interest. Sublists give information on
+the transcription factors in these pathways, the direction of regulation 
+(up/down), the target genes and their matching transcripts from the transcriptome
+data set.
+
+Based on these results the user can produce a summarized results table containing
+those target genes of the axis, which are matching the transcriptome data, the
+direction of their regulation coming from the phosphoproteome data set (up/down),
+the direction of regulation coming from the transcriptome data set (up/down) and
+the summarized complying information:
+\begin{verbatim}
+MAPK1_transcripts = get_matching_transcripts(data_omics, 
+                                             MAPK1_axis1)
+\end{verbatim}
+
+If the user is interested in an overall analysis of all signaling axes in the
+data sets, he can apply:
+\begin{verbatim}
+generate_DSSignalingBase(data_omics, 
+                         timepoints = c(0.25, 1, 4, 8, 13, 18, 24))
+\end{verbatim}
+with chosen time points.
+This function creates a folder structure for each consensus protein 
+in the working directory, which is filled with .RData objects and .csv tables 
+that carry the information for the individual time points of interest.
 
 
 \section{Visualization}
@@ -607,14 +743,14 @@ To complement the results from the different comparisons and analyses
 visualization functions for the different analyses.
 The consensus graphs of the static analysis for one or more corresponding time
 points can be plotted with the following function
-(see Figures~\ref{fig:Consgraph1} and~\ref{fig:Consgraph2}):
+(see Figure~\ref{fig:Consgraph1} and Figure~\ref{fig:Consgraph2}):
 \begin{verbatim}
 plotConsensusGraph(consensusGraphs, data_omics)
-\end{verbatim}  
+\end{verbatim}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics{ConsensusGraphs_1.pdf}
+\includegraphics [trim={3cm 2cm 0cm 2cm},clip]{ConsensusGraphs_tp1.pdf}
 \caption{\textit{pwOmics} static consensus graph: Time point 1 hr.}
 \label{fig:Consgraph1}
 \end{figure}
@@ -622,8 +758,8 @@ plotConsensusGraph(consensusGraphs, data_omics)
 
 \begin{figure}[htbp]
 \centering
-\includegraphics{ConsensusGraphs_2.pdf}
-\caption{\textit{pwOmics} static consensus graph: Time point 4 hrs.}
+\includegraphics [trim={3cm 2cm 0cm 2cm},clip]{ConsensusGraphs_tp24.pdf}
+\caption{\textit{pwOmics} static consensus graph: Time point 24 hrs.}
 \label{fig:Consgraph2}
 \end{figure}
 
@@ -631,7 +767,7 @@ plotConsensusGraph(consensusGraphs, data_omics)
 The consensus-based dynamic analysis result can be visualized as follows
 (see Figure~\ref{fig:DynConsgraph}):
 \begin{verbatim}
-plotConsDynNet(dynInferredNet, sig.level = 0.65)
+plotConsDynNet(dynInferredNet, sig.level = 0.7)
 \end{verbatim}
 Here, the parameter `sig.level' is the significance level used as cutoff for
 plotting edges in the network and has to be specified in the range between
@@ -645,12 +781,12 @@ layout parameters.\\
 \label{fig:DynConsgraph}
 \end{figure}
 
-However, as the user can access the networks easily \textit{tkplot} from the
-\textit{igraph} R package is a nice interactive graph drawing alternative.
+However, as the user can access the networks easily the \textit{tkplot} function 
+from the \textit{igraph} R package is a nice interactive graph drawing alternative.
 In addition plot parameters can be easily changed as the result networks
 are of class `igraph'.
 
-In order to plot the results from time profile clustering 
+In order to plot the results from time profile clustering
 (see Figure~\ref{fig:cluster}) the following function can be used:
 \begin{verbatim}
 plotTimeProfileClusters(fuzzyClusters) 
@@ -662,7 +798,7 @@ easily access this information by having a look to the output of the
 the number of data points in each cluster of the closest hard clustering,
 cluster indices, and additional parameters explained in detail in the `mfuzz'
 documentation. In the legend the attachments `\_g' and `\_p', respectively,
-indicate, if the node originally derives from protein or gene/transcript 
+indicate, if the node originally derives from phosphoprotein or gene/transcript
 measurements.
 
 \begin{figure}[htbp]
@@ -672,13 +808,77 @@ measurements.
 \label{fig:cluster}
 \end{figure}
 
+It is furthermore possible to investigate temporal correlations of phosphoprotein
+and transcriptome measurements.
+\begin{verbatim}
+temp_correlations(consensusGraphs[[1]], 
+    timepointsprot = c(1,4,8,13,18,24), 
+    timepointstrans = c(1,4,8,13,18,24),
+    foldername = "~/TempCorr_", 
+    trans_sign = "~/transcriptome_signif.txt", 
+    trans_sign_names = c("FC_1", "FC_4", "FC_8", "FC_13", 
+                         "FC_18", "FC_24"), 
+    phospho_sign = "~/phospho_anno.txt", 
+    phospho_sign_names = c("rat_1", "rat_4","rat_8","rat_13", 
+                           "rat_18", "rat_24")) 
+\end{verbatim}
+
+This function needs as input the static consensus graph with the consensus 
+proteins of interest, the protein and transcriptome measurement time points for which
+correlation should be investigated, the name of the folder that should be
+generated as results folder, the phosphoproteome and transcriptome measurement
+files and the corresponding column names for the selected time points.
+It is necessary that the gene symbols read in in the `readOmics' function are
+reused here.
+In the tab-delimited phosphoproteome measurement file (.txt) 
+additional phosphoprotein information can be stored in columns 
+`Amino.acid', `Position' and `Multiplicity'. This allows to compare correlations
+for individual phosphorylations.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics [width = 350pt, height = 280pt, trim={0cm 5cm 0cm 0cm},clip]{TempCorr_MAPK14_downstream.pdf}
+\caption{Temporal correlation of MAPK14 with transcripts identified to be
+resulted downstream.}
+\end{figure}
+
+
+
+
+
+
 \newpage
 \section{Session Information}
-
-<<echo=FALSE,results=tex>>=
-toLatex(sessionInfo())
-@
+\begin{itemize}[topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex]
+\item R Under development (unstable) (2015-03-11 r67980),
+Platform: x86\_64-unknown-linux-gnu (64-bit),
+Running under: Ubuntu precise (12.04.5 LTS)\\
+\item Locale: LC\_CTYPE=en\_US.UTF-8, LC\_NUMERIC=C,\\
+LC\_TIME=en\_US.UTF-8, LC\_COLLATE=en\_US.UTF-8,\\
+LC\_MONETARY=en\_US.UTF-8, LC\_MESSAGES=en\_US.UTF-8,\\
+LC\_PAPER=en\_US.UTF-8, LC\_NAME=C, LC\_ADDRESS=C,\\
+LC\_TELEPHONE=C, LC\_MEASUREMENT=en\_US.UTF-8,\\
+LC\_IDENTIFICATION=C\\
+\item Attached base packages: tcltk, parallel, stats, graphics, grDevices,
+utils, datasets, methods, base\\
+\item Other attached packages: ebdbNet\_1.2.3, Mfuzz\_2.27.1, DynDoc\_1.45.0,
+widgetTools\_1.45.0, e1071\_1.6-4, Biobase\_2.27.3, BiocGenerics\_0.13.11,
+longitudinal\_1.1.11, corpcor\_1.6.7, igraph\_0.7.1, pwOmics\_0.99.2\\
+\item Loaded via namespace (and not attached): Rcpp\_0.11.5, XVector\_0.7.4,
+BiocInstaller\_1.17.7, GenomeInfoDb\_1.3.19, plyr\_1.8.1,\\
+AnnotationHub\_1.99.82, tkWidgets\_1.45.0, class\_7.3-12, bitops\_1.0-6,\\
+biomaRt\_2.23.5, digest\_0.6.8, RSQLite\_1.0.0, shiny\_0.11.1, DBI\_0.3.1,\\
+rBiopaxParser\_2.5.0, stringr\_0.6.2, httr\_0.6.1, S4Vectors\_0.5.23,\\
+gtools\_3.4.2, caTools\_1.17.1, IRanges\_2.1.44, stats4\_3.2.0,\\
+data.table\_1.9.4, R6\_2.0.1, AnnotationDbi\_1.29.24, XML\_3.98-1.1,\\
+RJSONIO\_1.3-0, gdata\_2.13.3, reshape2\_1.4.1, STRINGdb\_1.7.0,\\
+gplots\_2.16.0, htmltools\_0.2.6, GenomicRanges\_1.19.54, mime\_0.3,\\
+interactiveDisplayBase\_1.5.6, xtable\_1.7-4, httpuv\_1.3.2,\\
+KernSmooth\_2.23-14, RCurl\_1.95-4.5, chron\_2.3-45\\
+\end{itemize}
 
 \printbibliography
 
 \end{document}
+
+

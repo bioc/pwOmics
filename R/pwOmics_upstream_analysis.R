@@ -14,14 +14,19 @@
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
-#' PWdatabase = c("biocarta"), 
-#' TFtargetdatabase = c("chea"))
-#' \donttest{
-#' data_omics = readTFdata(data_omics)
-#' data_omics_plus = readPWdata(data_omics, 
-#' loadgenelists = "Genelists")
-#' }
+#' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
+#' TFtargetdatabase = c("userspec"))
+#' data_omics = readPhosphodata(data_omics, 
+#' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+#' package = "pwOmics")) 
+#' data_omics = readTFdata(data_omics, 
+#' TF_target_path = system.file("extdata", "TF_targets.txt", 
+#' package = "pwOmics"))
+#' data_omics_plus = readPWdata(data_omics,  
+#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
 #' \dontrun{
+#' data_omics_plus = identifyPR(data_omics_plus)
+#' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
 #' }
@@ -52,108 +57,15 @@ identifyTFs <- function(data_omics) {
 }
 
 
-#' Transcription factor enrichment - upstream analysis.
+#' Identify regulators of transcription factors - upstream analysis.
 #'
-#' This function does transcription factor enrichment for transcription factor 
-#' identified to be upstream of the diff. expressed genes/transcripts in the
-#' omics data set imported with readOmics function. In order to use this
-#' function first read in the transcription factor target gene information via
-#' readTFdata and identify the upstream TFs of the differentially expressed 
-#' genes/transcripts with the identifyTFs function.
-#'
-#' @param data_omics OmicsData object.
-#' @param method correction method for multiple testing correction as specified 
-#' in p.adjust documentation; default is Benjamini & Hochberg correction.
-#' @param alpha significance level for transcription factor enrichment; 
-#' default is alpha = 0.05.
-#' @param ... further input parameters for multiple comparison adjustment.
-#' @return OmicsData object: list of 4 elements (OmicsD, PathwayD, TFtargetsD,
-#' Status); OmicsD containing omics data set + results (after analysis);
-#' PathwayD containing selected pathway databases + biopax model;
-#' TFtargetsD containing selected TF target gene databases + TF target gene data.
-#' @keywords manip
-#' @export
-#' @examples
-#' data(OmicsExampleData)
-#' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
-#' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
-#' PWdatabase = c("biocarta"), 
-#' TFtargetdatabase = c("chea"))
-#' \donttest{
-#' setwd(system.file("extdata", package = "pwOmics"))
-#' data_omics = readTFdata(data_omics)
-#' data_omics_plus = readPWdata(data_omics, 
-#' loadgenelists = "Genelists")
-#' }
-#' \dontrun{
-#' data_omics = identifyPWs(data_omics_plus)
-#' data_omics = identifyTFs(data_omics)
-#' data_omics = enrichTFs(data_omics)
-#' }
-enrichTFs <- function(data_omics, method = "BH", alpha = 0.05, ...) {
-    
-    if(class(data_omics) != "OmicsData")
-    {stop("Parameter 'data_omics' is not an OmicsData object.")}
-    
-    if(data_omics[[4]][[1]] < 3)
-    {stop("Transcription factors in upstream analysis or pathways in 
-           downstream analysis were not yet identified. Please use the 
-           identifyTFs and the identifyPWs function to do so.")}
-    
-    no_all_genes = dim(data_omics[[1]][[1]][[3]])[1]
-    allgenes_TFs = rbindlist(data_omics[[1]][[3]][[2]][[1]])
-    allgenes_TFs = allgenes_TFs[which(!is.na(allgenes_TFs))]
-    for(glen in 1: length(data_omics[[1]][[1]][[1]][[2]]))
-    { 
-        no_de_genes = dim(data_omics[[1]][[2]][[2]][glen][[1]])[1]
-        tps_TFs = rbindlist(data_omics[[1]][[3]][[2]][[glen+1]])
-        tps_TFs = tps_TFs[which(!is.na(tps_TFs))]
-        tps_TFs = as.vector(apply(tps_TFs,2,as.character))
-        p_vals = vector()
-        count_all = vector()
-        count_de = vector()
-        for(TF in 1: length(tps_TFs))
-        {   count_all[TF] = length(which(apply(allgenes_TFs,2,as.character) == tps_TFs[TF]))
-            count_de[TF] = length(which(tps_TFs == tps_TFs[TF]))
-            
-            p_vals[TF] = fisher.test(matrix(c(count_all[TF]- count_de[TF], 
-                                              no_all_genes - no_de_genes, count_de[TF], no_de_genes), 
-                                            nrow = 2, dimnames = list(number = c("TF", "genes"), 
-                                                                      genes = c("not d.e.", "d.e."))))$p.value
-        }
-        q_vals = p.adjust(p_vals, ...)
-        enr_TFs = unique(tps_TFs[which(q_vals < alpha)])
-        for(k in 1: no_de_genes)
-        {if(!is.na(data_omics[[1]][[3]][[2]][[glen+1]][[k]][[1]][1]))
-        { data_omics[[1]][[3]][[2]][[glen+1]][[k]][,2] = NA
-          colnames(data_omics[[1]][[3]][[2]][[glen+1]][[k]])= c("upstreamTFs", "enrichedTFs")
-          for(s in 1: length(enr_TFs))
-          { ind_match = which(data_omics[[1]][[3]][[2]][[glen+1]][[k]][,1] == enr_TFs[s])
-            if(length(ind_match)!= 0)
-            {data_omics[[1]][[3]][[2]][[glen+1]][[k]][ind_match,2] = 1}
-          }
-        }
-        }
-    }
-    message("Transcription factor enrichment is completed.\n")
-    return(data_omics)
-}
-
-
-
-
-#' Identify regulators of enriched transcription factors - upstream analysis.
-#'
-#' This function identifies the regulators upstream of the enriched/identified 
+#' This function identifies the regulators upstream of the identified 
 #' transcription factors in upstream analysis.
 #' Converting the pathway information to a regulatory graph needs some time...
 #' Warnings regarding the skipping of edges in building the regulatory graph can 
 #' be ignored.
 #'  
 #' @param data_omics OmicsData object.
-#' @param only_enriched boolean value defining if transcription factors should
-#' be identifies only for enriched pathways (TRUE); or for all identified
-#' pathways (FALSE); default is TRUE.
 #' @param noTFs_inPW integer; only regulators in upstream pathways with more
 #' than this number of TFs are identified.
 #' @param order_neighbors integer specifiying the order of the neighborhood:
@@ -168,22 +80,26 @@ enrichTFs <- function(data_omics, method = "BH", alpha = 0.05, ...) {
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
-#' PWdatabase = c("biocarta"), 
-#' TFtargetdatabase = c("chea"))
-#' \donttest{
-#' data_omics = readTFdata(data_omics)
+#' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
+#' TFtargetdatabase = c("userspec"))
+#' data_omics = readPhosphodata(data_omics, 
+#' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+#' package = "pwOmics")) 
+#' data_omics = readTFdata(data_omics, 
+#' TF_target_path = system.file("extdata", "TF_targets.txt", 
+#' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
-#' loadgenelists = FALSE)
-#' }
+#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
 #' \dontrun{
+#' data_omics_plus = identifyPR(data_omics_plus)
+#' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
-#' data_omics = enrichPWs(data_omics)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
-#' identifyRsofTFs(data_omics, only_enriched = FALSE, noTFs_inPW = 1, 
-#' order_neighbors = 10)
+#' data_omics = identifyRsofTFs(data_omics, 
+#' noTFs_inPW = 1, order_neighbors = 10)
 #' }
-identifyRsofTFs <- function(data_omics, only_enriched = TRUE, noTFs_inPW = 2, 
+identifyRsofTFs <- function(data_omics, noTFs_inPW = 2, 
                             order_neighbors = 6) {
     
     if(class(data_omics) != "OmicsData")
@@ -201,23 +117,29 @@ identifyRsofTFs <- function(data_omics, only_enriched = TRUE, noTFs_inPW = 2,
     { 
         tps_TFs = identTFs(data_omics, glen)
         if(!length(tps_TFs) == 0)
-        {if(only_enriched == TRUE)
-        {tps_TFs = tps_TFs[which(tps_TFs[,enrichedTFs] == 1),]}
-        pathway_info = identPWsofTFs(genelists, tps_TFs)
+        {
+        pathway_info = identPWsofTFs(genelists, tps_TFs)                        
         pws_morex_TFs = selectPWsofTFs(pathway_info[[1]], pathway_info[[2]],
                                        noTFs_inPW)
-        up_regulators = identRegulators(pws_morex_TFs, data_omics,
-                                        order_neighbors, noTFs_inPW)
+        up_regulators = identRegulators(pws_morex_TFs, data_omics,   
+                                        order_neighbors, noTFs_inPW) 
+        up_regulators_bound = list()
+        for(s in 1: length(pws_morex_TFs))
+        {   if(!is.na(names(up_regulators[[s]]))[1])
+            {up_regulators_bound[[s]] = do.call("rbind", up_regulators[[s]])
+            }else{
+             up_regulators_bound[[s]] = up_regulators[[s]][[1]]   
+            }
+        }   
+        up_regulators_bound = na.omit(do.call("rbind", up_regulators_bound))
         
         data_omics[[1]][[3]][[2]][[glen+1]] = 
             c(data_omics[[1]][[3]][[2]][[glen+1]], list(pathway_info[[1]]))
         names(data_omics[[1]][[3]][[2]][[glen+1]])[dim(data_omics[[1]][[2]][[2]][[glen]])[1] +1] = 
             "upstreamPW"
-        
-        data_omics[[1]][[3]][[2]][[glen+1]] = 
-            c(data_omics[[1]][[3]][[2]][[glen+1]], 
-              as.data.frame(na.omit(as.character(unlist(up_regulators)))))
-        names(data_omics[[1]][[3]][[2]][[glen+1]])[dim(data_omics[[1]][[2]][[2]][[glen]])[1] +2] = 
+
+        data_omics[[1]][[3]][[2]][[glen+1]][[length(data_omics[[1]][[3]][[2]][[glen+1]])+1]] = as.data.frame(up_regulators_bound)
+        names(data_omics[[1]][[3]][[2]][[glen+1]])[dim(data_omics[[1]][[2]][[2]][[glen]])[1] +1] = 
             "regulatorsPW"
         message("Regulators for time point ", 
                 data_omics[[1]][[1]][[1]][[2]][glen] ," were identified. \n")  

@@ -18,8 +18,9 @@ PathwayD containing selected pathway databases + biopax model;
 TFtargetsD containing selected TF target gene databases + TF target gene data.
 }
 \description{
-This function identifies the pathways of the differentially abundant proteins
-dependent on the chosen database. Requires rBiopaxParser package. Takes a 
+This function identifies the pathways of the differentially abundant 
+phosphoproteins dependent on the chosen database. 
+Requires rBiopaxParser package. Takes a 
 lot of time for a high number of proteins and/or if all databases are chosen.
 First, chosen databases are loaded, then new internal pathway IDs are 
 generated. 
@@ -34,14 +35,19 @@ faster usage...
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
-PWdatabase = c("biocarta"), 
-TFtargetdatabase = c("chea"))
-\donttest{
-data_omics = readTFdata(data_omics)
-data_omics_plus = readPWdata(data_omics, 
-loadgenelists = "Genelists")
-}
+PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
+TFtargetdatabase = c("userspec"))
+data_omics = readPhosphodata(data_omics, 
+phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+package = "pwOmics")) 
+data_omics = readTFdata(data_omics, 
+TF_target_path = system.file("extdata", "TF_targets.txt", 
+package = "pwOmics"))
+data_omics_plus = readPWdata(data_omics,  
+loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
 \dontrun{
+data_omics_plus = identifyPR(data_omics_plus)
+setwd(system.file("extdata/Genelists", package = "pwOmics"))
 data_omics = identifyPWs(data_omics_plus)
 }
 }

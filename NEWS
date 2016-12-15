@@ -1,4 +1,11 @@
-pwOmics 3.1.1
+pwOmics 1.7.1
+===================================
+* include signaling axes identification functions
+* include phosphorylation information prefiltering in intersection analysis
+* include direction of regulation prefiltering in intersection analysis
+* include visualization of temporal correlations between phosphosite expression data and transcriptome data
+
+pwOmics 1.5.0
 ===================================
 * include static consensus profiles function
 * include activating/inhibiting edges in dynamic consensus net

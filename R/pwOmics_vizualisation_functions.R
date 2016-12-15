@@ -8,22 +8,27 @@
 #' @keywords manip
 #' @export
 #' @examples
-#' #please run with whole database files (prepared according to vignette)
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 #' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
-#' TFtargetdatabase = c("chea", "pazar"))
+#' TFtargetdatabase = c("userspec"))
+#' data_omics = readPhosphodata(data_omics, 
+#' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+#' package = "pwOmics")) 
+#' data_omics = readTFdata(data_omics, 
+#' TF_target_path = system.file("extdata", "TF_targets.txt", 
+#' package = "pwOmics"))
+#' data_omics_plus = readPWdata(data_omics,  
+#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
 #' \dontrun{
-#' data_omics = readTFdata(data_omics)
-#' data_omics_plus = readPWdata(data_omics, 
-#' loadgenelists = "Genelists")
+#' data_omics_plus = identifyPR(data_omics_plus)
+#' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
-#' data_omics = enrichPWs(data_omics)
-#' data_omics = identifyRsofTFs(data_omics, only_enriched = FALSE, 
+#' data_omics = identifyRsofTFs(data_omics, 
 #' noTFs_inPW = 1, order_neighbors = 10)
-#' data_omics = identifyPWTFTGs(data_omics, only_enriched = FALSE)
+#' data_omics = identifyPWTFTGs(data_omics)
 #' statConsNet = staticConsensusNet(data_omics)
 #' consDynNet = consDynamicNet(data_omics, statConsNet)
 #' timeprof = clusterTimeProfiles(consDynNet)
@@ -37,7 +42,8 @@ plotTimeProfileClusters <- function(fuzzed_matsplines) {
     plot(x = NULL, y = NULL, bty = 'L', 
          xlim = c(min(as.numeric(colnames(fuzzed_matsplines$centers))), 
                   max(as.numeric(colnames(fuzzed_matsplines$centers)))+1),
-         ylim = c(-2,2), xlab = "time", ylab = "normalized expression", 
+         ylim = c(min(fuzzed_matsplines$centers),max(fuzzed_matsplines$centers)), 
+         xlab = "time", ylab = "normalized expression", 
          main = paste("Fuzzy c-means clustering\n with ", 
                       max(fuzzed_matsplines$cluster), " centers", sep = ""))
     colors = rainbow(max(fuzzed_matsplines$cluster))
@@ -77,22 +83,27 @@ plotTimeProfileClusters <- function(fuzzed_matsplines) {
 #' @keywords manip
 #' @export
 #' @examples
-#' #please run with whole database files (prepared according to vignette)
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 #' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
-#' TFtargetdatabase = c("chea", "pazar"))
-#' \dontrun{
-#' data_omics = readTFdata(data_omics)
+#' TFtargetdatabase = c("userspec"))
+#' data_omics = readPhosphodata(data_omics, 
+#' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+#' package = "pwOmics")) 
+#' data_omics = readTFdata(data_omics, 
+#' TF_target_path = system.file("extdata", "TF_targets.txt", 
+#' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
-#' loadgenelists = FALSE)
+#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
+#' \dontrun{
+#' data_omics_plus = identifyPR(data_omics_plus)
+#' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
-#' data_omics = enrichPWs(data_omics)
-#' data_omics = identifyRsofTFs(data_omics, only_enriched = FALSE, 
+#' data_omics = identifyRsofTFs(data_omics, 
 #' noTFs_inPW = 1, order_neighbors = 10)
-#' data_omics = identifyPWTFTGs(data_omics, only_enriched = FALSE)
+#' data_omics = identifyPWTFTGs(data_omics)
 #' statConsNet = staticConsensusNet(data_omics)
 #' dynConsNet = consDynamicNet(data_omics, statConsNet)
 #' plotConsDynNet(dynConsNet, sig.level = 0.8)
@@ -120,15 +131,24 @@ plotConsDynNet <- function(dynConsensusNet, sig.level, clarify = "TRUE",
     dyngraph <- graph.adjacency(dynnet, mode = c("directed"), 
                                 add.rownames = TRUE)
     ident = unlist(strsplit(as.character(V(dyngraph)$name),"_"))[seq(2, length(V(dyngraph)$name)*2, by = 2)]
-    V(dyngraph)$color[which(ident == "p")] = "red"
-    V(dyngraph)$color[which(ident == "g")] = "green"
+    V(dyngraph)$color = rep("grey", times = length(V(dyngraph)))
+    V(dyngraph)$color[which(ident == "p")] = rep("red", times = length(which(ident == "p")))
+    V(dyngraph)$color[which(ident == "g")] = rep("green", times = length(which(ident == "g")))
     V(dyngraph)$name = unlist(strsplit(V(dyngraph)$name, "_"))[seq(1, length(ident)*2, by = 2)]
     V(dyngraph)$label.cex = 0.6
-    plot(dyngraph, main = "Dynamic consensus net", layout = layout,...)
+    V(dyngraph)$label.color = "black"
+    E(dyngraph)$color = rep("grey", times = length(E(dyngraph)))
+    E(dyngraph)$color = "red4"
+    E(dyngraph)$color[which(E(dyngraph)$weight==1)] = "green4"
+        plot(dyngraph, main = "Dynamic consensus net", edge.arrow.size=0.5, layout = layout,...)
     legend("topleft" , legend = c("consensus proteins", "consensus genes"), 
            fill = c("red", "green"), cex = 0.7, ...)
     dev.off()
-    }
+}
+
+
+
+
 
 #' Plot consensus graph(s) from static analysis.
 #' 
@@ -143,24 +163,29 @@ plotConsDynNet <- function(dynConsensusNet, sig.level, clarify = "TRUE",
 #' @keywords manip
 #' @export
 #' @examples
-#' #please run with whole database files (prepared according to vignette)
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 #' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
-#' TFtargetdatabase = c("chea", "pazar"))
-#' \dontrun{
-#' data_omics = readTFdata(data_omics)
+#' TFtargetdatabase = c("userspec"))
+#' data_omics = readPhosphodata(data_omics, 
+#' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+#' package = "pwOmics")) 
+#' data_omics = readTFdata(data_omics, 
+#' TF_target_path = system.file("extdata", "TF_targets.txt", 
+#' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
-#' loadgenelists = FALSE)
+#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
+#' \dontrun{
+#' data_omics_plus = identifyPR(data_omics_plus)
+#' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
-#' data_omics = enrichPWs(data_omics)
-#' data_omics = identifyRsofTFs(data_omics, only_enriched = FALSE, 
+#' data_omics = identifyRsofTFs(data_omics, 
 #' noTFs_inPW = 1, order_neighbors = 10)
-#' data_omics = identifyPWTFTGs(data_omics, only_enriched = FALSE)
+#' data_omics = identifyPWTFTGs(data_omics)
 #' statConsNet = staticConsensusNet(data_omics)
-#' plot(statConsNet)
+#' plot(ConsensusGraph, data_omics)
 #' }
 plotConsensusGraph <- function(consensusGraphs, data_omics, ...) {
     
@@ -181,13 +206,16 @@ plotConsensusGraph <- function(consensusGraphs, data_omics, ...) {
         V(consensusGraphs[[k]])$label.cex = 0.6
         plot.igraph(consensusGraphs[[k]], 
                     main = paste("Consensus graph\n time ", 
-                                 same_tps[k], sep = ""), vertex.size = 18, ...)
+                                 same_tps[k], sep = ""), vertex.size = 7, 
+                    vertex.label.color = "black", vertex.label.dist = 0.4, 
+                    vertex.label.font = 2, ...)
         legend("topleft" , legend = c("consensus proteins", 
                                       "steiner node proteins", "consensus TFs", "consensus target genes"), 
                fill = c("red", "yellow", "lightblue", "green"), cex = 0.7, ...)
     }
     dev.off()
 }
+
 
 #' Plot consensus graph profiles of static consensus molecules.
 #' 
@@ -205,24 +233,29 @@ plotConsensusGraph <- function(consensusGraphs, data_omics, ...) {
 #' @keywords manip
 #' @export
 #' @examples
-#' #please run with whole database files (prepared according to vignette)
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 #' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
-#' TFtargetdatabase = c("chea", "pazar"))
-#' \dontrun{
-#' data_omics = readTFdata(data_omics)
+#' TFtargetdatabase = c("userspec"))
+#' data_omics = readPhosphodata(data_omics, 
+#' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+#' package = "pwOmics")) 
+#' data_omics = readTFdata(data_omics, 
+#' TF_target_path = system.file("extdata", "TF_targets.txt", 
+#' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
-#' loadgenelists = FALSE)
+#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
+#' \dontrun{
+#' data_omics_plus = identifyPR(data_omics_plus)
+#' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
-#' data_omics = enrichPWs(data_omics)
-#' data_omics = identifyRsofTFs(data_omics, only_enriched = FALSE, 
+#' data_omics = identifyRsofTFs(data_omics, 
 #' noTFs_inPW = 1, order_neighbors = 10)
-#' data_omics = identifyPWTFTGs(data_omics, only_enriched = FALSE)
+#' data_omics = identifyPWTFTGs(data_omics)
 #' statConsNet = staticConsensusNet(data_omics)
-#' plotConsensusProfiles(statConsNet)
+#' plotConsensusProfiles(statConsNet, data_omics, subsel = TRUE)
 #' }
 plotConsensusProfiles <- function(consensusGraphs, data_omics, subsel = TRUE, ...) {
     
@@ -275,4 +308,182 @@ plotConsensusProfiles <- function(consensusGraphs, data_omics, subsel = TRUE, ..
            legend = c("consensus proteins", "steiner node proteins", "consensus TFs", "consensus target genes"), cex = 0.7)
     dev.off()
 }
+
+
+
+#' Plot temporal correlations of phosphoprotein expression levels and affected 
+#' downstream transcripts.
+#' 
+#' This function plots an overview of consensus phosphoprotein expression level 
+#' correlations with those transcripts that are affected downstream in a newly
+#' generated folder in the working directory. The following 
+#' additional information needs to be provided: Phosphorylation information amino
+#' acid, position and multiplicity with the expression levels for each
+#' of the time points the correlations should be plotted for. Furthermore 
+#' data tables for fold changes/ratios of phosphoproteins and transcripts that 
+#' are part of the data_omics object.
+#' 
+#' @param ConsensusGraph result from static analysis: consensus graph generated 
+#' by staticConsensusNet function.
+#' @param timepointsprot numeric vector with measurement time points in 
+#' phosphoproteome data set, which should be used for correlation plots
+#' @param timepointstrans numeric vector with measurement time points in
+#' transcriptome data set, which should be used for correlation plots
+#' @param foldername character vector specifying the name of the folder that
+#' will be generated for the temporal correlations
+#' @param trans_sign character vector specifying a tab-delimited file with the
+#' transcriptome expression levels for all time points in timepointstrans
+#' @param trans_sign_names character vector specifying column names in the
+#' transcriptome file corresponding to the expression levels at different time
+#' points.  
+#' @param phospho_sign character vector specifying a tab-delimited file with the
+#' phosphoproteome information (columns 'Gene.names', 'Amino.acid', 'Position',
+#' 'Multiplicity') and expression levels for all time points in timepointstrans
+#' @param phospho_sign_names character vector specifying column names in the
+#' phosphoproteome file corresponding to the expression levels at different time
+#' points. 
+#' @param ... further plotting/legend parameters.
+#' @return pdf file in current working directory.
+#' 
+#' @keywords manip
+#' @export
+#' @examples
+#' data(OmicsExampleData)
+#' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
+#' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
+#' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
+#' TFtargetdatabase = c("userspec"))
+#' data_omics = readPhosphodata(data_omics, 
+#' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+#' package = "pwOmics")) 
+#' data_omics = readTFdata(data_omics, 
+#' TF_target_path = system.file("extdata", "TF_targets.txt", 
+#' package = "pwOmics"))
+#' data_omics_plus = readPWdata(data_omics,  
+#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
+#' \dontrun{
+#' data_omics_plus = identifyPR(data_omics_plus)
+#' setwd(system.file("extdata/Genelists", package = "pwOmics"))
+#' data_omics = identifyPWs(data_omics_plus)
+#' data_omics = identifyTFs(data_omics)
+#' data_omics = identifyRsofTFs(data_omics, 
+#' noTFs_inPW = 1, order_neighbors = 10)
+#' data_omics = identifyPWTFTGs(data_omics)
+#' statConsNet = staticConsensusNet(data_omics)
+#' temp_correlations(statConsNet, timepointsprot = c(1,4,8,13,18,24),
+#' timepointstrans = c(1,4,8,13,18,24), foldername = "ProtCons_", 
+#' trans_sign = system.file("extdata", "signif_single.csv", package = "pwOmics") 
+#' trans_sign_names = c("FC_1",  "FC_2", "FC_3", "FC_4"), 
+#' phospho_sign = system.file("extdata", "mat_phospho.csv", package = "pwOmics") 
+#' phospho_sign_names = c("Rat1", "Rat2", "Rat3", "Rat4")) )
+#' }
+#' 
+temp_correlations <- function (ConsensusGraph, timepointsprot, 
+                                   timepointstrans, foldername = "ProtCons_", 
+                                   trans_sign = "signif_single.csv", 
+                                   trans_sign_names, 
+                                   phospho_sign = "mat_phospho.csv", 
+                                   phospho_sign_names) 
+{
+    trans_sign = read.csv(trans_sign, sep = "\t")
+    phospho_sign = read.csv(phospho_sign, sep = ",")
+    proteins = names(V(ConsensusGraph)[which(V(ConsensusGraph)$color == "red")])
+    filenames = list.files(getwd(), pattern = "_downstream")
+    filenames_prot = filenames[which(gsub("_downstream", "", filenames) %in% proteins)]
+    for (g in 1:length(filenames_prot)) {
+        print(filenames_prot[g])
+        pdf(paste(foldername, filenames_prot[g], ".pdf", sep = ""))
+        temp = NULL
+        filenames = list.files(path = paste(getwd(), filenames_prot[g], 
+                                            sep = "/"), pattern = "transcripts.csv")
+        filenamesR = list.files(path = paste(getwd(), filenames_prot[g], 
+                                             sep = "/"), pattern = ".RData")
+        ind_vec = vector()
+        for (k in 1:length(timepointsprot)) {
+            ind_vec[k] = which(grepl(paste("tp", as.character(timepointsprot[k]), 
+                                           "_", sep = ""), filenames) == TRUE)
+        }
+        times_cov = vector(length = length(timepointsprot))
+        for (f in 1:length(timepointsprot)) {
+            load(paste(getwd(), filenames_prot[g], filenamesR[ind_vec[f]], 
+                       sep = "/"))
+            if (length(axis) != 0) {
+                temp = read.csv(paste(getwd(), filenames_prot[g], 
+                                      filenames[ind_vec[f]], sep = "/"))
+                times_cov[f] = TRUE
+            }
+        }
+        names(times_cov) = paste("tp_", timepointsprot, sep = "")
+        if (length(temp) > 0) {
+            temp[, 1] = NULL
+            transcripts_to_corr = as.character(temp[, 1])
+            data_transcripts = trans_sign[match(transcripts_to_corr, 
+                                            as.character(trans_sign[, 1])), ]
+            data_phosphoprot = phospho_sign[grep(paste(gsub("_downstream", "", 
+                                    filenames_prot[g]), "$", sep = ""), 
+                                    phospho_sign$T..Gene.names), 1:14]
+            
+            colfunc <- "blue"
+            par(mfrow = c(3, 2), oma = c(1, 1, 1, 1), mar = c(5, 4, 4, 2) + 0.1)
+            plot(1, type="n", axes=FALSE, xlab="", ylab="")
+            legend("center", legend = paste(timepointsprot, " min / ", 
+                                            timepointstrans, " min", sep = ""), col = "black", 
+                   pch = c(19, 18, 17, 15), title = "phosphoproteome / transcriptome time points", 
+                   bty = "n")
+            if(dim(data_phosphoprot)[1]>1)
+            {data_phosphoprot_new = apply(data_phosphoprot[,phospho_sign_names],2,as.numeric)
+            rownames(data_phosphoprot_new) = paste(data_phosphoprot[,"T..Gene.names"], 
+                                                   "_", data_phosphoprot[,"C..Amino.acid"], 
+                                                   data_phosphoprot[,"N..Position"], "_",
+                                                   gsub("___", "M", data_phosphoprot[,"C..Multiplicity"]), sep = "")
+            colh = colorRampPalette(c("blue", "orange"))(dim(data_phosphoprot_new)[1])
+            for (j in 1:dim(data_transcripts)[1]) {
+                plot(NA, NA, xlim = c(min(data_transcripts[, trans_sign_names], 
+                                    na.rm = TRUE) - 0.4, max(data_transcripts[, 
+                                    trans_sign_names], na.rm = TRUE) + 2), 
+                     ylim = c(min(data_phosphoprot_new, na.rm = TRUE) - 0.1, 
+                              max(data_phosphoprot_new, na.rm = TRUE) + 0.1), xlab = "FC downstream transcript", 
+                     ylab = paste("log2 ratio ", gsub("_downstream", "", 
+                             filenames_prot[g]), sep = ""), main = data_transcripts[j, 1])
+                
+                for(h in 1: dim(data_phosphoprot_new)[1])
+                {   for (s in 1:length(timepointsprot) - 1) {
+                    lines(as.numeric(data_transcripts[j, trans_sign_names[s:(s + 1)]]), 
+                          data_phosphoprot_new[h,s:(s + 1)], col = colh[h], lwd = 1)}
+                    points(data_transcripts[j, trans_sign_names], 
+                           data_phosphoprot_new[h,], col = colh[h], 
+                           pch = c(19, 18, 17, 15), cex = 1.2)
+                }
+                legend("bottomright", fill = colh, legend = rownames(data_phosphoprot_new), cex = 0.7)
+            }
+            }else{
+                data_phosphoprot_new = apply(data_phosphoprot[,phospho_sign_names],2,as.numeric)
+                nam = paste(data_phosphoprot[,"T..Gene.names"], "_", 
+                            data_phosphoprot[,"C..Amino.acid"], 
+                            data_phosphoprot[,"N..Position"], "_",
+                            gsub("___", "M", data_phosphoprot[,"C..Multiplicity"]), sep = "")
+                for (j in 1:dim(data_transcripts)[1]) {
+                    plot(NA, NA, xlim = c(min(data_transcripts[, trans_sign_names], 
+                                              na.rm = TRUE) - 0.4, 
+                                          max(data_transcripts[, trans_sign_names], 
+                                              na.rm = TRUE) + 2), 
+                         ylim = c(min(data_phosphoprot_new, na.rm = TRUE) - 0.1, 
+                                  max(data_phosphoprot_new, na.rm = TRUE) + 0.1), 
+                         xlab = "FC downstream transcript", 
+                         ylab = paste("log2 ratio ", gsub("_downstream", "", 
+                                filenames_prot[g]), sep = ""), main = data_transcripts[j, 1])
+                    for (s in 1:length(timepointsprot) - 1) {
+                        lines(as.numeric(data_transcripts[j, trans_sign_names[s:(s + 1)]]), 
+                              data_phosphoprot_new[s:(s + 1)], col = colfunc, lwd = 1)
+                    }
+                    points(data_transcripts[j, trans_sign_names],  data_phosphoprot_new, 
+                           col = colfunc, pch = c(19, 18, 17, 15), cex = 1.2)
+                    legend("bottomright", fill = colfunc, legend = nam, cex = 0.7)
+                }
+            }
+        }
+        dev.off()
+    }
+}
+
 

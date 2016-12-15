@@ -32,16 +32,10 @@
 #' @export
 #' @examples
 #' data(OmicsExampleData)
-#' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24),
-#' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
-#' PWdatabase = c("biocarta"), 
-#' TFtargetdatabase = c("chea"))
-#' \dontrun{
-#' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24),
+#' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 #' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
-#' TFtargetdatabase = c("chea", "pazar", "userspec"))
-#' }
+#' TFtargetdatabase = c("userspec"))
 readOmics <- function(tp_prots, tp_genes, omics, PWdatabase, TFtargetdatabase) {
     
     OmicsData = list(OmicsD = list(OmicsDescription = list(
@@ -58,7 +52,8 @@ readOmics <- function(tp_prots, tp_genes, omics, PWdatabase, TFtargetdatabase) {
                                      BiopaxModel = list()),
                      TFtargetsD = list(TFtargetdatabaseNames = TFtargetdatabase,
                                        TFtargetData = list()),
-                     Status = 1)
+                     Status = 1, 
+                     PhosphoD = data.frame())
     uni_protdata = data.frame()
     for(plen in 1: length(tp_prots))
     {uni_protdata = omics$P[[2]][[plen]][isUnique(omics$P[[2]][[plen]][,1]),]
@@ -75,6 +70,47 @@ readOmics <- function(tp_prots, tp_genes, omics, PWdatabase, TFtargetdatabase) {
     class(OmicsData) = "OmicsData"
     return(OmicsData)
 }
+
+
+#' Reads in phosphoprotein downstream regulation information.
+#'
+#' This function reads in phosphoprotein downstream regulation
+#' information from a txt file.
+#'
+#' @param data_omics OmicsData object.
+#' @param phosphoreg txt file with 2 columns, first providing gene names, second
+#' giving -1/1 annotation whether downstream regulation of phosphoprotein
+#' is inhibiting or activating, respectively.
+#' 
+#' @return OmicsData object: list of 4 elements (OmicsD, PathwayD, TFtargetsD, 
+#' Status); OmicsD containing omics data set + results (after analysis);
+#' PathwayD containing selected pathway databases + biopax model;
+#' TFtargetsD containing selected TF target gene databases + TF target gene data;
+#' PhosphoD containing optionally phosphoprotein downstream regulation annotation.
+#' @keywords manip
+#' @export
+#' @examples
+#' data(OmicsExampleData)
+#' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
+#' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
+#' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
+#' TFtargetdatabase = c("userspec"))
+#' data_omics = readPhosphodata(data_omics, 
+#' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+#' package = "pwOmics")) 
+readPhosphodata <- function(data_omics, phosphoreg) {
+    
+    if(class(data_omics) != "OmicsData")
+    { stop("Parameter 'data_omics' is not an OmicsData object.\n")} 
+    
+    data_omics$PhosphoD = as.data.frame(read.delim(phosphoreg, header = FALSE))
+    colnames(data_omics$PhosphoD) = c("Phosphoprotein","regulation")
+    
+    message("Phosphoprotein information was read. \n")  
+    
+    return(data_omics)
+}
+
 
 
 #' Reads in chosen transcription factor target database information.
@@ -125,10 +161,14 @@ readOmics <- function(tp_prots, tp_genes, omics, PWdatabase, TFtargetdatabase) {
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
-#' PWdatabase = c("biocarta"), 
-#' TFtargetdatabase = c("pazar"))
-#' data_omics = readTFdata(data_omics)
-#' data_omics[[3]]
+#' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
+#' TFtargetdatabase = c("userspec"))
+#' data_omics = readPhosphodata(data_omics, 
+#' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+#' package = "pwOmics")) 
+#' data_omics = readTFdata(data_omics, 
+#' TF_target_path = system.file("extdata", "TF_targets.txt", 
+#' package = "pwOmics"))
 readTFdata <- function(data_omics, TF_target_path, cell_match = 0, TF_filter_threshold = 0) {
     
     if(class(data_omics) != "OmicsData")
@@ -162,9 +202,9 @@ readTFdata <- function(data_omics, TF_target_path, cell_match = 0, TF_filter_thr
         ret_list = c(1:2, 4:35, 37:46, 48:49, 51:62, 64:69, 71, 73:76, 78:84, 88: length(pazar))
         for(k in ret_list)
         {   if(class(pazar[[k]]) == "GRanges")
-        { TF_data_pazar[[k]] = as.data.frame(pazar[[k]])
+             { TF_data_pazar[[k]] = as.data.frame(pazar[[k]])
         }else{
-            TF_data_pazar[[k]] = pazar[[k]]
+               TF_data_pazar[[k]] = pazar[[k]]
         }
         }
         TF_data_pazar = rbindlist(TF_data_pazar,use.names = TRUE, fill = TRUE)
@@ -214,6 +254,7 @@ readTFdata <- function(data_omics, TF_target_path, cell_match = 0, TF_filter_thr
     return(data_omics)
 }
 
+
 #' Read in pathway database data needed for pathway identification.
 #'
 #' This function reads pathway data of the chosen database(s) via the 
@@ -249,13 +290,16 @@ readTFdata <- function(data_omics, TF_target_path, cell_match = 0, TF_filter_thr
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
-#' PWdatabase = c("biocarta"), 
-#' TFtargetdatabase = c("chea"))
-#' \donttest{
-#' data_omics = readTFdata(data_omics)
-#' data_omics_plus = readPWdata(data_omics, loadgenelists = "Genelists")
-#' data_omics_plus[[2]][[1]]
-#' }
+#' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
+#' TFtargetdatabase = c("userspec"))
+#' data_omics = readPhosphodata(data_omics, 
+#' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+#' package = "pwOmics")) 
+#' data_omics = readTFdata(data_omics, 
+#' TF_target_path = system.file("extdata", "TF_targets.txt", 
+#' package = "pwOmics"))
+#' data_omics_plus = readPWdata(data_omics,  
+#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
 readPWdata <- function(data_omics, loadgenelists, biopax_level = 2) {
     
     if(class(data_omics) != "OmicsData")

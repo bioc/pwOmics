@@ -19,8 +19,8 @@ This function returns the protein IDs of all proteins measured.
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
-PWdatabase = c("biocarta"), 
-TFtargetdatabase = c("chea"))
+PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
+TFtargetdatabase = c("userspec"))
 getOmicsallProteinIDs(data_omics)
 }
 \keyword{manip}

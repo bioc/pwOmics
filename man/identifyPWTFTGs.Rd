@@ -2,17 +2,17 @@
 % Please edit documentation in R/pwOmics_downstream_analysis.R
 \name{identifyPWTFTGs}
 \alias{identifyPWTFTGs}
-\title{Identify TFs in enriched pathways and their target genes - downstream 
+\title{Identify TFs in pathways and their target genes - downstream 
 analysis.}
 \usage{
-identifyPWTFTGs(data_omics, only_enriched = TRUE)
+identifyPWTFTGs(data_omics, updown = FALSE)
 }
 \arguments{
 \item{data_omics}{OmicsData object.}
 
-\item{only_enriched}{boolean value defining if transcription factors should
-be identified only for enriched pathways (TRUE); or for all identified
-pathways (FALSE); default is TRUE.}
+\item{updown}{boolean value; TRUE in case up- and downregulation should be
+checked individually for intersection; FALSE = default, if only 
+deregulation should be checked for.}
 }
 \value{
 OmicsData object: list of 4 elements (OmicsD, PathwayD, TFtargetsD,
@@ -21,7 +21,7 @@ PathwayD containing selected pathway databases + biopax model;
 TFtargetsD containing selected TF target gene databases + TF target gene data.
 }
 \description{
-This function identifies the transcription factors being part of the enriched 
+This function identifies the transcription factors being part of the
 pathways of downstream analysis. Subsequently it finds the target genes of
 these transcription factors from the selected TF-target gene database.
 }
@@ -29,18 +29,22 @@ these transcription factors from the selected TF-target gene database.
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
-PWdatabase = c("biocarta"), 
-TFtargetdatabase = c("chea"))
-\donttest{
-data_omics = readTFdata(data_omics)
+PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
+TFtargetdatabase = c("userspec"))
+data_omics = readPhosphodata(data_omics, 
+phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+package = "pwOmics")) 
+data_omics = readTFdata(data_omics, 
+TF_target_path = system.file("extdata", "TF_targets.txt", 
+package = "pwOmics"))
 data_omics_plus = readPWdata(data_omics,  
-loadgenelists = FALSE)
-}
+loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
+data_omics_plus = identifyPR(data_omics_plus)
+setwd(system.file("extdata/Genelists", package = "pwOmics"))
 \dontrun{
 data_omics = identifyPWs(data_omics_plus)
 data_omics = identifyTFs(data_omics)
-data_omics = enrichPWs(data_omics)
-identifyPWTFTGs(data_omics, only_enriched = FALSE)
+data_omics = identifyPWTFTGs(data_omics)
 }
 }
 \keyword{manip}

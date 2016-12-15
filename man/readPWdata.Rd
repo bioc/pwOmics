@@ -38,13 +38,16 @@ Biopax level of retrieved databases is 2 by default.
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
-PWdatabase = c("biocarta"), 
-TFtargetdatabase = c("chea"))
-\donttest{
-data_omics = readTFdata(data_omics)
-data_omics_plus = readPWdata(data_omics, loadgenelists = "Genelists")
-data_omics_plus[[2]][[1]]
-}
+PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
+TFtargetdatabase = c("userspec"))
+data_omics = readPhosphodata(data_omics, 
+phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+package = "pwOmics")) 
+data_omics = readTFdata(data_omics, 
+TF_target_path = system.file("extdata", "TF_targets.txt", 
+package = "pwOmics"))
+data_omics_plus = readPWdata(data_omics,  
+loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
 }
 \references{
 1. Morgan M, Carlson M, Tenenbaum D and Arora S. AnnotationHub: 
