@@ -146,12 +146,12 @@ getOmicsDataset <- function(data_omics, writeData = FALSE) {
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -200,12 +200,12 @@ getDS_PWs <- function(data_omics) {
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -258,12 +258,12 @@ getDS_TFs <- function(data_omics) {
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -304,13 +304,13 @@ getDS_TGs <- function(data_omics) {
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics_plus = identifyPR(data_omics_plus)
-#' \dontrun{
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
@@ -356,13 +356,13 @@ getUS_TFs <- function(data_omics) {
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics_plus = identifyPR(data_omics_plus)
-#' \dontrun{
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
@@ -406,13 +406,13 @@ getUS_PWs <- function(data_omics) {
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics_plus = identifyPR(data_omics_plus)
-#' \dontrun{
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
@@ -452,12 +452,12 @@ getUS_regulators <- function(data_omics) {
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -504,12 +504,12 @@ getBiopaxModel <- function(data_omics) {
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -626,12 +626,12 @@ getProteinIntersection <- function(data_omics, tp_prot, tp_genes, updown = FALSE
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -768,12 +768,12 @@ getTFIntersection <- function(data_omics, tp_prot, tp_genes,
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -951,12 +951,12 @@ getGenesIntersection <- function(data_omics, tp_prot, tp_genes,
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)

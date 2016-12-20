@@ -16,12 +16,12 @@
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
-#' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -91,12 +91,12 @@ plotTimeProfileClusters <- function(fuzzed_matsplines) {
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
-#' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -171,12 +171,12 @@ plotConsDynNet <- function(dynConsensusNet, sig.level, clarify = "TRUE",
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
-#' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -241,12 +241,12 @@ plotConsensusGraph <- function(consensusGraphs, data_omics, ...) {
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
-#' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -356,12 +356,12 @@ plotConsensusProfiles <- function(consensusGraphs, data_omics, subsel = TRUE, ..
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
-#' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)

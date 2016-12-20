@@ -166,9 +166,11 @@ readPhosphodata <- function(data_omics, phosphoreg) {
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
+#' }
 readTFdata <- function(data_omics, TF_target_path, cell_match = 0, TF_filter_threshold = 0) {
     
     if(class(data_omics) != "OmicsData")
@@ -295,11 +297,13 @@ readTFdata <- function(data_omics, TF_target_path, cell_match = 0, TF_filter_thr
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 #' package = "pwOmics")) 
+#' \dontrun{
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
+#' }
 readPWdata <- function(data_omics, loadgenelists, biopax_level = 2) {
     
     if(class(data_omics) != "OmicsData")
