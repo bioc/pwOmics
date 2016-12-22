@@ -1,34 +1,25 @@
 %\VignetteIndexEntry{pwOmics}
 \documentclass[a4paper]{article}
-
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
-
 \usepackage{graphicx}
 \usepackage{enumitem}
 \usepackage{epstopdf}
 \usepackage{csquotes}
-%\usepackage[sort, numbers]{natbib}
 \usepackage[backend=bibtex,bibencoding=ascii,style=authoryear,sorting=none]{biblatex}
 \usepackage{subcaption}
 \usepackage{hyperref}
 \usepackage[noae]{Sweave}
-
-\addbibresource{pwOmics_vignette.bib}
 \setlength{\parindent}{0pt}
 
 \title{pwOmics - Pathway-based integration of time-series omics data using public database knowledge}
 \author{Astrid Wachter\\
 Medical Statistics, University Medical Center Göttingen, Germany}
 
-
 \begin{document}
-\SweaveOpts{concordance=TRUE}
-%\bibliographystyle{ieeetr}
-\input{pwOmics-concordance}
 \maketitle
-
 \tableofcontents
+
 \section{Introduction}
 Characterization of biological processes can be performed in great detail with
 the increased generation of omics data on different functional levels of
@@ -37,11 +28,11 @@ parallel with different platforms is a complex but promising task, needing
 consideration of time-independent combination of omics data and additionally
 time-dependent signaling analysis. As each measurement technique shows a certain
 bias and has natural limitations in identifying full signaling responses
-(\cite{yeger-lotem_bridging_2009}), such cross-platform analysis is an up-to-date
+(Yeger-Lotem, E et al., 2009), such cross-platform analysis is an up-to-date
 approach in order to connect biological implications on different signaling
 levels. Using diverse data types is expected to provide a deeper understanding
 of global biological functions and the underlying complex processes
-(Kholodenko et \cite{kholodenko2012}).\\
+(Kholodenko B et al., 2012).\\
 This is why computational data analysis tools for interpretation of data from
 proteomics and transcriptomics measurements in parallel are needed.\\
 \textit{pwOmics} is a tool for pathway-based level-specific data comparison and
@@ -69,22 +60,23 @@ work with. Three different kinds of databases are necessary to do all analyses
 steps:\\
 \begin{enumerate}[topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex]
 \item Pathway databases:\\ The user can choose from Biocarta
-(\cite{nishimura_biocarta_2001}), Reactome (\cite{milacic_annotating_2012,
-croft_reactome_2014}), PID (\cite{schaefer_pid:_2009}) from the National
-Cancer Institute (NCI) and KEGG (\cite{kanehisa_data_2014,
-kanehisa_kegg:_2000}).\\
+(Nishimura, D, 2001), Reactome (Milacic, M et al., 2012; 
+Croft, David et al., 2014), PID (Schaefer, CF et al., 2009) from the National
+Cancer Institute (NCI) and KEGG (Kanehisa, M et al.,2014,
+Kanehisa, M and Goto, S, 2000).\\
 \item Protein-protein interaction (PPI) database:\\ STRING
-(\cite{franceschini_string_2013}).\\
+(Franceschini, A et al., 2013).\\
 \item Transcription factor (TF) - target gene databases:\\ The user can choose
-from ChEA (\cite{lachmann_chea:_2010}), Pazar (\cite{portales-casamar_pazar_2009,
-portales-casamar_pazar:_2007}) and/or decide to specify an own file e.g. based
+from ChEA (Lachmann, A et al., 2010), Pazar (Portales-Casamar, 
+E et al., 2009; Portales-Casamar, E et al., 2007) 
+and/or decide to specify an own file e.g. based
 on a commercial database.\\
 \end{enumerate}
 
 The pathway database information is used to identify the pathways of the
 differentially abundant phosphoproteins in the downstream analysis as well as upstream
 protein regulators of TFs in the upstream analysis. The PPI database STRING
-(\cite{franceschini_string_2013}) was chosen to define the protein net for the
+(Franceschini, A et al., 2013) was chosen to define the protein net for the
 consensus analysis. TF - target gene database information is necessary for
 the TF identification in pathways in the downstream analysis. Additionally the
 upstream TFs of differentially expressed genes/transcripts are identified in the
@@ -93,7 +85,7 @@ In downstream analysis the pathway gene set information is used, whereas in the
 upstream analysis also the pathway topology information is exploited.\\
 
 The database information is downloaded internally via \textit{STRINGdb} and
-\textit{AnnotationHub} (\cite{Morgan}) package. In case the author is interested
+\textit{AnnotationHub} (Morgan M et al.) package. In case the author is interested
 also in the metadata of the pathway database and TF - target database it can be
 received by
 
@@ -178,17 +170,22 @@ file with first column transcription factors and second column target gene
 symbols without a header, e.g.:\\
 
 \begin{center}
-\fbox{\parbox[c]{3cm}{
-GATA-4    HAMP\\
-c-Jun	IL18\\
-NF-kappaB   TLR2\\
-MYB LTB\\
-FOXO1A	TGFBR1\\
-...}}
+\fbox{
+\begin{tabular}{ l l }
+  GATA-4 & HAMP\\
+  c-Jun & IL18\\
+  NF-kappaB & TLR2\\
+  MYB & LTB\\
+  FOXO1A & TGFBR1\\
+  ... & ...
+\end{tabular}
+
+
+}
 \end{center}
 
 The STRING PPI-information is downloaded automatically while processing and
-analyzing the data: The \textit{STRINGdb} package (\cite{franceschini_string_2013})
+analyzing the data: The \textit{STRINGdb} package (Franceschini, A et al., 2013)
 is used here.
 
 \section{Example dataset}
@@ -380,7 +377,7 @@ data_omicsPW = readPWdata(data_omics,
 \end{verbatim}
 As the process of generating genelists with these IDs can take some time -
 especially for rather big databases such as Reactome
-(\cite{milacic_annotating_2012, croft_reactome_2014}) - the genelists for the
+(Milacic, M et al., 2012; Croft, D et al., 2014) - the genelists for the
 different databases are automatically stored in the working directory and can
 be reused in another analysis when the corresponding path containing these files
 is given to the `readPWdata' function as loadgenelists parameter.
@@ -527,7 +524,7 @@ by expected signaling changes and financial limitations the potential in the
 interpretation of the results is strongly confined to the experimental design
 decisions. Thus, measured signaling changes, which naturally consist of a
 superposition of diverse time-scales of transcriptional and translational
-processes and comprehend diverse frequency patterns (\cite{yosef_impulse_2011}),
+processes and comprehend diverse frequency patterns (Yosef, N and Regev A(2011)),
 are dependent on the sampling. This means for some of the signaling axes it
 might be the case, that
 \begin{itemize}
@@ -568,13 +565,14 @@ gathered over time - as it is the case for the consensus-based dynamic analysis
 is also applicable for single time point measurements.\\
 
 The static consensus analysis is conducted by generation of a Steiner tree
-(\cite{Kleinberg_AlgorithmDesign_2006}) on basis of consensus proteins and TFs
+(Kleinberg, J and Tardos E, 2006) on basis of consensus proteins and TFs
 identified in downstream and upstream analysis for each corresponding time
 point. The underlying graph used is the protein-protein-interaction (PPI)
 graph from the STRING database reduced to the connected nodes.
 The consensus proteins and TFs are considered as terminal nodes and are
 connected via a shortest path-based approximation of the Steiner tree
-algorithm (\cite{Takahashi_Steiner_1980, Sadeghi2013}) across the reduced
+algorithm (Takahashi, H and A Matsuyama, 1980; 
+Sadeghi, A and Fröhlich, H, 2013) across the reduced
 PPI-STRING-graph. Subsequently knowledge of TF-target gene pairs from the
 chosen database is used to expand the graph with matching genes/transcripts
 from both upstream and downstream analysis. In case the consensus graph contains
@@ -593,9 +591,7 @@ the intersection analysis.
 Unlike the static consensus analysis, the consensus-based dynamic analysis takes into
 consideration also the signaling changes over time by applying dynamic bayesian
 network inference. The packages used for the consensus-based dynamic analysis are
-\textit{longitudinal} (\cite{Opgen_longi_2006, rainer_opgen-rhein_inferring_2006})
-to adjust the format of the data and the actual network inference part is done
-via the \textit{ebdbNet} (\cite{Rau_ebdbnet_2010}) package.
+\textit{longitudinal} (Opgen-Rhein, R and Strimmer, K, 2006; Opgen-Rhein R and Strimmer K, 2006) to adjust the format of the data and the actual network inference part is done via the \textit{ebdbNet} (Rau, A et al., 2010) package.
 This package includes an iterative empirical Bayesian procedure with a Kalman
 filter estimating the posterior distributions of the network parameters.
 The defined prior structure of the network is used for a straightforward
@@ -628,15 +624,15 @@ the different time points.\\
 This assumption, however, has to be applied consciously and carefully, as there
 might be higher frequency signaling components superimposed (see for a
 comprehensive analysis of temporal dynamics of gene expression
-(\cite{yosef_impulse_2011})).
+(Yosef N and Regev A, 2011).
 In theory a signal has to be sampled two times its maximal frequency in order to
 be able to reconstruct it exactly from time discrete measurements
-(Nyquist-Shannon sampling theorem (\cite{Shannon_theorem_1949,
-Nyquist_theorem_1928})). This means only exact interpretation of those signaling
+(Nyquist-Shannon sampling theorem (Shannon, CA and Weaver W, 1949;
+Nyquist, H, 1928). This means only exact interpretation of those signaling
 axes are possible that have a frequency which is smaller than half of the
 sampling frequency. However, under certain preconditions on signal structure
 and the sampling operator reconstruction of the original signal can be done with
-a lower sampling rate (\cite{DBLP:journals/tit/BlumensathD09}).
+a lower sampling rate (Blumensath, T and Michael ED, 2009).
 This is an interesting starting point for a more comprehensive dynamic analysis
 of the expected signals and the sampling needed for an extensive data mining of
 omics data sets measured in parallel, but exceeds the scope of this package.
@@ -659,7 +655,7 @@ package) the number of hidden states can be determined. Here, the user can
 specify the \textit{cutoffhankel} parameter to choose the cutoff to determine
 the desired percent of total variance explained by the singular values.
 Additional parameters on convergence criteria and iterations performed can be
-specified. For further details the user is referred to (\cite{Rau_ebdbnet_2010}).
+specified. For further details the user is referred to (Rau, A et al., 2010).
 \begin{verbatim}
 library(ebdbNet)
 library(longitudinal)
@@ -672,10 +668,10 @@ An additional analysis option is clustering of co-regulation patterns over time.
 It provides information about the signaling molecules with common dynamic
 behaviour and thus allows to draw conclusions in terms of signaling chronology.
 Time profile clustering is performed as soft clustering based on the
-\textit{Mfuzz} package (\cite{Mfuzz2012}). The advantage of this clustering method
+\textit{Mfuzz} package (Futschik, M, 2012). The advantage of this clustering method
 is that a protein, TF or gene/transcript can be assigned to several clusters,
 thus reducing the sensitivity to noise and the information loss hard clustering
-exhibits. It is implemented as fuzzy c-means algorithm (\cite{Hathaway_Pattern1986})
+exhibits. It is implemented as fuzzy c-means algorithm (Hathaway, R and Bezdek, J, 1986)
 and iteratively optimizes the objective function to minimize the variation of
 objects within the clusters. The user needs to provide a `min.std' threshold
 parameter if proteins or genes/transcripts with a low standard deviation
@@ -683,7 +679,7 @@ should be excluded. In addition the maximum number of cluster centers which
 should be tested in the `minimum distance between cluster centroid test' has
 to by given. This number is used as initial number to determine the data-specific
 maximal cluster number based on the number of distinct data points. For more
-details see (\cite{Mfuzz2012}) and (\cite{schwammle_simple_2010}).
+details see (Futschik, M, 2012) and (Schwämmle, V and Jensen ON, 2010).
 \begin{verbatim}
 library(Mfuzz)
 fuzzyClusters = clusterTimeProfiles(dynInferredNet,
@@ -772,7 +768,7 @@ plotConsDynNet(dynInferredNet, sig.level = 0.7)
 Here, the parameter `sig.level' is the significance level used as cutoff for
 plotting edges in the network and has to be specified in the range between
 0 and 1. Furthermore the user can indicate if unconnected nodes should be
-removed and provide additional \textit{igraph} (\cite{igraph2006})
+removed and provide additional \textit{igraph} (Csardi, G and Nepusz T, 2006)
 layout parameters.\\
 \begin{figure}[htbp]
 \centering
@@ -842,42 +838,98 @@ for individual phosphorylations.
 resulted downstream.}
 \end{figure}
 
+\section{References}
+\begin{itemize}
 
+\item Yeger-Lotem, Esti et al. (2009). “Bridging high-throughput genetic and 
+transcriptional data reveals cellular responses to alpha-synuclein toxicity”.
+In: Nature Genetics 41.3, pp. 316–323. issn: 1546-1718. doi: 10.1038/ng.
+337.
+\item Boris Kholodenko et al. (2012). “Computational Approaches for Analyzing Information Flow in Biological Networks”. In: Science Signaling 5, re1.
+\item Nishimura, Darryl (2001). “BioCarta”. In: Biotech Software \& Internet Report
+2.3, pp. 117–120. issn: 1527-9162. doi: 10.1089/152791601750294344. url:
+http://online.liebertpub.com/doi/abs/10.1089/152791601750294344
+(visited on 01/02/2015).
+\item Milacic, Marija et al. (2012). “Annotating cancer variants and anti-cancer 
+therapeutics in reactome”. In: Cancers 4.4, pp. 1180–1211. issn: 2072-6694.
+doi: 10.3390/cancers4041180.
+\item Croft, David et al. (2014). “The Reactome pathway knowledgebase”. In:
+Nucleic Acids Research 42.Database issue, pp. D472–477. issn: 1362-4962.
+doi: 10.1093/nar/gkt1102.
+\item Schaefer, Carl F. et al. (2009). “PID: the Pathway Interaction Database”. 
+In: Nucleic Acids Research 37.Database issue, pp. D674–679. issn: 1362-
+4962. doi: 10.1093/nar/gkn653.
+\item Kanehisa, Minoru et al. (2014). “Data, information, knowledge and principle:
+back to metabolism in KEGG”. In: Nucleic Acids Research 42.Database
+issue, pp. D199–205. issn: 1362-4962. doi: 10.1093/nar/gkt1076.
+\item Kanehisa, M. and S. Goto (2000). “KEGG: kyoto encyclopedia of genes and
+genomes”. In: Nucleic Acids Research 28.1, pp. 27–30. issn: 0305-1048.
+19
+\item Franceschini, Andrea et al. (2013). “STRING v9.1: protein-protein interaction
+networks, with increased coverage and integration”. In: Nucleic Acids Research 41. 
+Database issue, pp. D808–D815. issn: 0305-1048. doi: 10.1093/
+nar / gks1094. url: http : / / www . ncbi . nlm . nih . gov / pmc / articles /
+PMC3531103/ (visited on 01/02/2015).
+\item Lachmann, Alexander et al. (2010). “ChEA: transcription factor regulation 
+inferred from integrating genome-wide ChIP-X experiments”. In: Bioinformatics (Oxford, England) 26.19, pp. 2438–2444. issn: 1367-4811. doi:
+10.1093/bioinformatics/btq466.
+\item Portales-Casamar, Elodie et al. (2009). “The PAZAR database of gene regu-
+latory information coupled to the ORCA toolkit for the study of regulatory 
+sequences”. In: Nucleic Acids Research 37.suppl 1, pp. D54–D60.
+issn: 0305-1048, 1362-4962. doi: 10.1093/nar/gkn783. 
+\item Portales-Casamar, Elodie et al. (2007). “PAZAR: a framework for collection
+and dissemination of cis-regulatory sequence annotation”. In: Genome
+Biology 8.10, R207. issn: 1465-6906. doi: 10.1186/gb- 2007- 8- 10- r207.
+\item Morgan M Carlson M, Tenenbaum D and Arora S. AnnotationHub: Client to
+access AnnotationHub resources. R package version 2.22.0.
+\item Yosef, Nir and Aviv Regev (2011). “Impulse control: Temporal dynamics in
+gene transcription”. In: Cell 144.6, pp. 886–896. issn: 0092-8674. doi: 10.
+1016/j.cell.2011.02.015. url: http://www.ncbi.nlm.nih.gov/pmc/
+articles/PMC3148525/ (visited on 01/03/2015).
+\item Kleinberg, J and E Tardos (2006). Algorithm Design. Pearson, Boston, MA.
+\item Takahashi, H and A Matsuyama (1980). “An approximate solution for the
+Steiner problem in graphs”. In: Math. Jap. 24, pp. 573–577.
+\item Sadeghi, Afshin and Holger Fröhlich (2013). “Steiner tree methods for optimal
+sub-network identification: an empirical study”. In: BMC Bioinformatics 14,
+p. 144.
+\item Opgen-Rhein, R and K Strimmer (2006). “Using regularized dynamic correlation
+to infer gene dependency networks from time-series microarray data”. In:
+Proceedings of the 4th International Workshop on Computational Systems
+Biology, WCSB 2006, pp. 73–76.
+\item Rainer Opgen-Rhein, Korbinian Strimmer (2006). “Inferring gene dependency
+networks from genomic longitudinal data: a functional data approach”. In:
+REVSTAT – Statistical Journal Volume 4.1, pp. 53–65. issn: 1645-6726.
+\item Rau, Andrea et al. (2010). “An empirical Bayesian method for estimating 
+biological networks from temporal microarray data”. In: Statistical Applications
+in Genetics and Molecular Biology 9.1.
+\item Shannon, CA and W Weaver (1949). The mathematical theory of communication. 
+University of Illinois Press.
+\item Nyquist, H (1928). “Certain topics in telegraph transmission theory”. In: 
+Transactions of the A. I. E. E. pp. 617–644.
+\item Blumensath, Thomas and Michael E. Davies (2009). “Sampling Theorems for
+Signals From the Union of Finite-Dimensional Linear Subspaces”. In: IEEE
+Transactions on Information Theory 55.4, pp. 1872–1882. 
+\item Futschik, Matthias (2012). Mfuzz: Soft clustering of time series gene expression
+data. R package version 2.22.0. url: http://itb.biologie.hu-berlin.
+de/~futschik/software/R/Mfuzz/.
+\item Hathaway, R and Bezdek, J (1986). "Local convergence of the fuzzy c-means algorithm".
+In: Pattern Recognition 19, pp. 477-480.
+\item Schwämmle, Veit and Ole Nørregaard Jensen (2010). “A simple and fast method
+to determine the parameters for fuzzy c–means cluster analysis”. In:
+Bioinformatics 26.22, pp. 2841–2848. issn: 1367-4803, 1460-2059. doi: 10.
+1093/bioinformatics/btq534. url: http://bioinformatics.oxfordjournals.
+org/content/26/22/2841 (visited on 01/03/2015).
+\item Csardi, Gabor and Tamas Nepusz (2006). “The igraph software package for
+complex network research”. In: InterJournal Complex Systems, p. 1695. url:
+http://igraph.org.
 
-
-
+\end{itemize}
 
 \newpage
 \section{Session Information}
-\begin{itemize}[topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex]
-\item R Under development (unstable) (2015-03-11 r67980),
-Platform: x86\_64-unknown-linux-gnu (64-bit),
-Running under: Ubuntu precise (12.04.5 LTS)\\
-\item Locale: LC\_CTYPE=en\_US.UTF-8, LC\_NUMERIC=C,\\
-LC\_TIME=en\_US.UTF-8, LC\_COLLATE=en\_US.UTF-8,\\
-LC\_MONETARY=en\_US.UTF-8, LC\_MESSAGES=en\_US.UTF-8,\\
-LC\_PAPER=en\_US.UTF-8, LC\_NAME=C, LC\_ADDRESS=C,\\
-LC\_TELEPHONE=C, LC\_MEASUREMENT=en\_US.UTF-8,\\
-LC\_IDENTIFICATION=C\\
-\item Attached base packages: tcltk, parallel, stats, graphics, grDevices,
-utils, datasets, methods, base\\
-\item Other attached packages: ebdbNet\_1.2.3, Mfuzz\_2.27.1, DynDoc\_1.45.0,
-widgetTools\_1.45.0, e1071\_1.6-4, Biobase\_2.27.3, BiocGenerics\_0.13.11,
-longitudinal\_1.1.11, corpcor\_1.6.7, igraph\_0.7.1, pwOmics\_0.99.2\\
-\item Loaded via namespace (and not attached): Rcpp\_0.11.5, XVector\_0.7.4,
-BiocInstaller\_1.17.7, GenomeInfoDb\_1.3.19, plyr\_1.8.1,\\
-AnnotationHub\_1.99.82, tkWidgets\_1.45.0, class\_7.3-12, bitops\_1.0-6,\\
-biomaRt\_2.23.5, digest\_0.6.8, RSQLite\_1.0.0, shiny\_0.11.1, DBI\_0.3.1,\\
-rBiopaxParser\_2.5.0, stringr\_0.6.2, httr\_0.6.1, S4Vectors\_0.5.23,\\
-gtools\_3.4.2, caTools\_1.17.1, IRanges\_2.1.44, stats4\_3.2.0,\\
-data.table\_1.9.4, R6\_2.0.1, AnnotationDbi\_1.29.24, XML\_3.98-1.1,\\
-RJSONIO\_1.3-0, gdata\_2.13.3, reshape2\_1.4.1, STRINGdb\_1.7.0,\\
-gplots\_2.16.0, htmltools\_0.2.6, GenomicRanges\_1.19.54, mime\_0.3,\\
-interactiveDisplayBase\_1.5.6, xtable\_1.7-4, httpuv\_1.3.2,\\
-KernSmooth\_2.23-14, RCurl\_1.95-4.5, chron\_2.3-45\\
-\end{itemize}
-
-\printbibliography
+<<>>=
+sessionInfo()
+@
 
 \end{document}
 
