@@ -45,15 +45,15 @@
 #' TFtargetdatabase = c("userspec"))
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
-#' package = "pwOmics")) 
-#' \dontrun{
+#' package = "pwOmics.newupdown")) 
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
-#' package = "pwOmics"))
+#' package = "pwOmics.newupdown"))
 #' data_omics_plus = readPWdata(data_omics,  
-#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
+#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics.newupdown")) 
+#' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)    
-#' setwd(system.file("extdata/Genelists", package = "pwOmics"))
+#' setwd(system.file("extdata/Genelists", package = "pwOmics.newupdown"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
 #' data_omics = identifyRsofTFs(data_omics, 
@@ -202,6 +202,75 @@ staticConsensusNet <- function(data_omics, run_times = 3, updown = FALSE,
 }
 
 
+
+
+#' Add Consensus Graph information.
+#' 
+#' Adds phosphoprotein information based on phosphoprotein data table and 
+#' redraws Consensus Graph edges
+#'    
+#' @param data_omics OmicsData object.
+#' @param consensusGraph result from static analysis: consensus graph generated 
+#' by staticConsensusNet function.
+#' @param phosphotab dataframe with phosphoprotein information annotated in 
+#' columns 'Gene.names', 'Amino acid', 'Position' (of phosphosite).
+#' @return graph of igraph class containing complemented consensus graph
+#' information
+#' @keywords manip
+#' @export
+#' @examples
+#' data(OmicsExampleData)
+#' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
+#' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
+#' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
+#' TFtargetdatabase = c("userspec"))
+#' data_omics = readPhosphodata(data_omics, 
+#' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
+#' package = "pwOmics.newupdown")) 
+#' data_omics = readTFdata(data_omics, 
+#' TF_target_path = system.file("extdata", "TF_targets.txt", 
+#' package = "pwOmics.newupdown"))
+#' data_omics_plus = readPWdata(data_omics,  
+#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics.newupdown")) 
+#' \dontrun{
+#' data_omics_plus = identifyPR(data_omics_plus) 
+#' setwd(system.file("extdata/Genelists", package = "pwOmics.newupdown"))
+#' data_omics = identifyPWs(data_omics_plus)
+#' data_omics = identifyTFs(data_omics)
+#' data_omics = identifyRsofTFs(data_omics, 
+#' noTFs_inPW = 1, order_neighbors = 10)
+#' data_omics = identifyPWTFTGs(data_omics)
+#' statConsNet = staticConsensusNet(data_omics)
+#' }
+infoConsensusGraph <- function(data_omics, consensusGraph, phosphotab)
+{
+    if(length(consensusGraph[[1]]) == 1)
+    {consensusGraphs = list(consensusGraph)
+    temp = 1
+    }else{
+    consensusGraphs = consensusGraph
+    temp = 0     
+    }
+    for(k in 1: length(consensusGraphs))
+    {   p_names_graph = V(consensusGraphs[[k]])$name[which(V(consensusGraphs[[k]])$color == "red")]
+        p_newnames_graph = paste(phosphotab$Gene.names[match(p_names_graph, phosphotab$Gene.names)], "_",
+                             phosphotab$Amino.acid[match(p_names_graph, phosphotab$Gene.names)],
+                             phosphotab$Position[match(p_names_graph, phosphotab$Gene.names)], 
+                             sep = "")
+    
+    V(consensusGraphs[[k]])$name[which(V(consensusGraphs[[k]])$color == "red")] = p_newnames_graph
+    }
+    for(j in 1: length(consensusGraphs))
+    {   
+        ind_green = which(V(consensusGraphs[[j]])$color == "green")
+        E(consensusGraphs[[j]])$lty = 1
+        E(consensusGraphs[[j]])[from(ind_green)]$lty = 3
+    }
+    if(temp==1)
+    { consensusGraphs = consensusGraphs[[1]]
+    temp = 0}
+    return(consensusGraphs) 
+}
 
 
 
@@ -505,15 +574,15 @@ SteinerTree_cons <- function(terminal_nodes, PPI_graph, run_times) {
 #' TFtargetdatabase = c("userspec"))
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
-#' package = "pwOmics")) 
-#' \dontrun{
+#' package = "pwOmics.newupdown")) 
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
-#' package = "pwOmics"))
+#' package = "pwOmics.newupdown"))
 #' data_omics_plus = readPWdata(data_omics,  
-#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
+#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics.newupdown"))
+#' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus) 
-#' setwd(system.file("extdata/Genelists", package = "pwOmics"))
+#' setwd(system.file("extdata/Genelists", package = "pwOmics.newupdown"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
 #' data_omics = identifyRsofTFs(data_omics, 
