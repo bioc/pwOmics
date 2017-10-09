@@ -24,4 +24,3 @@ Find the overlap of x next neighbors of transcription factors in identified
 pathways. Writes the overlap into a given list called 'regulators'.
 }
 \keyword{manip}
-

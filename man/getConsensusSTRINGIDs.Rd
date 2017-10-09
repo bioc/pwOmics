@@ -31,4 +31,3 @@ proteins and transcription factors).
 Get consensus graph in STRING IDs.
 }
 \keyword{manip}
-

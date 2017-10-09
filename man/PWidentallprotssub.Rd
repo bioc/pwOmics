@@ -23,4 +23,3 @@ OmicsData object with identified pathways for each protein.
 Internal subfunction for all protein pathway identification.
 }
 \keyword{manip}
-

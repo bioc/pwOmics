@@ -1,6 +1,7 @@
 %\VignetteIndexEntry{pwOmics}
 \documentclass[a4paper]{article}
 
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 
@@ -9,7 +10,7 @@
 \usepackage{epstopdf}
 \usepackage{csquotes}
 %\usepackage[sort, numbers]{natbib}
-\usepackage[backend=bibtex,bibencoding=ascii,style=authoryear,sorting=none]{biblatex}
+\usepackage[backend=biber,bibencoding=utf8,style=authoryear,sorting=none]{biblatex}
 \usepackage{subcaption}
 \usepackage{hyperref}
 \usepackage[noae]{Sweave}
@@ -19,7 +20,7 @@
 
 \title{pwOmics - Pathway-based integration of time-series omics data using public database knowledge}
 \author{Astrid Wachter\\
-Medical Statistics, University Medical Center Göttingen, Germany}
+Medical Statistics, University Medical Center G\"ottingen, Germany}
 
 
 \begin{document}
@@ -496,27 +497,27 @@ non-corresponding time points in the different data sets. The comparison is
 possible on the three different functional levels considered in this package:
 On the pathway level, the transcription factor level and gene/transcript level.
 The parameters `updown' and `phospho' enable to define, whether the direction
-of regulation should be considered in the comparison and whether the 
+of regulation should be considered in the comparison and whether the
 phosphosite information should be considered. The consensus
 molecule sets (C) for each of the molecular levels (protein level,
-transcription factor level and gene/transcript level) are defined as: 
+transcription factor level and gene/transcript level) are defined as:
 \begin{enumerate}[topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex]
 \item if phosphoprotein downstream activity is induced:\\
 $C = (X'\uparrow \cap ~X	\uparrow) \cup (X'\downarrow \cap ~X\downarrow)$ \\
 \item if phosphoprotein downstream activity is inhibited:\\
 $C = (X'\uparrow \cap ~X	\downarrow) \cup (X'\downarrow \cap ~X\uparrow)$ \\
 \item if no information is available for a specific phosphoprotein:\\
-$C = (X'\uparrow \cap ~X	\uparrow) \cup (X'\downarrow \cap ~X\downarrow) 
+$C = (X'\uparrow \cap ~X	\uparrow) \cup (X'\downarrow \cap ~X\downarrow)
 \cup (X'\uparrow \cap ~X	\downarrow) \cup (X'\downarrow \cap ~X\uparrow)$\\
 \end{enumerate}
-with $\uparrow$ = upregulated and $\downarrow$ = downregulated and $X$ = 
+with $\uparrow$ = upregulated and $\downarrow$ = downregulated and $X$ =
 molecules in downstream analysis, $X'$ = molecules in upstream analysis.
 \begin{verbatim}
-getProteinIntersection(data_omics, tp_prot = 4, tp_genes = 18, 
+getProteinIntersection(data_omics, tp_prot = 4, tp_genes = 18,
                        updown = TRUE, phospho = TRUE)
-getTFIntersection(data_omics, tp_prot = 13, tp_genes = 13, 
+getTFIntersection(data_omics, tp_prot = 13, tp_genes = 13,
                        updown = TRUE, phospho = TRUE)
-getGenesIntersection(data_omics, tp_prot = 24, tp_genes = 24, 
+getGenesIntersection(data_omics, tp_prot = 24, tp_genes = 24,
                         updown = TRUE, phospho = TRUE)
 \end{verbatim}
 These functions not only enable a comparison of the same timepoints on the
@@ -550,7 +551,7 @@ gettpIntersection(data_omics, updown = TRUE, phospho = TRUE)
 \end{verbatim}
 The parameters `updown' and `phospho' allow to select whether different regulation
 directions in the data sets (phosphoproteome vs. transcriptome) should be filtered out
-in the comparison, and whether the downstream regulation influence of 
+in the comparison, and whether the downstream regulation influence of
 phosphoproteins read in with the `readPhosphodata' function should be considered
 in the comparison.
 

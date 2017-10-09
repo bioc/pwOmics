@@ -22,4 +22,3 @@ This function loads the pathway information from pathway databases.
 Needed in the identifyPWs function.
 }
 \keyword{manip}
-

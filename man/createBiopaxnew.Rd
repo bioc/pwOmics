@@ -21,4 +21,3 @@ This function creates a new biopax model depending on which
 pathway databases are chosen for analysis.
 }
 \keyword{manip}
-

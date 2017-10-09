@@ -42,12 +42,12 @@ TFtargetdatabase = c("userspec"))
 data_omics = readPhosphodata(data_omics, 
 phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 package = "pwOmics")) 
-\dontrun{
 data_omics = readTFdata(data_omics, 
 TF_target_path = system.file("extdata", "TF_targets.txt", 
 package = "pwOmics"))
 data_omics_plus = readPWdata(data_omics,  
 loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
+\dontrun{
 data_omics_plus = identifyPR(data_omics_plus)
 setwd(system.file("extdata/Genelists", package = "pwOmics"))
 data_omics = identifyPWs(data_omics_plus)
@@ -71,4 +71,3 @@ Algorithms, Plenum Press, New York, 1981.
 2841-2848, 2010.
 }
 \keyword{manip}
-

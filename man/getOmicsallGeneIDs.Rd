@@ -24,4 +24,3 @@ TFtargetdatabase = c("userspec"))
 getOmicsallGeneIDs(data_omics)
 }
 \keyword{manip}
-

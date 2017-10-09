@@ -23,4 +23,3 @@ measured IDs as first element and a list as second element including for
 each tp a dataframe with IDs and log foldchanges per timepoint.
 }
 \keyword{datasets}
-

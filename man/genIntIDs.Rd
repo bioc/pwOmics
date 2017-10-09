@@ -24,4 +24,3 @@ data.table with newly generated internal IDs of biopax model.
 Generates new internal ids (database-specific) in biopax$df.
 }
 \keyword{manip}
-

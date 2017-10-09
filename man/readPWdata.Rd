@@ -43,13 +43,11 @@ TFtargetdatabase = c("userspec"))
 data_omics = readPhosphodata(data_omics, 
 phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 package = "pwOmics")) 
-\dontrun{
 data_omics = readTFdata(data_omics, 
 TF_target_path = system.file("extdata", "TF_targets.txt", 
 package = "pwOmics"))
 data_omics_plus = readPWdata(data_omics,  
 loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-}
 }
 \references{
 1. Morgan M, Carlson M, Tenenbaum D and Arora S. AnnotationHub: 
@@ -59,4 +57,3 @@ Client to access AnnotationHub resources. R package version 1.99.75.
 rBiopaxParser - an R package to parse, modify and visualize BioPAX data.
 }
 \keyword{manip}
-

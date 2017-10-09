@@ -23,4 +23,3 @@ list of splines matrix values and calculated times.
 Prediction of continous data points via smoothing splines.
 }
 \keyword{manip}
-

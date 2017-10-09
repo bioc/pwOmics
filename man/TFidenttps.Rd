@@ -18,4 +18,3 @@ Identification of upstream transcription factors for the differentially
 expressed genes of the different timepoints.
 }
 \keyword{manip}
-

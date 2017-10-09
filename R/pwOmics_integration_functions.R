@@ -22,13 +22,13 @@
 #' TFtargetdatabase = c("userspec"))
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
-#' package = "pwOmics.newupdown")) 
+#' package = "pwOmics")) 
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
-#' package = "pwOmics.newupdown"))
+#' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
-#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics.newupdown"))
-#' setwd(system.file("extdata/Genelists", package = "pwOmics.newupdown"))
+#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
+#' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' data_omics = identifyPWs(data_omics_plus)
@@ -196,15 +196,15 @@ findSignalingAxes <- function(data_omics, phosphoprot, tpDS)
 #' TFtargetdatabase = c("userspec"))
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
-#' package = "pwOmics.newupdown")) 
+#' package = "pwOmics")) 
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
-#' package = "pwOmics.newupdown"))
+#' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
-#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics.newupdown"))
+#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
 #' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)
-#' setwd(system.file("extdata/Genelists", package = "pwOmics.newupdown"))
+#' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
 #' data_omics = identifyPWTFTGs(data_omics)
@@ -268,15 +268,15 @@ get_matching_transcripts <- function(data_omics, axis)
 #' TFtargetdatabase = c("userspec"))
 #' data_omics = readPhosphodata(data_omics, 
 #' phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
-#' package = "pwOmics.newupdown")) 
+#' package = "pwOmics")) 
 #' data_omics = readTFdata(data_omics, 
 #' TF_target_path = system.file("extdata", "TF_targets.txt", 
-#' package = "pwOmics.newupdown"))
+#' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
-#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics.newupdown"))
+#' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
 #' \dontrun{
 #' data_omics_plus = identifyPR(data_omics_plus)
-#' setwd(system.file("extdata/Genelists", package = "pwOmics.newupdown"))
+#' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
 #' data_omics = identifyPWTFTGs(data_omics)

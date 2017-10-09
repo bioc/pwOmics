@@ -18,4 +18,3 @@ data.table of upstream TFs.
 This function provides a data.table of upstream transcription factors.
 }
 \keyword{manip}
-

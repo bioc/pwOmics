@@ -25,4 +25,3 @@ TFtargetdatabase = c("userspec"))
 getOmicsTimepoints(data_omics)
 }
 \keyword{manip}
-

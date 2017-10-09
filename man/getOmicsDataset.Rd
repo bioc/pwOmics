@@ -29,4 +29,3 @@ TFtargetdatabase = c("userspec"))
 getOmicsDataset(data_omics)
 }
 \keyword{manip}
-

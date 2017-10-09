@@ -20,4 +20,3 @@ TF - target gene interactions.
 Combine SteinerNet with bipartite graph to get full consensus network.
 }
 \keyword{manip}
-

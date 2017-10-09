@@ -25,4 +25,3 @@ This function generates genelists from the chosen pathway databases for
 further processing in detPathways function.
 }
 \keyword{manip}
-

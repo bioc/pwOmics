@@ -35,4 +35,3 @@ phosphoreg = system.file("extdata", "phospho_reg_table.txt",
 package = "pwOmics")) 
 }
 \keyword{manip}
-
