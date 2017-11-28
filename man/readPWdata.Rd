@@ -35,6 +35,7 @@ usage...
 Biopax level of retrieved databases is 2 by default.
 }
 \examples{
+\donttest{
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -42,12 +43,13 @@ PWdatabase = c("biocarta", "kegg", "nci", "reactome"),
 TFtargetdatabase = c("userspec"))
 data_omics = readPhosphodata(data_omics, 
 phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
-package = "pwOmics")) 
+package = "pwOmics.newupdown")) 
 data_omics = readTFdata(data_omics, 
 TF_target_path = system.file("extdata", "TF_targets.txt", 
-package = "pwOmics"))
+package = "pwOmics.newupdown"))
 data_omics_plus = readPWdata(data_omics,  
-loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
+loadgenelists = system.file("extdata/Genelists", package = "pwOmics.newupdown"))
+}
 }
 \references{
 1. Morgan M, Carlson M, Tenenbaum D and Arora S. AnnotationHub: 
@@ -57,3 +59,4 @@ Client to access AnnotationHub resources. R package version 1.99.75.
 rBiopaxParser - an R package to parse, modify and visualize BioPAX data.
 }
 \keyword{manip}
+

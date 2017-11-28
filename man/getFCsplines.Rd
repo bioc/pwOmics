@@ -22,3 +22,4 @@ splines values used in dynamic analysis.
 Calculate the splines used for the dynamic analysis.
 }
 \keyword{manip}
+

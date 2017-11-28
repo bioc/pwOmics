@@ -14,3 +14,4 @@ This function automatically loads the genelists corresponding to the selected
 pathway databases stored as RData file in the current working directory.
 }
 \keyword{manip}
+

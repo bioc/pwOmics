@@ -18,3 +18,4 @@ prints OmicsData object.
 Print an OmicsData object.
 }
 \keyword{manip}
+

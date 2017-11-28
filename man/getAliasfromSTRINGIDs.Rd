@@ -38,3 +38,4 @@ igraph object with alias name annotation.
 Map alias names to STRING IDs of consensus graph.
 }
 \keyword{manip}
+

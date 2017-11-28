@@ -19,3 +19,4 @@ This function prepares the OmicsData object for the identified pathway
 information.
 }
 \keyword{manip}
+

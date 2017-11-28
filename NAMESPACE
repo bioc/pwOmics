@@ -13,6 +13,10 @@ import(AnnotationDbi)
 importClassesFrom(GenomicRanges, GRanges)
 importFrom(graph, nodes)
 
+importFrom("grDevices", "colorRampPalette", "dev.off", "pdf", "rainbow")
+importFrom("stats", "na.omit", "predict", "qnorm", "smooth.spline", "ts")
+importFrom("utils", "read.csv", "read.delim", "write.csv")
+
 S3method(print, OmicsData)
 export(readOmics)
 export(readTFdata)

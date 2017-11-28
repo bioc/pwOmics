@@ -16,6 +16,7 @@ all gene IDs.
 This function returns the gene IDs of all genes (transcripts) measured.
 }
 \examples{
+\donttest{
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -23,4 +24,6 @@ PWdatabase = c("biocarta", "kegg", "nci", "reactome"),
 TFtargetdatabase = c("userspec"))
 getOmicsallGeneIDs(data_omics)
 }
+}
 \keyword{manip}
+

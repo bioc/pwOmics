@@ -51,3 +51,4 @@ PWdatabase = c("biocarta", "kegg", "nci", "reactome"),
 TFtargetdatabase = c("userspec"))
 }
 \keyword{manip}
+

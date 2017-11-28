@@ -10,7 +10,8 @@
 \usepackage{epstopdf}
 \usepackage{csquotes}
 %\usepackage[sort, numbers]{natbib}
-\usepackage[backend=biber,bibencoding=utf8,style=authoryear,sorting=none]{biblatex}
+%\usepackage[backend=biber,bibencoding=utf8,style=authoryear,sorting=none]{biblatex}
+\usepackage[backend=bibtex,bibencoding=ascii,style=authoryear,sorting=none]{biblatex}
 \usepackage{subcaption}
 \usepackage{hyperref}
 \usepackage[noae]{Sweave}

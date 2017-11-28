@@ -17,3 +17,4 @@ igraph object connected graph from STRING PPI database.
 Generates connected graph with undirected edges from STRING PPI-database.
 }
 \keyword{manip}
+

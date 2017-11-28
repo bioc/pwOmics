@@ -63,9 +63,10 @@ PWdatabase = c("biocarta", "kegg", "nci", "reactome"),
 TFtargetdatabase = c("userspec"))
 data_omics = readPhosphodata(data_omics, 
 phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
-package = "pwOmics")) 
+package = "pwOmics.newupdown")) 
 data_omics = readTFdata(data_omics, 
 TF_target_path = system.file("extdata", "TF_targets.txt", 
-package = "pwOmics"))
+package = "pwOmics.newupdown"))
 }
 \keyword{manip}
+
