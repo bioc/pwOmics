@@ -22,6 +22,7 @@ This function identifies the downstream regulation influence
 of phosphoprotein regulation for further downstream analysis steps.
 }
 \examples{
+\dontrun{
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -29,12 +30,14 @@ PWdatabase = c("biocarta", "kegg", "nci", "reactome"),
 TFtargetdatabase = c("userspec"))
 data_omics = readPhosphodata(data_omics, 
 phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
-package = "pwOmics")) 
+package = "pwOmics.newupdown")) 
 data_omics = readTFdata(data_omics, 
 TF_target_path = system.file("extdata", "TF_targets.txt", 
-package = "pwOmics"))
+package = "pwOmics.newupdown"))
 data_omics_plus = readPWdata(data_omics,  
-loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
+loadgenelists = system.file("extdata/Genelists", package = "pwOmics.newupdown"))
 data_omics_plus = identifyPR(data_omics_plus)
 }
+}
 \keyword{manip}
+

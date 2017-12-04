@@ -46,6 +46,7 @@ picked arbitrarily and there are always several shortest path distances.
 By default the same time points of both data sets are considered.
 }
 \examples{
+\dontrun{
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -53,15 +54,16 @@ PWdatabase = c("biocarta", "kegg", "nci", "reactome"),
 TFtargetdatabase = c("userspec"))
 data_omics = readPhosphodata(data_omics, 
 phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
-package = "pwOmics")) 
+package = "pwOmics.newupdown")) 
 data_omics = readTFdata(data_omics, 
 TF_target_path = system.file("extdata", "TF_targets.txt", 
-package = "pwOmics"))
+package = "pwOmics.newupdown"))
 data_omics_plus = readPWdata(data_omics,  
-loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
+loadgenelists = system.file("extdata/Genelists", package = "pwOmics.newupdown")) 
+}
 \dontrun{
 data_omics_plus = identifyPR(data_omics_plus)    
-setwd(system.file("extdata/Genelists", package = "pwOmics"))
+setwd(system.file("extdata/Genelists", package = "pwOmics.newupdown"))
 data_omics = identifyPWs(data_omics_plus)
 data_omics = identifyTFs(data_omics)
 data_omics = identifyRsofTFs(data_omics, 
@@ -78,3 +80,4 @@ the book "The Steiner tree Problem", Peter L. Hammer
 H Takahashi, A Matsuyama
 }
 \keyword{manip}
+

@@ -44,10 +44,12 @@ differentially abundant proteins with corresponding fold changes for each
 time point.
 }
 \examples{
+\dontrun{
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
 TFtargetdatabase = c("userspec"))
+}
 }
 \keyword{manip}

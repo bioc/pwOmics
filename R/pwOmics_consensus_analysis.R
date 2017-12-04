@@ -38,6 +38,7 @@
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -51,7 +52,7 @@
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
-#' \dontrun{
+#'
 #' data_omics_plus = identifyPR(data_omics_plus)    
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -219,6 +220,7 @@ staticConsensusNet <- function(data_omics, run_times = 3, updown = FALSE,
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -232,7 +234,7 @@ staticConsensusNet <- function(data_omics, run_times = 3, updown = FALSE,
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics")) 
-#' \dontrun{
+#'
 #' data_omics_plus = identifyPR(data_omics_plus) 
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -567,6 +569,7 @@ SteinerTree_cons <- function(terminal_nodes, PPI_graph, run_times) {
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -580,7 +583,7 @@ SteinerTree_cons <- function(terminal_nodes, PPI_graph, run_times) {
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
+#' 
 #' data_omics_plus = identifyPR(data_omics_plus) 
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)

@@ -7,6 +7,7 @@ import(rBiopaxParser)
 import(Biobase)
 importFrom(igraph, decompose.graph, V, E, add.edges, get.all.shortest.paths, minimum.spanning.tree, degree, delete.vertices, induced.subgraph, igraph.from.graphNEL, get.vertex.attribute, neighborhood, layout.fruchterman.reingold, graph.adjacency, plot.igraph, "V<-", "E<-", graph.data.frame)
 import(biomaRt)
+
 importFrom(AnnotationHub, AnnotationHub)
 importFrom(AnnotationHub, query)
 import(AnnotationDbi)

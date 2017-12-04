@@ -18,6 +18,7 @@ elements contain data frame with pathway IDs and pathway names.
 Get upstream pathways of identified transcription factors.
 }
 \examples{
+\dontrun{
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -25,15 +26,16 @@ PWdatabase = c("biocarta", "kegg", "nci", "reactome"),
 TFtargetdatabase = c("userspec"))
 data_omics = readPhosphodata(data_omics, 
 phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
-package = "pwOmics")) 
+package = "pwOmics.newupdown")) 
 data_omics = readTFdata(data_omics, 
 TF_target_path = system.file("extdata", "TF_targets.txt", 
-package = "pwOmics"))
+package = "pwOmics.newupdown"))
 data_omics_plus = readPWdata(data_omics,  
-loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
+loadgenelists = system.file("extdata/Genelists", package = "pwOmics.newupdown"))
 data_omics_plus = identifyPR(data_omics_plus)
+}
 \dontrun{
-setwd(system.file("extdata/Genelists", package = "pwOmics"))
+setwd(system.file("extdata/Genelists", package = "pwOmics.newupdown"))
 data_omics = identifyPWs(data_omics_plus)
 data_omics = identifyTFs(data_omics)
 data_omics = identifyRsofTFs(data_omics, 
@@ -42,3 +44,4 @@ getUS_PWs(data_omics)
 }
 }
 \keyword{manip}
+
