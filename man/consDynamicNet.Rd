@@ -60,7 +60,7 @@ singular value decomposition (SVD) of the block-Hankel matrix H in order to
 specify the hidden state dimension K (for further details see [1]).
 }
 \examples{
-\donttest{
+\dontrun{
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,

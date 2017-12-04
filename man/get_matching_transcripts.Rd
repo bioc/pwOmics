@@ -24,7 +24,7 @@ This function returns the summarized table of matching transcripts information
 based on the result list from the findSignalingAxes function.
 }
 \examples{
-\donttest{
+\dontrun{
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,

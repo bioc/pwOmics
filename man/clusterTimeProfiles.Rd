@@ -34,7 +34,7 @@ function of [3]. Be aware that the cluster number determination might be
 difficult especially for short time series measurements.
 }
 \examples{
-\donttest{
+\dontrun{
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,

@@ -8,12 +8,14 @@
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 #' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
 #' TFtargetdatabase = c("userspec"))
 #' getOmicsTimepoints(data_omics)
+#' }
 getOmicsTimepoints <- function(data_omics) {
     
     if(class(data_omics) != "OmicsData")
@@ -32,12 +34,14 @@ getOmicsTimepoints <- function(data_omics) {
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 #' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
 #' TFtargetdatabase = c("userspec"))
 #' getOmicsallProteinIDs(data_omics)
+#' }
 getOmicsallProteinIDs <- function(data_omics) {
     
     if(class(data_omics) != "OmicsData")
@@ -58,12 +62,14 @@ getOmicsallProteinIDs <- function(data_omics) {
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 #' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
 #' TFtargetdatabase = c("userspec"))
 #' getOmicsallGeneIDs(data_omics)
+#' }
 getOmicsallGeneIDs <- function(data_omics) {
     
     if(class(data_omics) != "OmicsData")
@@ -88,12 +94,14 @@ getOmicsallGeneIDs <- function(data_omics) {
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
 #' PWdatabase = c("biocarta", "kegg", "nci", "reactome"), 
 #' TFtargetdatabase = c("userspec"))
 #' getOmicsDataset(data_omics)
+#' } 
 getOmicsDataset <- function(data_omics, writeData = FALSE) {
     
     if(class(data_omics) != "OmicsData")
@@ -138,6 +146,7 @@ getOmicsDataset <- function(data_omics, writeData = FALSE) {
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -151,7 +160,7 @@ getOmicsDataset <- function(data_omics, writeData = FALSE) {
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
+#' 
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -192,6 +201,7 @@ getDS_PWs <- function(data_omics) {
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -205,7 +215,7 @@ getDS_PWs <- function(data_omics) {
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
+#' 
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -250,6 +260,7 @@ getDS_TFs <- function(data_omics) {
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -263,7 +274,7 @@ getDS_TFs <- function(data_omics) {
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
+#' 
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -296,6 +307,7 @@ getDS_TGs <- function(data_omics) {
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -310,7 +322,7 @@ getDS_TGs <- function(data_omics) {
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics_plus = identifyPR(data_omics_plus)
-#' \dontrun{
+#' 
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
@@ -348,6 +360,7 @@ getUS_TFs <- function(data_omics) {
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -362,7 +375,7 @@ getUS_TFs <- function(data_omics) {
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics_plus = identifyPR(data_omics_plus)
-#' \dontrun{
+#' 
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
@@ -398,6 +411,7 @@ getUS_PWs <- function(data_omics) {
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -412,7 +426,7 @@ getUS_PWs <- function(data_omics) {
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics_plus = identifyPR(data_omics_plus)
-#' \dontrun{
+#' 
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
@@ -444,6 +458,7 @@ getUS_regulators <- function(data_omics) {
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -457,7 +472,7 @@ getUS_regulators <- function(data_omics) {
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics,  
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
+#' 
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -496,6 +511,7 @@ getBiopaxModel <- function(data_omics) {
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -509,7 +525,7 @@ getBiopaxModel <- function(data_omics) {
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
+#' 
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -618,6 +634,7 @@ getProteinIntersection <- function(data_omics, tp_prot, tp_genes, updown = FALSE
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -631,7 +648,7 @@ getProteinIntersection <- function(data_omics, tp_prot, tp_genes, updown = FALSE
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
+#' 
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -760,6 +777,7 @@ getTFIntersection <- function(data_omics, tp_prot, tp_genes,
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -773,7 +791,7 @@ getTFIntersection <- function(data_omics, tp_prot, tp_genes,
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
+#' 
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -943,6 +961,7 @@ getGenesIntersection <- function(data_omics, tp_prot, tp_genes,
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -956,7 +975,7 @@ getGenesIntersection <- function(data_omics, tp_prot, tp_genes,
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
+#' 
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)

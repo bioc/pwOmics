@@ -32,7 +32,7 @@ databases as reactome, so use savegenelists and loadgenelists for easier and
 faster usage...
 }
 \examples{
-\donttest{
+\dontrun{
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,

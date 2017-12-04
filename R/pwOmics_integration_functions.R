@@ -15,6 +15,7 @@
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -29,7 +30,7 @@
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
+#' 
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' data_omics = identifyPWs(data_omics_plus)
 #' data_omics = identifyTFs(data_omics)
@@ -189,6 +190,7 @@ findSignalingAxes <- function(data_omics, phosphoprot, tpDS)
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -202,7 +204,7 @@ findSignalingAxes <- function(data_omics, phosphoprot, tpDS)
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
+#' 
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)
@@ -261,6 +263,7 @@ get_matching_transcripts <- function(data_omics, axis)
 #' @keywords manip
 #' @export
 #' @examples
+#' \dontrun{
 #' data(OmicsExampleData)
 #' data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 #' tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -274,7 +277,7 @@ get_matching_transcripts <- function(data_omics, axis)
 #' package = "pwOmics"))
 #' data_omics_plus = readPWdata(data_omics, 
 #' loadgenelists = system.file("extdata/Genelists", package = "pwOmics"))
-#' \dontrun{
+#' 
 #' data_omics_plus = identifyPR(data_omics_plus)
 #' setwd(system.file("extdata/Genelists", package = "pwOmics"))
 #' data_omics = identifyPWs(data_omics_plus)

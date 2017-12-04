@@ -25,6 +25,7 @@ This function reads in phosphoprotein downstream regulation
 information from a txt file.
 }
 \examples{
+\dontrun{
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -33,6 +34,7 @@ TFtargetdatabase = c("userspec"))
 data_omics = readPhosphodata(data_omics, 
 phosphoreg = system.file("extdata", "phospho_reg_table.txt", 
 package = "pwOmics.newupdown")) 
+}
 }
 \keyword{manip}
 

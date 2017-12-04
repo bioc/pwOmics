@@ -56,6 +56,7 @@ transcription factor target gene database. The information is downloaded
 via the AnnotationHub package and merged, if necessary.
 }
 \examples{
+\dontrun{
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
@@ -67,6 +68,7 @@ package = "pwOmics.newupdown"))
 data_omics = readTFdata(data_omics, 
 TF_target_path = system.file("extdata", "TF_targets.txt", 
 package = "pwOmics.newupdown"))
+}
 }
 \keyword{manip}
 

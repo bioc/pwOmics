@@ -40,7 +40,7 @@ The timepoints or measurement names for comparison have to be defined in
 tp_prot and tp_genes as given in the readOmics function.
 }
 \examples{
-\donttest{
+\dontrun{
 data(OmicsExampleData)
 data_omics = readOmics(tp_prots = c(0.25, 1, 4, 8, 13, 18, 24), 
 tp_genes = c(1, 4, 8, 13, 18, 24), OmicsExampleData,
