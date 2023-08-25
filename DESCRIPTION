@@ -42,7 +42,7 @@ Imports:
 Suggests:
     ebdbNet,
     longitudinal,
-    Mfuzz
+    Mfuzz,
     RUnit
 biocViews: SystemsBiology, Transcription, GeneTarget, GeneSignaling
 NeedsCompilation: no
