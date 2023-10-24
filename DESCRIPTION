@@ -1,7 +1,7 @@
 Package: pwOmics
 Type: Package
 Title: Pathway-based data integration of omics data
-Version: 1.34.0
+Version: 1.35.0
 Date: 2023-08-28
 Author: Astrid Wachter <Astrid.Wachter@med.uni-goettingen.de>
 Maintainer: Torsten Schoeps <torsten.schoeps@bioinf.med.uni-goettingen.de>
